@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('social_instagram')->nullable();
             $table->string('social_twitter')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

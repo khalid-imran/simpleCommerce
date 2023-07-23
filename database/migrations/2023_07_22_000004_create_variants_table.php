@@ -21,7 +21,7 @@ return new class extends Migration
             $table->tinyInteger('available')->default(1)->comment('1.Available, 0.Not Available');
             $table->double('price');
             $table->timestamps();
-
+            $table->softDeletes();
         });
     }
 

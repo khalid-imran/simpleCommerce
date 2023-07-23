@@ -48,7 +48,7 @@ app.mixin({
             let formData = new FormData()
             for (const property in object) {
                 if (object[property]){
-                    if (typeof object[property] === 'object' && property !== 'image' && property !== 'signature') {
+                    if (typeof object[property] === 'object' && property !== 'file' && property !== 'signature') {
                         if (Array.isArray(object[property]))  {
                             object[property].map((value, index) => {
                                 for (const ArrProperty in value) {
@@ -62,7 +62,7 @@ app.mixin({
                                 }
                             }
                         }
-                    } else if (typeof object[property] === 'object' && (property === 'image' || property === 'signature'))  {
+                    } else if (typeof object[property] === 'object' && (property === 'file' || property === 'signature'))  {
                         formData.append(property, object[property])
                     } else {
                         formData.append(property, object[property])

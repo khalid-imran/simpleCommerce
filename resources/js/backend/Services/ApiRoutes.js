@@ -8,6 +8,18 @@ const ApiRoutes = {
     SingleCategory: ApiVersion + '/category/single',
     DeleteCategory: ApiVersion + '/category/delete',
     ListCategory: ApiVersion + '/category/list',
+    //Fee
+    AddFee: ApiVersion + '/delivery/save',
+    EditFee: ApiVersion + '/delivery/update',
+    SingleFee: ApiVersion + '/delivery/single',
+    DeleteFee: ApiVersion + '/delivery/delete',
+    ListFee: ApiVersion + '/delivery/list',
+    //Slide
+    AddSlide: ApiVersion + '/slide/save',
+    EditSlide: ApiVersion + '/slide/update',
+    SingleSlide: ApiVersion + '/slide/single',
+    DeleteSlide: ApiVersion + '/slide/delete',
+    ListSlide: ApiVersion + '/slide/list',
 };
 
 export default ApiRoutes;

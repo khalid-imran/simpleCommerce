@@ -15,7 +15,7 @@
                         <img src="/images/avatars/user.svg" class="user-img" alt="user avatar">
                         <div class="user-info ps-3">
                             <p class="user-name mb-0">{{auth.name}}</p>
-                            <p class="designattion mb-0">{{ auth.email }}</p>
+                            <p class="designattion mb-0">{{ auth.phone }}</p>
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">

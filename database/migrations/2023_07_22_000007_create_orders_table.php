@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('status')->default(0)->comment('0. pending 1. delivered 2. cancelled');
             $table->integer('is_active')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -86,6 +86,9 @@
                                    type="checkbox"
                                    @click="toggleCheck($event, dataRow.id)">
                         </td>
+                        <td v-if="dataCol['type'] === 'img'">
+                            <img class="table-image" :src="dataRow[dataCol['key']]" alt="">
+                        </td>
                         <td v-if="dataCol['type'] === 'text'"
                             :class="dataCol['isCapital'] !== undefined && dataCol['isCapital'] === true ? 'text-capitalize' : ''">
                             <span v-if="dataCol['photo'] !== undefined && dataCol['photo'] === true">
@@ -466,6 +469,10 @@ table {
     object-fit: fill;
     object-position: center;
     margin-right: 15px;
+}
+.table-image{
+    width: 100px;
+    height: 100px;
 }
 
 .no-list-style {

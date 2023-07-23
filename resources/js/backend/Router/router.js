@@ -4,6 +4,8 @@ import Login from "../Pages/Auth/Login.vue"
 import Layout from "../Pages/Layout/Layout.vue"
 import Dashboard from "../Pages/Dashboard/Dashborad.vue"
 import Category from "../Pages/Settings/Category/Category.vue"
+import DeliveryFee from "../Pages/Settings/DeliveryFee/DeliveryFee.vue"
+import Slide from "../Pages/Settings/Slide/Slide.vue"
 const routes = [
     {
         name: "login",
@@ -13,12 +15,14 @@ const routes = [
     },
     {
         name: "layout",
-        path: "/",
+        path: "/secure-admin",
         component: Layout,
         beforeEnter: authRequestCheck,
         children: [
             { path: "/", name: "dashboard", component: Dashboard},
-            { path: "/category", name: "category", component: Category},
+            { path: "/secure-admin/category", name: "category", component: Category},
+            { path: "/secure-admin/delivery/fee", name: "deliveryFee", component: DeliveryFee},
+            { path: "/secure-admin/slide", name: "slide", component: Slide},
         ]
     }
 ]

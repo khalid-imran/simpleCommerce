@@ -42,7 +42,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 500, 'errors' => $validator->errors()]);
         }
-        $userInfo = User::where('email', $inputData['email'])->first();
+        $userInfo = User::where('phone', $inputData['phone'])->first();
         if($userInfo == null){
             return response()->json(['status' => 500, 'errors' => ['email' => ['Invalid credential! Please try again']]], 200);
         }

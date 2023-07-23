@@ -22,6 +22,7 @@ return new class extends Migration
             $table->double('unit_price')->nullable();
             $table->double('total_price')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

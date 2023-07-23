@@ -3,15 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\BankController;
-use App\Http\Controllers\AccountHeadController;
-use App\Http\Controllers\MemberController;
-use App\Http\Controllers\IncomeController;
-use App\Http\Controllers\ExpenseController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\DeliveryFeeController;
+use App\Http\Controllers\SlideController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +23,7 @@ Route::group(['prefix' => 'auth'], function() {
     Route::post('forgot/password', [AuthController::class, 'forget']);
     Route::post('reset/password', [AuthController::class, 'passwordReset']);
 });
+/*admin api*/
 Route::group(['middleware' => 'auth:api'], function() {
     Route::group(['prefix' => 'category'], function() {
         Route::post('save', [CategoryController::class, 'save']);
@@ -36,5 +31,19 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('single', [CategoryController::class, 'single']);
         Route::post('update', [CategoryController::class, 'update']);
         Route::post('delete', [CategoryController::class, 'delete']);
+    });
+    Route::group(['prefix' => 'delivery'], function() {
+        Route::post('save', [DeliveryFeeController::class, 'save']);
+        Route::post('list', [DeliveryFeeController::class, 'list']);
+        Route::post('single', [DeliveryFeeController::class, 'single']);
+        Route::post('update', [DeliveryFeeController::class, 'update']);
+        Route::post('delete', [DeliveryFeeController::class, 'delete']);
+    });
+    Route::group(['prefix' => 'slide'], function() {
+        Route::post('save', [SlideController::class, 'save']);
+        Route::post('list', [SlideController::class, 'list']);
+        Route::post('single', [SlideController::class, 'single']);
+        Route::post('update', [SlideController::class, 'update']);
+        Route::post('delete', [SlideController::class, 'delete']);
     });
 });

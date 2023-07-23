@@ -27,7 +27,7 @@ return new class extends Migration
             $table->tinyInteger('is_featured')->default(0)->comment('1.active, 0.inactive');
             $table->tinyInteger('is_active')->default(1)->comment('1.active, 2.inactive');
             $table->timestamps();
-
+            $table->softDeletes();
         });
     }
 

@@ -13,13 +13,13 @@
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-capitalize">{{ actionType }} {{ 'Accounts Category' }}</h5>
+                        <h5 class="modal-title text-capitalize">{{ actionType }} {{ 'Category' }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form @submit.prevent="actionType == 'add' ? add() : edit()">
                         <div class="modal-body">
                             <div class="form-group mb-3">
-                                <label for="name" class="form-label">Categrty Name<span class="text-danger">*</span></label>
+                                <label for="name" class="form-label">Category Name<span class="text-danger">*</span></label>
                                 <input type="text" v-model="addEditParam.name" name="name"
                                        class="form-control" id="name" placeholder="Categrty Name">
                                 <small class="invalid-feedback text-danger"></small>
@@ -90,7 +90,7 @@ export default {
                     this.param = param
                     this.list()
                 },
-                noDataError: 'Please click "+ Add Accounts Category" Type to add a new Accounts Category'
+                noDataError: 'Please click "+ Add Category" Type to add a new Category'
             },
         }
     },
@@ -188,7 +188,7 @@ export default {
         this.list()
     },
     created() {
-        this.breadCrumb.push('Accounts Category')
+        this.breadCrumb.push('Category')
     }
 }
 </script>

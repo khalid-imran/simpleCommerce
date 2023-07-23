@@ -13,5 +13,6 @@ use App\Http\Controllers\SpaController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/secure-admin/{any}', [SpaController::class, 'backend'])->where('any', '.*')->name('Spa.Admin');
+Route::get('/secure-admin/{any}', [SpaController::class, 'backend'])->where('any', '.*')->name('Spa.Admin.Auth');
+Route::get('/secure-admin', [SpaController::class, 'backend'])->where('any', '.*')->name('Spa.Admin');
 Route::get('/{any}', [SpaController::class, 'frontend'])->where('any', '.*')->name('Spa.User');
