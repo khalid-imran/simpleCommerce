@@ -1,0 +1,220 @@
+@import "variables";
+@import "ulit";
+/*icon*/
+img{
+    &.trash {
+        content: url("/images/icons/trash.svg");
+        cursor: pointer;
+    }
+    &.xls {
+        content: url("/images/icons/xls.svg");
+        cursor: pointer;
+    }
+    &.pdf {
+        content: url("/images/icons/pdf.svg");
+        cursor: pointer;
+    }
+    &.delete {
+        content: url("/images/icons/delete.svg");
+        cursor: pointer;
+    }
+}
+
+/*global*/
+.autocomplete-input{
+    position: relative;
+    .input-result{
+        position: absolute;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #e1e1e1;
+        width: 100%;
+        left: 0;
+        right: 0;
+        background-color: #ffffff;
+        z-index: 99;
+        box-shadow: 0 2px 6px 0 #cbcbcb;
+        .each-box{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 10px;
+            transition: 500ms;
+            border-radius: 4px;
+            cursor: pointer;
+            &:hover{
+                background-color: #f2f2f2;
+                transition: 500ms;
+            }
+        }
+    }
+    .input-loader{
+        position: absolute;
+        right: 0.6rem;
+        top: 0.7rem;
+    }
+}
+.block{
+    pointer-events: none;
+    filter: blur(3px);
+    cursor: not-allowed;
+    opacity: .8;
+}
+
+.file-upload{
+    box-sizing: border-box;
+    border: 2px dashed #157EFB;
+    border-radius: 3px;
+    padding: 0;
+    background-color: lighten(#157EFB, 30%);
+    background-image: url("/images/fancy_upload.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity: 0.85;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    color: #157EFB;
+    &.avatar{
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+    }
+    &.signature{
+        width: 100%;
+        height: 150px;
+    }
+}
+.avatar{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px dashed #157EFB;
+    object-fit: fill;
+    object-position: center;
+}
+.signature{
+    width: 100%;
+    height: 150px;
+    border: 2px dashed #157EFB;
+    object-fit: fill;
+    object-position: center;
+}
+.remove-avatar{
+    position: absolute;
+    left: 8rem;
+    top: 7rem;
+    width: 25px;
+    height: 25px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.remove-sig{
+    position: absolute;
+    right: -18px;
+    bottom: 0;
+    width: 25px;
+    height: 25px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.input-password{
+    position: relative;
+    .eye{
+        position: absolute;
+        right: 1rem;
+        top: 2.25rem;
+    }
+}
+.pagination{
+    margin-bottom: 0;
+    .page-item{
+        .page-link{
+            text-align: center;
+            display: flex;
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+            border-radius: 50%;
+            border: 1px solid #e6e6e6;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+    }
+}
+.table-control {
+    max-width: 205px;
+    min-width: 205px;
+}
+.calendar-icon{
+    position: absolute;
+    right: 17px;
+    top: 2rem;
+    pointer-events: none;
+    font-size: 20px;
+    &.table-icon{
+        right: 6px;
+        top: 0;
+    }
+}
+.multiselect{
+    .multiselect__tags {
+        min-height: 39px!important;
+        display: block;
+        padding: 4px 40px 0 8px!important;
+        border-radius: 5px;
+        border: 1px solid #ced4da!important;
+        background: #fff;
+        font-size: 14px;
+    }
+    .multiselect__input, .multiselect__single{
+        margin-bottom: 0!important;
+        line-height: 30px!important;
+    }
+    .multiselect__placeholder{
+        display: none!important;
+    }
+    .multiselect__tag{
+        margin-bottom: 0!important;
+        margin-top: 4px;
+        background: #008cff!important;
+    }
+}
+.item-delete {
+    font-size: 22px;
+    position: relative;
+    top: 31px;
+}
+
+/*scroll bar*/
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
