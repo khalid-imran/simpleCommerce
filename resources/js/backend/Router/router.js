@@ -23,6 +23,7 @@ const routes = [
             { path: "/secure-admin/category", name: "category", component: Category},
             { path: "/secure-admin/delivery/fee", name: "deliveryFee", component: DeliveryFee},
             { path: "/secure-admin/slide", name: "slide", component: Slide},
+            { path: "/secure-admin/slide", name: "slide", component: Slide},
         ]
     }
 ]
