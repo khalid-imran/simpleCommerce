@@ -20,6 +20,17 @@ const ApiRoutes = {
     SingleSlide: ApiVersion + '/slide/single',
     DeleteSlide: ApiVersion + '/slide/delete',
     ListSlide: ApiVersion + '/slide/list',
+    //Website
+    AddWebsite: ApiVersion + '/website/save',
+    EditWebsite: ApiVersion + '/website/update',
+    SingleWebsite: ApiVersion + '/website/single',
+    //Product
+    AddProduct: ApiVersion + '/product/save',
+    EditProduct: ApiVersion + '/product/update',
+    SingleProduct: ApiVersion + '/product/single',
+    DeleteProduct: ApiVersion + '/product/delete',
+    ListProduct: ApiVersion + '/product/list',
+    DeleteProductImage: ApiVersion + '/product/delete/image',
 };
 
 export default ApiRoutes;

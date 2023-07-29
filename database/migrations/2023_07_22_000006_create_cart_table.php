@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('product_id');
             $table->integer('product_variant_id')->default(0);
-            $table->tinyInteger('is_guest')->default(0)->comment('0.customer, 1.guest');
             $table->integer('quantity');
             $table->double('price');
             $table->double('total');

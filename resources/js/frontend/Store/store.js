@@ -3,7 +3,7 @@ const store = createStore({
     state: {
         Auth: null,
         AccessToken: null,
-        AllClasses: null,
+        website: null,
         AllGroup: null,
     },
     getters: {
@@ -19,6 +19,12 @@ const store = createStore({
             }
             return state.AccessToken;
         },
+        GetWebsite(state) {
+            if (state.website == null) {
+                return JSON.parse(localStorage.getItem("website_settings"));
+            }
+            return state.website;
+        },
     },
     mutations: {
         PutAuth(state, data) {
@@ -28,6 +34,10 @@ const store = createStore({
         PutAccessToken(state, data) {
             localStorage.setItem('ecommerce_user_access_token', data);
             state.AccessToken = data;
+        },
+        PutWebsite(state, data) {
+            localStorage.setItem('website_settings', JSON.stringify(data));
+            state.website = data;
         },
     },
     actions: {

@@ -18,7 +18,7 @@
     <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
     <link href="{{ asset('css/icons.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <title>Admin</title>
+    <title>Diivaa Admin</title>
     <script>
         window.APP_URL = '{{ env('APP_URL') }}';
     </script>

@@ -15,75 +15,80 @@
                                            </div>
                                            <hr>
                                            <div class="row">
+                                               <div class="col-sm-3 mb-4">
+                                                   <template v-if="!photo">
+                                                       <input @change="addLogo" id="fancy-sig-upload" type="file"
+                                                              name="files" accept=".jpg, .png, image/jpeg, image/png"
+                                                              class="d-none">
+                                                       <label for="fancy-sig-upload" class="file-upload signature">
+                                                           Logo
+                                                       </label>
+                                                   </template>
+                                                   <template v-if="photo">
+                                                       <div class="position-relative">
+                                                           <img class="signature" :src="photo" alt="">
+                                                           <div class="remove-sig bg-danger" @click="removeLogo">
+                                                               <i class="bx bx-trash"></i>
+                                                           </div>
+                                                       </div>
+                                                   </template>
+                                               </div>
+                                               <div class="col-sm-9"></div>
                                                <div class="col-sm-6 mb-3 form-group">
-                                                   <label class="form-label">Date<span class="text-danger">*</span></label>
-                                                   <flat-pickr class="form-control" v-model="addEditParam.date" name="date"
-                                                               :config="{dateFormat: 'Y-m-d', altInput: true, altFormat:'d/m/Y'}"/>
+                                                   <label class="form-label">Name</label>
+                                                   <input type="text" class="form-control" name="name" v-model="addEditParam.name">
                                                    <small class="invalid-feedback text-danger"></small>
                                                </div>
                                                <div class="col-sm-6 mb-3 form-group">
-                                                   <label class="form-label">Accounts Category</label>
-                                                   <select class="form-select" v-model="addEditParam.category_id" name="category_id">
-                                                       <option v-for="c in categories" :value="c.id">{{ c.name }}</option>
-                                                   </select>
+                                                   <label class="form-label">About</label>
+                                                   <input type="text" class="form-control" name="about" v-model="addEditParam.about">
                                                </div>
                                                <div class="col-sm-6 mb-3 form-group">
-                                                   <label class="form-label">Collection By<span class="text-danger">*</span></label>
-                                                   <multiselect name="member_id" v-model="member"  track-by="id" label="name" :options="members" :multiple="false"></multiselect>
+                                                   <label class="form-label">Address</label>
+                                                   <input type="text" class="form-control" name="address" v-model="addEditParam.address">
                                                    <small class="invalid-feedback text-danger"></small>
                                                </div>
                                                <div class="col-sm-6 mb-3 form-group">
-                                                   <label class="form-label">Payment Method<span class="text-danger">*</span></label>
-                                                   <select class="form-select" v-model="addEditParam.payment_method" name="payment_method">
-                                                       <option value="bank">Bank</option>
-                                                       <option value="bkash">Bkash</option>
-                                                       <option value="nagad">Nagad</option>
-                                                       <option value="others">Others</option>
-                                                   </select>
+                                                   <label class="form-label">Phone</label>
+                                                   <input type="text" class="form-control" name="phone" v-model="addEditParam.phone">
                                                    <small class="invalid-feedback text-danger"></small>
                                                </div>
-                                               <div class="col-sm-6 mb-3 form-group" v-if="addEditParam.payment_method == 'bank'">
-                                                   <label class="form-label">Bank Name</label>
-                                                   <select class="form-select" v-model="addEditParam.bank_id" name="bank_id">
-                                                       <option v-for="b in banks" :value="b.id">{{ b.name }}</option>
-                                                   </select>
+                                               <div class="col-sm-6 mb-3 form-group">
+                                                   <label class="form-label">Email</label>
+                                                   <input type="text" class="form-control" name="email" v-model="addEditParam.email">
                                                    <small class="invalid-feedback text-danger"></small>
                                                </div>
-                                               <div class="col-md-6 mb-3 form-group" v-if="addEditParam.payment_method == 'bank'">
-                                                   <label class="form-label">Bank Account Number</label>
-                                                   <input type="text" class="form-control" name="account_number" v-model="addEditParam.account_number">
+                                               <div class="col-sm-6 mb-3 form-group">
+                                                   <label class="form-label">Facebook Link</label>
+                                                   <input type="text" class="form-control" name="social_facebook" v-model="addEditParam.social_facebook">
+                                                   <small class="invalid-feedback text-danger"></small>
+                                               </div>
+                                               <div class="col-sm-6 mb-3 form-group">
+                                                   <label class="form-label">Linkedin Link</label>
+                                                   <input type="text" class="form-control" name="email" v-model="addEditParam.social_linkedIn">
+                                                   <small class="invalid-feedback text-danger"></small>
+                                               </div>
+                                               <div class="col-sm-6 mb-3 form-group">
+                                                   <label class="form-label">Youtube Link</label>
+                                                   <input type="text" class="form-control" name="email" v-model="addEditParam.social_youtube">
+                                                   <small class="invalid-feedback text-danger"></small>
+                                               </div>
+                                               <div class="col-sm-6 mb-3 form-group">
+                                                   <label class="form-label">Instagram Link</label>
+                                                   <input type="text" class="form-control" name="email" v-model="addEditParam.social_instagram">
+                                                   <small class="invalid-feedback text-danger"></small>
+                                               </div>
+                                               <div class="col-sm-6 mb-3 form-group">
+                                                   <label class="form-label">Twitter Link</label>
+                                                   <input type="text" class="form-control" name="email" v-model="addEditParam.social_twitter">
                                                    <small class="invalid-feedback text-danger"></small>
                                                </div>
 
-                                               <div class="col-sm-6 mb-3 form-group">
-                                                   <label class="form-label">Accounts Head</label>
-                                                   <select class="form-select" v-model="addEditParam.account_head_id" name="account_head_id">
-                                                       <option v-for="a in accountHeads" :value="a.id">{{ a.name }}</option>
-                                                   </select>
-                                                   <small class="invalid-feedback text-danger"></small>
-                                               </div>
-
-                                               <div class="col-md-6 form-group">
-                                                   <label class="form-label">Amount<span class="text-danger">*</span></label>
-                                                   <input type="text" class="form-control" name="amount" v-model="addEditParam.amount">
-                                                   <small class="invalid-feedback text-danger"></small>
-                                               </div>
-                                               <div class="col-sm-6 mb-3 form-group">
-                                                   <label class="form-label">Approved By</label>
-                                                   <multiselect  name="approved_by" v-model="approve_by" track-by="id" label="name"  :options="members" :multiple="true"></multiselect>
-                                                   <small class="invalid-feedback text-danger"></small>
-                                               </div>
-                                               <div class="col-md-6 mb-3 form-group">
-                                                   <label class="form-label">Remarks</label>
-                                                   <input type="text" class="form-control" name="remarks" v-model="addEditParam.remarks">
-                                                   <small class="invalid-feedback text-danger"></small>
-                                               </div>
                                            </div>
                                        </div>
                                    </div>
                                </div>
                                <div class="text-end">
-                                   <router-link :to="{name: 'income'}" type="button" class="btn btn-secondary me-2 btn-width" >Close</router-link>
                                    <button type="submit" class="btn btn-primary btn-width" v-if="!loading">
                                        Save
                                    </button>
@@ -118,34 +123,53 @@ export default {
             loading: false,
             dataLoading: false,
             addEditParam: {
-                date: '',
-                category_id: '',
-                member_id: '',
-                account_head_id: '',
-                payment_method: '',
-                bank_id: '',
-                account_number: '',
-                amount: '',
-                approved_by: [],
-                remarks: '',
+                name: '',
+                logo: '',
+                about: '',
+                address: '',
+                phone: '',
+                email: '',
+                social_facebook: '',
+                social_linkedIn: '',
+                social_youtube: '',
+                social_instagram: '',
+                social_twitter: '',
             },
+            photo: null
         }
     },
     methods: {
+        addLogo: function (e) {
+            this.addEditParam.logo = e.target.files[0];
+            this.photo = URL.createObjectURL(this.addEditParam.logo);
+        },
+        removeLogo: function () {
+            this.addEditParam.logo = '';
+            this.photo = null;
+        },
         getSingle: function () {
             this.dataLoading = true
-            ApiService.POST(ApiRoutes.ListBank, (res) => {
+            ApiService.POST(ApiRoutes.SingleWebsite, null,(res) => {
+                this.dataLoading = false
                 if (parseInt(res.status) === 200) {
-                    this.addEditParam = res.data
+                    if (res.data != null) {
+                        this.addEditParam = res.data
+                        if (this.addEditParam.logo != null) {
+                            this.photo = this.addEditParam.full_path
+                        }
+                    }
                 }
             });
         },
         manage: function () {
             ApiService.ClearErrorHandler();
             this.loading = true;
-            ApiService.POST(ApiRoutes.AddIncome, this.addEditParam, (res) => {
+            let url = this.addEditParam.id != undefined && this.addEditParam.id != '' ? ApiRoutes.EditWebsite : ApiRoutes.AddWebsite;
+            let param = this.makeFormData(this.addEditParam)
+            ApiService.POST(url, param, (res) => {
                 this.loading = false;
                 if (parseInt(res.status) === 200) {
+                    this.$toast.success(res.message)
                 } else {
                     ApiService.ErrorHandler(res.errors);
                 }

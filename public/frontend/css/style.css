@@ -192,7 +192,7 @@ ul {
   padding: 0;
 }
 
-/*-- 
+/*--
     - Common Classes
 -----------------------------------------*/
 .fix {
@@ -1235,7 +1235,7 @@ a:hover {
 }
 
 /***************************
-    Page section padding 
+    Page section padding
 ****************************/
 .ptb-0 {
   padding: 0;
@@ -1350,7 +1350,7 @@ a:hover {
 }
 
 /***************************
-    Page section margin 
+    Page section margin
 ****************************/
 .mtb-0 {
   margin: 0;
@@ -1424,7 +1424,7 @@ a:hover {
   margin: 290px 0;
 }
 
-/*-- 
+/*--
     - Input Placeholder
 -----------------------------------------*/
 input:-moz-placeholder,
@@ -1739,8 +1739,8 @@ textarea:focus {
   margin: 14px 0 0;
 }
 
-/*-- 
-    Scroll Up 
+/*--
+    Scroll Up
 -----------------------------------------*/
 #scrollUp {
   width: 50px;
@@ -4505,7 +4505,7 @@ a.default-btn {
   }
 }
 .slider-content-2 h1 {
-  font-size: 72px;
+  font-size: 68px;
   line-height: 97px;
   color: #010101;
   margin: 6px 0 37px;

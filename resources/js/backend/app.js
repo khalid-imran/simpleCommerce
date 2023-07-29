@@ -12,7 +12,7 @@ import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-default.css';
 import Multiselect from 'vue-multiselect'
 import "vue-multiselect/dist/vue-multiselect.css"
-
+import Vue3Editor from "vue3-editor";
 const app = createApp(App);
 app.use(store);
 app.use(router);
@@ -26,6 +26,7 @@ app.use(FloatingVue, {
 app.use(ToastPlugin,  { position: "top-right"});
 app.component('flat-pickr', flatPickr);
 app.component('multiselect', Multiselect)
+app.use(Vue3Editor);
 app.mixin({
     methods: {
         formatPrice: function(value) {
@@ -48,7 +49,7 @@ app.mixin({
             let formData = new FormData()
             for (const property in object) {
                 if (object[property]){
-                    if (typeof object[property] === 'object' && property !== 'file' && property !== 'signature') {
+                    if (typeof object[property] === 'object' && property !== 'file' && property !== 'logo') {
                         if (Array.isArray(object[property]))  {
                             object[property].map((value, index) => {
                                 for (const ArrProperty in value) {
@@ -62,7 +63,7 @@ app.mixin({
                                 }
                             }
                         }
-                    } else if (typeof object[property] === 'object' && (property === 'file' || property === 'signature'))  {
+                    } else if (typeof object[property] === 'object' && (property === 'file' || property === 'logo'))  {
                         formData.append(property, object[property])
                     } else {
                         formData.append(property, object[property])

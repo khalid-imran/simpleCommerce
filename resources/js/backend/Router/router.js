@@ -6,6 +6,10 @@ import Dashboard from "../Pages/Dashboard/Dashborad.vue"
 import Category from "../Pages/Settings/Category/Category.vue"
 import DeliveryFee from "../Pages/Settings/DeliveryFee/DeliveryFee.vue"
 import Slide from "../Pages/Settings/Slide/Slide.vue"
+import Website from "../Pages/Settings/Website/Website.vue"
+import Product from "../Pages/Product/Product.vue"
+import ProductAdd from "../Pages/Product/Add.vue"
+import ProductEdit from "../Pages/Product/Edit.vue"
 const routes = [
     {
         name: "login",
@@ -23,7 +27,10 @@ const routes = [
             { path: "/secure-admin/category", name: "category", component: Category},
             { path: "/secure-admin/delivery/fee", name: "deliveryFee", component: DeliveryFee},
             { path: "/secure-admin/slide", name: "slide", component: Slide},
-            { path: "/secure-admin/slide", name: "slide", component: Slide},
+            { path: "/secure-admin/website", name: "website", component: Website},
+            { path: "/secure-admin/product", name: "product", component: Product},
+            { path: "/secure-admin/product/add", name: "productAdd", component: ProductAdd},
+            { path: "/secure-admin/product/edit/:id", name: "productEdit", component: ProductEdit},
         ]
     }
 ]

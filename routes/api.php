@@ -6,6 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DeliveryFeeController;
 use App\Http\Controllers\SlideController;
+use App\Http\Controllers\WebsiteController;
+use App\Http\Controllers\WebsiteSettingController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,4 +49,19 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('update', [SlideController::class, 'update']);
         Route::post('delete', [SlideController::class, 'delete']);
     });
+    Route::group(['prefix' => 'website'], function() {
+        Route::post('save', [WebsiteController::class, 'save']);
+        Route::post('single', [WebsiteController::class, 'single']);
+        Route::post('update', [WebsiteController::class, 'update']);
+    });
+    Route::group(['prefix' => 'product'], function() {
+        Route::post('save', [ProductController::class, 'save']);
+        Route::post('list', [ProductController::class, 'list']);
+        Route::post('single', [ProductController::class, 'single']);
+        Route::post('update', [ProductController::class, 'update']);
+        Route::post('delete', [ProductController::class, 'delete']);
+        Route::post('delete/images', [ProductController::class, 'deleteProductImage']);
+    });
 });
+/*front api*/
+Route::post('website/get', [WebsiteSettingController::class, 'get']);

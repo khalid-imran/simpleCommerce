@@ -31,7 +31,17 @@
                     <li :class="isActive('slide')">
                         <router-link :to="{name: 'slide'}"><i class="bx bx-right-arrow-alt"></i>Slide</router-link>
                     </li>
+                    <li :class="isActive('website')">
+                        <router-link :to="{name: 'website'}"><i class="bx bx-right-arrow-alt"></i>Website</router-link>
+                    </li>
                 </ul>
+            </li>
+            <li>
+                <router-link :to="{name: 'product'}">
+                    <div class="parent-icon"><i class='bx bx-barcode-reader'></i>
+                    </div>
+                    <div class="menu-title">Product</div>
+                </router-link>
             </li>
         </ul>
         <!--end navigation-->
@@ -54,11 +64,13 @@ export default {
             }
         },
         isActive: function (routeName) {
-            if (this.$route.name == routeName) {
-                return 'mm-active'
-            } else {
-                return ''
-            }
+           setTimeout(() => {
+               if (this.$route.name == routeName) {
+                   return 'mm-active'
+               } else {
+                   return ''
+               }
+           })
         }
     },
 }

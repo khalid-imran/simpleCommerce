@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -17,8 +18,15 @@ class CategoryController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 500, 'errors' => $validator->errors()]);
         }
+        $slug = Str::slug($requestData['name']);
+        $checkSlug = Category::where('slug', $slug)->first();
+        if ($checkSlug != null) {
+            $slug = $slug . '-' . time();
+        }
+
         $category = new Category();
         $category->name = $requestData['name'];
+        $category->slug = $slug;
         if ($category->save()) {
             return response()->json(['status' => 200, 'message' => 'Successfully saved category.']);
         }
@@ -72,7 +80,14 @@ class CategoryController extends Controller
         if ($category == null) {
             return response()->json(['status' => 500, 'message' => 'Cannot find category.']);
         }
+        $slug = Str::slug($requestData['name']);
+        $checkSlug = $category['slug'];
+        if ($checkSlug == $slug) {
+            $slug = $slug . '-' . time();
+        }
+
         $category->name = $requestData['name'];
+        $category->slug = $slug;
         if ($category->save()) {
             return response()->json(['status' => 200, 'message' => 'Successfully updated category.']);
         }

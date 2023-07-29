@@ -5,26 +5,11 @@
                 <div class="col-lg-2 col-md-4 col-sm-4">
                     <div class="copyright mb-30">
                         <div class="footer-logo">
-                            <a href="index.html">
-                                <img alt src="images/logo.png">
-                            </a>
+                            <router-link :to="{name: 'dashboard'}">
+                                <img alt :src="settings?.website?.full_path">
+                            </router-link>
                         </div>
-                        <p>© 2021 <a href="#">Flone</a>.<br> All Rights Reserved</p>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4">
-                    <div class="footer-widget mb-30 ml-30">
-                        <div class="footer-title">
-                            <h3>ABOUT US</h3>
-                        </div>
-                        <div class="footer-list">
-                            <ul>
-                                <li><a href="about.html">About us</a></li>
-                                <li><a href="#">Store location</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                                <li><a href="#">Orders tracking</a></li>
-                            </ul>
-                        </div>
+                        <p>© {{ new Date().getFullYear() }} <router-link :to="{name: 'dashboard'}">Diivaa</router-link>.<br> All Rights Reserved</p>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-4 col-sm-4">
@@ -34,10 +19,10 @@
                         </div>
                         <div class="footer-list">
                             <ul>
-                                <li><a href="#">Returns</a></li>
-                                <li><a href="#">Support Policy</a></li>
-                                <li><a href="#">Size guide</a></li>
-                                <li><a href="#">FAQs</a></li>
+                                <li><a href="javascript:void(0)">Returns</a></li>
+                                <li><a href="javascript:void(0)">Support Policy</a></li>
+                                <li><a href="javascript:void(0)">Size guide</a></li>
+                                <li><a href="javascript:void(0)">FAQs</a></li>
                             </ul>
                         </div>
                     </div>
@@ -49,34 +34,24 @@
                         </div>
                         <div class="footer-list">
                             <ul>
-                                <li><a href="#">Facebook</a></li>
-                                <li><a href="#">Twitter</a></li>
-                                <li><a href="#">Instagram</a></li>
-                                <li><a href="#">Youtube</a></li>
+                                <li v-if="settings?.website?.social_facebook"><a :href="settings?.website.social_facebook">Facebook</a></li>
+                                <li v-if="settings?.website?.social_twitter"><a :href="settings?.website?.social_twitter">Twitter</a></li>
+                                <li v-if="settings?.website?.social_instagram"><a :href="settings?.website?.social_instagram">Instagram</a></li>
+                                <li v-if="settings?.website?.social_youtube"><a :href="settings?.website?.social_youtube">Youtube</a></li>
+                                <li v-if="settings?.website?.social_linkedIn"><a :href="settings?.website?.social_linkedIn">LinkedIn</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="footer-widget mb-30 ml-70">
                         <div class="footer-title">
-                            <h3>SUBSCRIBE</h3>
+                            <h3>About us</h3>
                         </div>
                         <div class="subscribe-style">
-                            <p>Get E-mail updates about our latest shop and special offers.</p>
-                            <div id="mc_embed_signup" class="subscribe-form">
-                                <form id="mc-embedded-subscribe-form" class="validate" novalidate target="_blank" name="mc-embedded-subscribe-form" method="post" action="https://devitems.us11.list-manage.com/subscribe/post?u=6bbb9b6f5827bd842d9640c82&id=05d85f18ef">
-                                    <div id="mc_embed_signup_scroll" class="mc-form">
-                                        <input class="email" type="email" required placeholder="Enter your email here.." name="EMAIL" value>
-                                        <div class="mc-news" aria-hidden="true">
-                                            <input type="text" value tabindex="-1" name="b_6bbb9b6f5827bd842d9640c82_05d85f18ef">
-                                        </div>
-                                        <div class="clear">
-                                            <input id="mc-embedded-subscribe" class="button" type="submit" name="subscribe" value="Subscribe">
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                            <p>{{ settings?.website?.about }}</p>
+                            <p><span class="text-theme">Phone:</span> {{ settings?.website?.phone }}</p>
+                            <p><span class="text-theme">Email:</span> {{ settings?.website?.email }}</p>
                         </div>
                     </div>
                 </div>
@@ -90,7 +65,17 @@
 import store from "../../Store/store";
 
 export default {
+    data: function () {
+        return {}
+    },
+    computed: {
+        settings: function () {
+            return store.getters.GetWebsite
+        }
+    },
+    methods: {
 
+    },
 }
 </script>
 

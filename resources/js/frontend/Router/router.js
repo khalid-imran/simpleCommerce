@@ -5,38 +5,16 @@ import Layout from "../Pages/Layout/Layout.vue"
 import Dashboard from "../Pages/Dashboard/Dashborad.vue"
 const routes = [
     {
-        name: "login",
-        path: "/login",
-        component: Login,
-        beforeEnter: authCheck,
-    },
-    {
         name: "layout",
         path: "/",
         component: Layout,
-        beforeEnter: authRequestCheck,
         children: [
             { path: "/", name: "dashboard", component: Dashboard},
+            { path: "/login", name: "login", component: Login},
+            { path: "/product/:category?", name: "product", component: Login},
         ]
     }
 ]
-
-function authCheck(to, from, next) {
-    let token = localStorage.getItem('ecommerce_user_access_token');
-    if (token !== undefined && token != null) {
-        next('/');
-    } else {
-        next();
-    }
-}
-function authRequestCheck(to, from, next) {
-    let token = localStorage.getItem('ecommerce_user_access_token');
-    if (token === undefined || token == null) {
-        next('/login');
-    } else {
-        next();
-    }
-}
 
 const router = createRouter({
     history: createWebHistory(),
