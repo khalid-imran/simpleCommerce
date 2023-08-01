@@ -13,179 +13,110 @@
                                     </div>
                                     <hr>
                                     <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="row form-group mb-3">
-                                                <div class="col-sm-3">
-                                                    <template v-if="!photo">
-                                                        <input @change="addPhoto" id="fancy-file-upload" type="file"
-                                                               name="files" accept=".jpg, .png, image/jpeg, image/png"
-                                                               class="d-none">
-                                                        <label for="fancy-file-upload" class="file-upload signature">Photo</label>
-                                                    </template>
-                                                    <template v-if="photo">
-                                                        <div class="position-relative w-content">
-                                                            <img class="signature" :src="photo" alt="">
-                                                            <div class="remove-sig bg-danger" @click="removePhoto">
-                                                                <i class="bx bx-trash"></i>
-                                                            </div>
-                                                        </div>
-                                                    </template>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    <div class="row">
-                                                        <div class="col-sm-6">
-                                                            <div class="form-group mb-3">
-                                                                <label for="name" class="form-label">Code<span class="text-danger">*</span></label>
-                                                                <input type="text" v-model="addEditParam.code" name="code" class="form-control" id="code"
-                                                                       placeholder="Code">
-                                                                <small class="invalid-feedback text-danger"></small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <div class="form-group mb-3">
-                                                                <label for="name" class="form-label">Name<span class="text-danger">*</span></label>
-                                                                <input type="text" v-model="addEditParam.name" name="name" class="form-control" id="name"
-                                                                       placeholder="Name">
-                                                                <small class="invalid-feedback text-danger"></small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <div class="form-group mb-3">
-                                                                <label for="name" class="form-label">Short Name</label>
-                                                                <input type="text" v-model="addEditParam.short_name" name="short_name" class="form-control" id="short_name"
-                                                                       placeholder="Short Name">
-                                                                <small class="invalid-feedback text-danger"></small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <div class="form-group mb-3">
-                                                                <label for="name" class="form-label">Color</label>
-                                                                <input type="text" v-model="addEditParam.color" name="color" class="form-control" id="color"
-                                                                       placeholder="Color">
-                                                                <small class="invalid-feedback text-danger"></small>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <div class="form-group mb-3">
-                                                <label for="name" class="form-label">Weight</label>
-                                                <input type="text" v-model="addEditParam.weight" name="weight" class="form-control" id="weight"
-                                                       placeholder="Weight">
+                                                <label for="name" class="form-label">Title<span class="text-danger">*</span></label>
+                                                <input type="text" v-model="addEditParam.title" name="title" class="form-control" id="title"
+                                                       placeholder="Title">
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <div class="form-group mb-3">
-                                                <label for="name" class="form-label">DP</label>
-                                                <input type="text" v-model="addEditParam.dp" name="dp" class="form-control" id="dp"
-                                                       placeholder="DP">
+                                                <label for="name" class="form-label">Category</label>
+                                                <select name="category_id" class="form-control" v-model="addEditParam.category_id">
+                                                    <option v-for="c in category" :value="c.id">{{c.name}}</option>
+                                                </select>
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <div class="form-group mb-3">
-                                                <label for="name" class="form-label">TP</label>
-                                                <input type="text" v-model="addEditParam.tp" name="tp" class="form-control" id="tp"
-                                                       placeholder="TP">
+                                                <label for="name" class="form-label">Discount Type</label>
+                                                <select  v-model="addEditParam.discount_type" name="discount_type" class="form-control" id="discount_type">
+                                                    <option value="2">None</option>
+                                                    <option value="0">Percentage</option>
+                                                    <option value="1">Percentage</option>
+                                                </select>
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <div class="form-group mb-3">
-                                                <label for="name" class="form-label">MRP</label>
-                                                <input type="text" v-model="addEditParam.mrp" name="mrp" class="form-control" id="mrp"
-                                                       placeholder="MRP">
+                                                <label for="name" class="form-label">Discount Amount</label>
+                                                <input type="text" :disabled="addEditParam.discount_type > 1" v-model="addEditParam.discount_amount"
+                                                       name="discount_amount" class="form-control" id="discount_amount"
+                                                       placeholder="Discount Amount">
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <div class="form-group mb-3">
-                                                <label for="name" class="form-label">Box</label>
-                                                <input type="text" v-model="addEditParam.box" name="box" class="form-control" id="box"
-                                                       placeholder="Box">
+                                                <label for="name" class="form-label">Product Feature</label>
+                                                <vue-editor v-model="addEditParam.features" :editor-toolbar="customToolbar" name="features"/>
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <div class="form-group mb-3">
-                                                <label for="name" class="form-label">Carton</label>
-                                                <input type="text" v-model="addEditParam.carton" name="carton" class="form-control" id="carton"
-                                                       placeholder="Carton">
+                                                <label for="name" class="form-label">Product Description</label>
+                                                <vue-editor v-model="addEditParam.description" :editor-toolbar="customToolbar" name="description"/>
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <div class="form-group mb-3">
-                                                <label for="name" class="form-label">Trade Offer</label>
-                                                <input type="text" v-model="addEditParam.trade_offer" name="trade_offer" class="form-control" id="trade_offer"
-                                                       placeholder="Trade Offer">
+                                                <label for="name" class="form-label">Buy Price</label>
+                                                <input type="text" v-model="addEditParam.buy_price"
+                                                       name="buy_price" class="form-control" id="buy_price"
+                                                       placeholder="Buy Price">
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <div class="form-group mb-3">
-                                                <label for="name" class="form-label">Free</label>
-                                                <input type="text" v-model="addEditParam.free" name="free" class="form-control" id="free"
-                                                       placeholder="Free">
+                                                <label for="name" class="form-label d-flex align-items-center justify-content-between">
+                                                    <span>Product Variant</span>
+                                                    <button type="button" class="btn btn-sm btn-inverse-primary" @click="addNewVariant">Add new variant</button>
+                                                </label>
+                                                <table class="table table-bordered align-items-center">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Title</th>
+                                                        <th>Price</th>
+                                                        <th></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr v-for="(v, i) in addEditParam.variants">
+                                                        <td>
+                                                            <input class="form-control" type="text" v-model="v.title">
+                                                        </td>
+                                                        <td>
+                                                            <input class="form-control" type="text" v-model="v.price">
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <i v-if="i > 0" class="bx bx-trash text-danger cursor-pointer fs-5" @click="removeVariant(i)"></i>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <input type="hidden" name="variants">
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                         </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-3">
-                                                <label for="name" class="form-label">DP after Trade Offer</label>
-                                                <input type="text" v-model="addEditParam.dp_after_trade_offer" name="dp_after_trade_offer" class="form-control" id="dp_after_trade_offer"
-                                                       placeholder="DP after Trade Offer">
-                                                <small class="invalid-feedback text-danger"></small>
+                                        <div class="col-sm-12 d-flex align-items-center">
+                                            <div class="each-img me-4" v-for="(img, index) in images">
+                                                <img :src="img" alt="">
+                                                <button type="button" class="btn btn-danger btn-radius me-2 delete-btn" @click="removePhoto(index)">
+                                                    <i class="bx bx-trash"></i>
+                                                </button>
                                             </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-3">
-                                                <label for="name" class="form-label">Materials</label>
-                                                <input type="text" v-model="addEditParam.materials" name="materials" class="form-control" id="materials"
-                                                       placeholder="Materials">
-                                                <small class="invalid-feedback text-danger"></small>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-3">
-                                                <label for="name" class="form-label">Benefits</label>
-                                                <input type="text" v-model="addEditParam.benefits" name="benefits" class="form-control" id="benefits"
-                                                       placeholder="Benefits">
-                                                <small class="invalid-feedback text-danger"></small>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-3">
-                                                <label for="name" class="form-label">Bsti(cm license)</label>
-                                                <input type="text" v-model="addEditParam.cm_license" name="cm_license" class="form-control" id="cm_license"
-                                                       placeholder="Bsti(cm license)">
-                                                <small class="invalid-feedback text-danger"></small>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group mb-3">
-                                                <label for="name" class="form-label">Bsti (metrology license)</label>
-                                                <input type="text" v-model="addEditParam.metrology_license" name="metrology_license" class="form-control" id="metrology_license"
-                                                       placeholder="Bsti (metrology license)">
-                                                <small class="invalid-feedback text-danger"></small>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-8">
-                                            <div class="form-group mb-3">
-                                                <label for="name" class="form-label">Remarks</label>
-                                                <input type="text" v-model="addEditParam.remarks" name="remarks" class="form-control" id="remarks"
-                                                       placeholder="Remarks">
-                                                <small class="invalid-feedback text-danger"></small>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <div class="form-group mb-3">
-                                                <label for="name" class="form-label">How to use</label>
-                                                <vue-editor v-model="addEditParam.usage" :editor-toolbar="customToolbar" name="usage"/>
-                                                <small class="invalid-feedback text-danger"></small>
+                                            <div class="each-img">
+                                                <input @change="addPhoto" id="fancy-file-upload" type="file"
+                                                       name="files" accept=".jpg, .png, image/jpeg, image/png"
+                                                       class="d-none">
+                                                <label for="fancy-file-upload" class="file-upload signature">Photo</label>
                                             </div>
                                         </div>
                                     </div>
@@ -220,28 +151,17 @@ export default {
             loading: false,
             dataLoading: false,
             addEditParam: {
-                image: '',
-                code: '',
-                name: '',
-                short_name: '',
-                color: '',
-                weight: '',
-                dp: '',
-                tp: '',
-                mrp: '',
-                box: '',
-                carton: '',
-                trade_offer: '',
-                free: '',
-                dp_after_trade_offer: '',
-                remarks: '',
-                usage: '',
-                benefits: '',
-                cm_license: '',
-                metrology_license: '',
-                materials: '',
+                title: '',
+                category_id: '',
+                description: '',
+                features: '',
+                buy_price: '',
+                discount_type: 2,
+                discount_amount: '',
+                images: [],
+                variants: [{title: '', price: ''}],
             },
-            photo: null,
+            images: [],
             customToolbar: [
                 [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                 ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -253,19 +173,36 @@ export default {
                 [{ 'align': [] }],
 
                 ['clean']
-            ]
+            ],
+            category: []
         }
     },
     methods: {
+        addNewVariant: function () {
+            this.addEditParam.variants.push({title: '', price: ''})
+        },
+        removeVariant: function (index) {
+            this.addEditParam.variants.splice(index, 1)
+        },
         addPhoto: function (e) {
-            this.addEditParam.image = e.target.files[0];
-            this.photo = URL.createObjectURL(this.addEditParam.image);
+            this.addEditParam.images.push(e.target.files[0]);
+            this.images.push(URL.createObjectURL(e.target.files[0]));
         },
-        removePhoto: function () {
-            this.addEditParam.image = '';
-            this.photo = null;
+        removePhoto: function (index) {
+            this.addEditParam.images.splice(index, 1)
+            this.images.splice(index, 1)
         },
-        manage: function (isNew = false) {
+        getCategory: function () {
+            ApiService.POST(ApiRoutes.ListCategory, {limit: 20}, (res) => {
+                this.loading = false;
+                if (parseInt(res.status) === 200) {
+                    this.category = res.data.data
+                } else {
+                    ApiService.ErrorHandler(res.errors);
+                }
+            });
+        },
+        manage: function () {
             ApiService.ClearErrorHandler();
             this.loading = true;
             let param = this.makeFormData(this.addEditParam)
@@ -285,11 +222,23 @@ export default {
 
     },
     created() {
-
+        this.getCategory()
     }
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.each-img{
+    width: 175px;
+    position: relative;
+    img{
+        width: 100%;
+        height: 150px;
+    }
+    .delete-btn{
+        position: absolute;
+        top: -13px;
+        right: -18px;
+    }
+}
 </style>

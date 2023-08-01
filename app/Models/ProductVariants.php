@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ProductVariants extends Model
 {
     use HasFactory, SoftDeletes;
+    protected $table = 'variants';
     protected $hidden = [
         'created_at',
         'updated_at',

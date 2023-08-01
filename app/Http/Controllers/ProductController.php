@@ -17,7 +17,6 @@ class ProductController extends Controller
         $requestData = $request->all();
         $validator = Validator::make($requestData, [
             'title' => 'required',
-            'category_id' => 'required|exists:categories,id,',
             'discount_amount' => 'numeric',
             'variants' => 'required|array',
         ]);
@@ -31,28 +30,26 @@ class ProductController extends Controller
         }
 
         $product = new Product();
-        $product->category_id = $requestData['category_id'];
+        $product->category_id = $requestData['category_id'] ?? null;
         $product->title = $requestData['title'];
         $product->slug = $slug;
-        $product->description = $requestData['description'];
-        $product->features = $requestData['features'];
-        $product->buy_price = $requestData['buy_price'];
-        $product->discount_type = $requestData['discount_type'];
-        if (isset($requestData['discount']) && $requestData['discount'] > 0) {
-            $product->discount_amount = $requestData['discount'];
+        $product->description = $requestData['description'] ?? null;
+        $product->features = $requestData['features'] ?? null;
+        $product->buy_price = $requestData['buy_price'] ?? null;
+        $product->discount_type = $requestData['discount_type'] ?? 2;
+        if (isset($requestData['discount_amount']) && $requestData['discount_amount'] > 0) {
+            $product->discount_amount = $requestData['discount_amount'];
         }
         if (!$product->save()) {
             return response()->json(['status' => 500, 'message' => 'Cannot created product.']);
         }
         if (isset($requestData['images']) && count($requestData['images']) > 0) {
+            $files = $request->file('images');
             $images = [];
-            foreach ($requestData['images'] as $img) {
-                if ($request->file($img)) {
-                    $image = $request->file($img);
-                    $name = md5(uniqid(rand(), true)) . str_replace(' ', '-', $image->getClientOriginalName());
-                    $image->move(storage_path('/app/public/uploads'), $name);
-                    $images[] = ['product_id' =>  $product->id, 'file_path' => $name];
-                }
+            foreach ($files as $img) {
+                $name = md5(uniqid(rand(), true)) . str_replace(' ', '-', $img->getClientOriginalName());
+                $img->move(storage_path('/app/public/uploads'), $name);
+                $images[] = ['product_id' =>  $product->id, 'file_path' => $name];
             }
             ProductImage::insert($images);
         }
@@ -78,7 +75,7 @@ class ProductController extends Controller
         $orderMode = isset($requestData['order_mode']) && !empty($requestData['order_mode']) ? $requestData['order_mode'] : 'DESC';
         $keyword = isset($requestData['keyword']) ? $requestData['keyword'] : '';
 
-        $result = Product::with('images', 'variants');
+        $result = Product::with('images');
         if (!empty($keyword)) {
             $result->where(function($q) use ($keyword) {
                 $q->where('title', 'LIKE', '%'.$keyword.'%');
@@ -106,7 +103,6 @@ class ProductController extends Controller
         $validator = Validator::make($requestData, [
             'id' => 'required',
             'title' => 'required',
-            'category_id' => 'required|exists:categories,id,',
             'discount_amount' => 'numeric',
             'variants' => 'required|array',
         ]);
@@ -119,28 +115,26 @@ class ProductController extends Controller
             $slug = $slug . '-' . time();
         }
         $product = Product::where('id', $requestData['id'])->first();
-        $product->category_id = $requestData['category_id'];
+        $product->category_id = $requestData['category_id'] ?? null;
         $product->title = $requestData['title'];
         $product->slug = $slug;
-        $product->description = $requestData['description'];
-        $product->features = $requestData['features'];
-        $product->buy_price = $requestData['buy_price'];
-        $product->discount_type = $requestData['discount_type'];
-        if (isset($requestData['discount']) && $requestData['discount'] > 0) {
-            $product->discount_amount = $requestData['discount'];
+        $product->description = $requestData['description'] ?? null;
+        $product->features = $requestData['features'] ?? null;
+        $product->buy_price = $requestData['buy_price'] ?? null;
+        $product->discount_type = $requestData['discount_type'] ?? 2;
+        if (isset($requestData['discount_amount']) && $requestData['discount_amount'] > 0) {
+            $product->discount_amount = $requestData['discount_amount'];
         }
         if (!$product->save()) {
             return response()->json(['status' => 500, 'message' => 'Cannot created product.']);
         }
         if (isset($requestData['images']) && count($requestData['images']) > 0) {
+            $files = $request->file('images');
             $images = [];
-            foreach ($requestData['images'] as $img) {
-                if ($request->file($img)) {
-                    $image = $request->file($img);
-                    $name = md5(uniqid(rand(), true)) . str_replace(' ', '-', $image->getClientOriginalName());
-                    $image->move(storage_path('/app/public/uploads'), $name);
-                    $images[] = ['product_id' =>  $product->id, 'file_path' => $name];
-                }
+            foreach ($files as $img) {
+                $name = md5(uniqid(rand(), true)) . str_replace(' ', '-', $img->getClientOriginalName());
+                $img->move(storage_path('/app/public/uploads'), $name);
+                $images[] = ['product_id' =>  $product->id, 'file_path' => $name];
             }
             ProductImage::insert($images);
         }
@@ -170,10 +164,10 @@ class ProductController extends Controller
         }
         Product::where('id', $requestData['id'])->delete();
         ProductVariants::where('product_id', $requestData['id'])->delete();
-        $images = ProductImage::where('product_id', $requestData['id'])->toArray();
+        $images = ProductImage::where('product_id', $requestData['id'])->get()->toArray();
         foreach ($images as $image) {
-            if (!empty($image->file_path) && file_exists(public_path('storage/uploads/'.$image->file_path))) {
-                unlink(public_path('storage/uploads/'.$image->file_path));
+            if (!empty($image['file_path']) && file_exists(public_path('storage/uploads/'.$image['file_path']))) {
+                unlink(public_path('storage/uploads/'.$image['file_path']));
             }
         }
         ProductImage::where('product_id', $requestData['id'])->delete();

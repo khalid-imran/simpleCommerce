@@ -52,8 +52,12 @@ app.mixin({
                     if (typeof object[property] === 'object' && property !== 'file' && property !== 'logo') {
                         if (Array.isArray(object[property]))  {
                             object[property].map((value, index) => {
-                                for (const ArrProperty in value) {
-                                    formData.append(property+'['+index+']['+ArrProperty+']', value[ArrProperty])
+                                if (typeof object[property] === 'object' && (property === 'images'))  {
+                                    formData.append(property+'['+index+']', object[property][index])
+                                } else {
+                                    for (const ArrProperty in value) {
+                                        formData.append(property+'['+index+']['+ArrProperty+']', value[ArrProperty])
+                                    }
                                 }
                             })
                         } else {

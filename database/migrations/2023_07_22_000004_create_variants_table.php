@@ -16,10 +16,8 @@ return new class extends Migration
         Schema::create('variants', function (Blueprint $table) {
             $table->id();
             $table->integer('product_id');
-            $table->string('size')->nullable();
-            $table->string('color')->nullable();
-            $table->tinyInteger('available')->default(1)->comment('1.Available, 0.Not Available');
-            $table->double('price');
+            $table->string('title')->nullable();
+            $table->double('price')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

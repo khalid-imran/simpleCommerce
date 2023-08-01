@@ -5,7 +5,7 @@
                 <div class="col-xl-2 col-lg-2 col-md-6 col-4">
                     <div class="logo">
                         <router-link :to="{name: 'dashboard'}">
-                            <img alt :src="settings?.website.full_path">
+                            <img alt :src="settings?.website?.full_path">
                         </router-link>
                     </div>
                 </div>
@@ -142,6 +142,13 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.logo{
+    img{
+        width: 120px;
+        height: 30px;
+        object-fit: cover;
+        object-position: center;
+    }
+}
 </style>

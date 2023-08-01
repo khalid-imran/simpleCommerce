@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedInteger('category_id')->nullable();
             $table->text('features')->nullable();
             $table->text('description')->nullable();
-            $table->double('buy_price')->default(0.00);
+            $table->double('buy_price')->nullable();
             $table->tinyInteger('discount_type')->default(0)->comment('1.prcnt , 0.fixed');
             $table->double('discount_amount')->default(0.00);
             $table->tinyInteger('is_active')->default(1)->comment('1.active, 2.inactive');

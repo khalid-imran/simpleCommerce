@@ -60,7 +60,7 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('single', [ProductController::class, 'single']);
         Route::post('update', [ProductController::class, 'update']);
         Route::post('delete', [ProductController::class, 'delete']);
-        Route::post('delete/images', [ProductController::class, 'deleteProductImage']);
+        Route::post('delete/image', [ProductController::class, 'deleteProductImage']);
     });
 });
 /*front api*/

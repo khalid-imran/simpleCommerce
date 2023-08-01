@@ -38,23 +38,11 @@ export default {
             table: {
                 alignTop: false,
                 columns: [
-                    {type: 'text', key: 'code', label: 'Product Code', sortable: true},
-                    {type: 'text', key: 'name', label: 'Name', sortable: true, photo: true},
-                    {type: 'text', key: 'short_name', label: 'Short Name', sortable: true},
-                    {type: 'text', key: 'color', label: 'Color', sortable: true},
-                    {type: 'text', key: 'weight', label: 'Weight', sortable: true},
-                    {type: 'text', key: 'dp', label: 'DP', sortable: true},
-                    {type: 'text', key: 'tp', label: 'TP', sortable: true},
-                    {type: 'text', key: 'mrp', label: 'MRP', sortable: true},
-                    {type: 'text', key: 'box', label: 'Box', sortable: true},
-                    {type: 'text', key: 'carton', label: 'Carton', sortable: true},
-                    {type: 'text', key: 'trade_offer', label: 'Trade Offer', sortable: true},
-                    {type: 'text', key: 'free', label: 'Free', sortable: true},
+                    {type: 'text', key: 'title', label: 'Title', sortable: true},
+                    {type: 'imgArr', key: 'images', label: 'Image', sortable: true},
                 ],
                 rows: [],
                 row_actions: [
-                    {name: 'view', type: 'action', label: 'bx bx-search-alt', color: 'btn-gradient-primary'},
-                    {name: 'pdf', type: 'action', label: 'bx bx-file', color: 'btn-gradient-info',  loading: false},
                     {name: 'edit', type: 'action', label: 'bx bx-pencil', color: 'btn-info'},
                     {name: 'delete', type: 'action', label: 'bx bx-trash', color: 'btn-gradient-danger'}
                 ],

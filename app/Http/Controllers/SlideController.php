@@ -106,7 +106,11 @@ class SlideController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 500, 'errors' => $validator->errors()]);
         }
-        Slide::where('id', $requestData['id'])->delete();
+        $slide = Slide::find($requestData['id']);
+        if (!empty($slide->file_path) && file_exists(public_path('storage/uploads/'.$slide->file_path))) {
+            unlink(public_path('storage/uploads/'.$slide->file_path));
+        }
+        $slide->delete();
         return response()->json(['status' => 200, 'message' => 'Successfully deleted slide.']);
     }
 }
