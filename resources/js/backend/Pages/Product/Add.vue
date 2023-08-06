@@ -35,8 +35,8 @@
                                                 <label for="name" class="form-label">Discount Type</label>
                                                 <select  v-model="addEditParam.discount_type" name="discount_type" class="form-control" id="discount_type">
                                                     <option value="2">None</option>
-                                                    <option value="0">Percentage</option>
                                                     <option value="1">Percentage</option>
+                                                    <option value="0">Fixed</option>
                                                 </select>
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>

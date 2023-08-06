@@ -7453,7 +7453,7 @@ a.default-btn {
 }
 .product-wrap .product-img .product-action .pro-cart {
   font-size: 14px;
-  width: calc(100% - 48px - 48px);
+  width: calc(100% - 48px);
   -webkit-transition-delay: 0.1s;
           transition-delay: 0.1s;
 }

@@ -13,7 +13,7 @@ class WebsiteSettingController extends Controller
 {
     public function get(Request $request)
     {
-        $category = Category::select('id','name')->get()->toArray();
+        $category = Category::select('id','name', 'slug')->get()->toArray();
         $website = Website::first();
         $slide = Slide::select('title', 'file_path', 'button_title')->get()->toArray();
         $deliveryFee = DeliveryFee::select('name', 'fee')->get()->toArray();

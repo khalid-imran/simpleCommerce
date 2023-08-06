@@ -14,9 +14,11 @@
                         <nav>
                             <ul>
                                 <li><router-link :to="{name: 'dashboard'}">Home </router-link></li>
-                                <li><router-link :to="{name: 'product'}"> Shop</router-link></li>
-                                <li v-for="c in settings?.category"><router-link :to="{name: 'product', params: { category: c.id }}">
-                                    {{ c.name }}</router-link></li>
+                                <li><router-link :to="{name: 'products'}"> Shop</router-link></li>
+                                <li v-for="c in settings?.category">
+                                    <router-link :to="{name: 'productCategory', params: { slug: c.slug }}" :key="c.slug">
+                                    {{ c.name }}</router-link>
+                                </li>
                             </ul>
                         </nav>
                     </div>
@@ -98,8 +100,8 @@
                     <nav id="mobile-menu-active">
                         <ul class="menu-overflow">
                             <li><router-link :to="{name: 'dashboard'}">Home </router-link></li>
-                            <li><router-link :to="{name: 'product'}"> Shop</router-link></li>
-                            <li v-for="c in settings?.category"><router-link :to="{name: 'product', params: { category: c.id }}">
+                            <li><router-link :to="{name: 'products'}"> Shop</router-link></li>
+                            <li v-for="c in settings?.category"><router-link :to="{name: 'productCategory', params: { slug: c.slug }}">
                                 {{ c.name }}</router-link></li>
                         </ul>
                     </nav>
@@ -145,7 +147,6 @@ export default {
 <style lang="scss" scoped>
 .logo{
     img{
-        width: 120px;
         height: 30px;
         object-fit: cover;
         object-position: center;

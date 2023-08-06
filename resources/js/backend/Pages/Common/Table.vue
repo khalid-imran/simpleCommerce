@@ -90,7 +90,7 @@
                             <img class="table-image" :src="dataRow[dataCol['key']]" alt="">
                         </td>
                         <td v-if="dataCol['type'] === 'imgArr'">
-                            <img class="table-image" v-if="dataRow[dataCol['key']].length > 0" :src="dataRow[dataCol['key']['full_path'][0]]" alt="">
+                            <img class="table-image" v-if="dataRow[dataCol['key']].length > 0" :src="dataRow[dataCol['key']][0]['full_path']" alt="">
                         </td>
                         <td v-if="dataCol['type'] === 'text'"
                             :class="dataCol['isCapital'] !== undefined && dataCol['isCapital'] === true ? 'text-capitalize' : ''">

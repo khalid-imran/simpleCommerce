@@ -9,6 +9,7 @@ use App\Http\Controllers\SlideController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WebsiteSettingController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductFrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,5 +64,12 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('delete/image', [ProductController::class, 'deleteProductImage']);
     });
 });
+
 /*front api*/
 Route::post('website/get', [WebsiteSettingController::class, 'get']);
+Route::group(['prefix' => 'product'], function() {
+    Route::post('get/latest', [ProductFrontController::class, 'latest']);
+    Route::post('by/category', [ProductFrontController::class, 'byCategory']);
+    Route::post('get/all', [ProductFrontController::class, 'getAll']);
+    Route::post('get/single', [ProductFrontController::class, 'getSingle']);
+});
