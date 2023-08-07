@@ -12,9 +12,10 @@
                         <div class="login-form-container">
                             <div class="login-register-form">
                                 <form action="#" method="post">
-                                    <input type="text" name="user-name" placeholder="Username">
+                                    <input type="text" name="name" placeholder="Name">
+                                    <input type="text" name="user-name" placeholder="Mobile">
                                     <input type="password" name="user-password" placeholder="Password">
-                                    <input name="user-email" placeholder="Email" type="email">
+                                    <input type="password" name="user-password" placeholder="Confirm Password">
                                     <div class="button-box">
                                         <button type="submit"><span>Register</span></button>
                                     </div>
@@ -37,8 +38,10 @@ export default {
         return {
             APP_URL: window.APP_URL,
             loginParam: {
+                name: '',
                 phone: '',
                 password: '',
+                confirm_password: '',
                 remember: '',
             },
             loading: false

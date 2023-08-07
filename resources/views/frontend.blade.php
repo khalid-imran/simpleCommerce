@@ -32,7 +32,6 @@
 <!--end wrapper-->
 <script src="{{asset('frontend/js/modernizr-3.11.7.min.js')}}"></script>
 <script src="{{asset('frontend/js/jquery-v3.6.0.min.js')}}"></script>
-<script src="{{asset('frontend/js/jquery-migrate-v3.3.2.min.js')}}"></script>
 <script src="{{asset('frontend/js/popper.min.js')}}"></script>
 <script src="{{asset('frontend/js/bootstrap.min.js')}}"></script>
 <script src="{{asset('frontend/js/plugins.js')}}"></script>
@@ -40,5 +39,6 @@
 <script src="{{ asset('js/frontend/app.js') }}"></script>
 <!-- Main JS -->
 <script src="{{asset('frontend/js/main.js')}}"></script>
+
 </body>
 </html>

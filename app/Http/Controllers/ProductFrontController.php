@@ -38,8 +38,7 @@ class ProductFrontController extends Controller
         $requestData = $request->all();
         $result = Product::with('images', 'variants')
             ->where('slug', $requestData['slug'])
-            ->orderBy('id', 'DESC')
-            ->get()->toArray();
+            ->first();
         return response()->json(['status' => 200, 'data' => $result]);
     }
 }

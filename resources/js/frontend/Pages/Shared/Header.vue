@@ -25,27 +25,18 @@
                 </div>
                 <div class="col-xl-2 col-lg-2 col-md-6 col-8">
                     <div class="header-right-wrap">
-                        <div class="same-style header-search">
-                            <a class="search-active" href="#"><i class="pe-7s-search"></i></a>
-                            <div class="search-content">
-                                <form action="#">
-                                    <input type="text" placeholder="Search">
-                                    <button class="button-search"><i class="pe-7s-search"></i></button>
-                                </form>
-                            </div>
-                        </div>
                         <div class="same-style account-satting" v-click-out-side="hideAccount">
                             <a class="account-satting-active" href="#"><i class="pe-7s-user-female"></i></a>
                             <div class="account-dropdown">
                                 <ul>
-                                    <li><a href="login-register.html">Login</a></li>
-                                    <li><a href="login-register.html">Register</a></li>
-                                    <li><a href="wishlist.html">Wishlist  </a></li>
-                                    <li><a href="my-account.html">my account</a></li>
+                                    <li v-if="auth == null"><router-link :to="{name: 'login'}">Login</router-link></li>
+                                    <li v-if="auth == null"><router-link :to="{name: 'register'}" href="login-register.html">Register</router-link></li>
+                                    <li v-if="auth != null"><a href="wishlist.html">Wishlist  </a></li>
+                                    <li v-if="auth != null"><a href="my-account.html">my account</a></li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="same-style header-wishlist">
+                        <div v-if="auth != null" class="same-style header-wishlist">
                             <a href="wishlist.html"><i class="pe-7s-like"></i></a>
                         </div>
                         <div class="same-style cart-wrap" v-click-out-side="hideCart">

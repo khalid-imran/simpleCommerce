@@ -16,11 +16,11 @@
             <div class="col-xl-3 col-md-6 col-lg-4 col-sm-6" v-for="l in allProducts">
                 <div class="product-wrap mb-25">
                     <div class="product-img">
-                        <a href="product-details.html">
+                        <router-link :to="{name: 'productSingle', params: {slug: l.slug}}">
                             <img class="default-img" v-if="l.images.length > 0" :src="l.images[0].full_path" alt="">
                             <img class="default-img" v-else src="images/product_default.jpg" alt="">
                             <img class="hover-img" v-if="l.images.length > 1" :src="l.images[1].full_path" alt="">
-                        </a>
+                        </router-link>
                         <span class="pink" v-if="l.discount_type == 1">-{{ l.discount_amount }}%</span>
                         <div class="product-action">
                             <div class="pro-same-action pro-wishlist">
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="product-content text-center">
-                        <h3><a href="product-details.html">{{l.title}}</a></h3>
+                        <h3><router-link :to="{name: 'productSingle', params: {slug: l.slug}}">{{l.title}}</router-link></h3>
                         <div class="product-price">
                             <span>$ {{getPrice(l).reduce_price}}</span>
                             <span class="old" v-if="l.discount_type != 2">$ {{ getPrice(l).price }}</span>

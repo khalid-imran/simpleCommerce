@@ -1,45 +1,23 @@
 <template>
     <div class="shop-area pt-100 pb-100">
         <div class="container">
-            <div class="row">
+            <div class="row"  v-if="singleProduct">
                 <div class="col-lg-6 col-md-6">
                     <div class="product-details">
                         <div class="product-details-img">
                             <div class="tab-content jump">
-                                <div id="shop-details-1" class="tab-pane large-img-style">
-                                    <img src="assets/img/product-details/large-1.jpg" alt="">
-                                    <span class="dec-price">-10%</span>
+                                <div v-for="(img,i) in singleProduct.images" :id="'shop-details-'+i" class="tab-pane large-img-style" :class="{active: i == 0}">
+                                    <img :src="img.full_path" alt="">
+                                    <span class="dec-price" v-if="singleProduct.discount_type == 1">-{{ singleProduct.discount_amount }}%</span>
                                     <div class="img-popup-wrap">
-                                        <a class="img-popup" href="assets/img/product-details/b-large-1.jpg"><i
-                                            class="pe-7s-expand1"></i></a>
-                                    </div>
-                                </div>
-                                <div id="shop-details-2" class="tab-pane active large-img-style">
-                                    <img src="assets/img/product-details/large-2.jpg" alt="">
-                                    <span class="dec-price">-10%</span>
-                                    <div class="img-popup-wrap">
-                                        <a class="img-popup" href="assets/img/product-details/b-large-2.jpg"><i
-                                            class="pe-7s-expand1"></i></a>
-                                    </div>
-                                </div>
-                                <div id="shop-details-3" class="tab-pane large-img-style">
-                                    <img src="assets/img/product-details/large-3.jpg" alt="">
-                                    <span class="dec-price">-10%</span>
-                                    <div class="img-popup-wrap">
-                                        <a class="img-popup" href="assets/img/product-details/b-large-3.jpg"><i
+                                        <a class="img-popup" :href="img.full_path"><i
                                             class="pe-7s-expand1"></i></a>
                                     </div>
                                 </div>
                             </div>
                             <div class="shop-details-tab nav">
-                                <a class="shop-details-overly" href="#shop-details-1" data-bs-toggle="tab">
-                                    <img src="assets/img/product-details/small-1.jpg" alt="">
-                                </a>
-                                <a class="shop-details-overly active" href="#shop-details-2" data-bs-toggle="tab">
-                                    <img src="assets/img/product-details/small-2.jpg" alt="">
-                                </a>
-                                <a class="shop-details-overly" href="#shop-details-3" data-bs-toggle="tab">
-                                    <img src="assets/img/product-details/small-3.jpg" alt="">
+                                <a :class="{active: i == 0}" class="shop-details-overly" v-for="(img,i) in singleProduct.images" :href="'#shop-details-'+i" data-bs-toggle="tab">
+                                    <img :src="img.full_path" alt="">
                                 </a>
                             </div>
                         </div>
@@ -47,52 +25,29 @@
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="product-details-content ml-70">
-                        <h2>Products Name Here</h2>
+                        <h2>{{ singleProduct.title }}</h2>
                         <div class="product-details-price">
                             <span>$18.00 </span>
                             <span class="old">$20.00 </span>
                         </div>
-                        <div class="pro-details-rating-wrap">
-                            <div class="pro-details-rating">
-                                <i class="fa fa-star-o yellow"></i>
-                                <i class="fa fa-star-o yellow"></i>
-                                <i class="fa fa-star-o yellow"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            <span><a href="#">3 Reviews</a></span>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisic elit eiusm tempor incidid ut labore et
-                            dolore magna aliqua. Ut enim ad minim venialo quis nostrud exercitation ullamco</p>
-                        <div class="pro-details-list">
-                            <ul>
-                                <li>- 0.5 mm Dail</li>
-                                <li>- Inspired vector icons</li>
-                                <li>- Very modern style</li>
-                            </ul>
-                        </div>
+<!--                        <div class="pro-details-rating-wrap">-->
+<!--                            <div class="pro-details-rating">-->
+<!--                                <i class="fa fa-star-o yellow"></i>-->
+<!--                                <i class="fa fa-star-o yellow"></i>-->
+<!--                                <i class="fa fa-star-o yellow"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                                <i class="fa fa-star-o"></i>-->
+<!--                            </div>-->
+<!--                            <span><a href="#">3 Reviews</a></span>-->
+<!--                        </div>-->
+                        <p v-html="singleProduct.description"></p>
+                        <div class="pro-details-list" v-html="singleProduct.features"></div>
                         <div class="pro-details-size-color">
-                            <div class="pro-details-color-wrap">
-                                <span>Color</span>
-                                <div class="pro-details-color-content">
-                                    <ul>
-                                        <li class="blue"></li>
-                                        <li class="maroon active"></li>
-                                        <li class="gray"></li>
-                                        <li class="green"></li>
-                                        <li class="yellow"></li>
-                                    </ul>
-                                </div>
-                            </div>
                             <div class="pro-details-size">
-                                <span>Size</span>
+                                <span>Variants</span>
                                 <div class="pro-details-size-content">
                                     <ul>
-                                        <li><a href="#">s</a></li>
-                                        <li><a href="#">m</a></li>
-                                        <li><a href="#">l</a></li>
-                                        <li><a href="#">xl</a></li>
-                                        <li><a href="#">xxl</a></li>
+                                        <li v-for="v in singleProduct.variants"><a href="javascript:void(0)">{{ v.title }}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -109,34 +64,6 @@
                             <div class="pro-details-wishlist">
                                 <a href="#"><i class="fa fa-heart-o"></i></a>
                             </div>
-                            <div class="pro-details-compare">
-                                <a href="#"><i class="pe-7s-shuffle"></i></a>
-                            </div>
-                        </div>
-                        <div class="pro-details-meta">
-                            <span>Categories :</span>
-                            <ul>
-                                <li><a href="#">Minimal,</a></li>
-                                <li><a href="#">Furniture,</a></li>
-                                <li><a href="#">Fashion</a></li>
-                            </ul>
-                        </div>
-                        <div class="pro-details-meta">
-                            <span>Tag :</span>
-                            <ul>
-                                <li><a href="#">Fashion, </a></li>
-                                <li><a href="#">Furniture,</a></li>
-                                <li><a href="#">Electronic</a></li>
-                            </ul>
-                        </div>
-                        <div class="pro-details-social">
-                            <ul>
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                                <li><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -146,33 +73,8 @@
     <div class="description-review-area pb-90">
         <div class="container">
             <div class="description-review-wrapper">
-                <div class="description-review-topbar nav">
-                    <a data-bs-toggle="tab" href="#des-details1">Additional information</a>
-                    <a class="active" data-bs-toggle="tab" href="#des-details2">Description</a>
-                    <a data-bs-toggle="tab" href="#des-details3">Reviews (2)</a>
-                </div>
                 <div class="tab-content description-review-bottom">
-                    <div id="des-details2" class="tab-pane active">
-                        <div class="product-description-wrapper">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit, sed do eiusmod tempor
-                                incididunt</p>
-                            <p>ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                                ullamco laboris nisi ut aliquip ex ea commo consequat. Duis aute irure dolor in
-                                reprehend in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                                occaecat cupidatat non proident, sunt in culpa qui officia deserunt </p>
-                        </div>
-                    </div>
-                    <div id="des-details1" class="tab-pane ">
-                        <div class="product-anotherinfo-wrapper">
-                            <ul>
-                                <li><span>Weight</span> 400 g</li>
-                                <li><span>Dimensions</span>10 x 10 x 15 cm</li>
-                                <li><span>Materials</span> 60% cotton, 40% polyester</li>
-                                <li><span>Other Info</span> American heirloom jean shorts pug seitan letterpress</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div id="des-details3" class="tab-pane">
+<!--                    <div id="des-details3" class="tab-pane">
                         <div class="row">
                             <div class="col-lg-7">
                                 <div class="review-wrapper">
@@ -274,56 +176,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="related-product-area pb-95">
-        <div class="container">
-            <div class="section-title text-center mb-50">
-                <h2>Related products</h2>
-            </div>
-            <div class="related-product-active ">
-                <div class="product-wrap">
-                    <div class="product-img">
-                        <a href="product-details.html">
-                            <img class="default-img" src="assets/img/product/pro-1.jpg" alt="">
-                            <img class="hover-img" src="assets/img/product/pro-1-1.jpg" alt="">
-                        </a>
-                        <span class="pink">-10%</span>
-                        <div class="product-action">
-                            <div class="pro-same-action pro-wishlist">
-                                <a title="Wishlist" href="#"><i class="pe-7s-like"></i></a>
-                            </div>
-                            <div class="pro-same-action pro-cart">
-                                <a title="Add To Cart" href="#"><i class="pe-7s-cart"></i> Add to cart</a>
-                            </div>
-                            <div class="pro-same-action pro-quickview">
-                                <a title="Quick View" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="pe-7s-look"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-content text-center">
-                        <h3><a href="product-details.html">T- Shirt And Jeans</a></h3>
-                        <div class="product-rating">
-                            <i class="fa fa-star-o yellow"></i>
-                            <i class="fa fa-star-o yellow"></i>
-                            <i class="fa fa-star-o yellow"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <div class="product-price">
-                            <span>$ 60.00</span>
-                            <span class="old">$ 60.00</span>
-                        </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>
     </div>
 </template>
-
 <script>
 import ApiService from "../../Services/ApiService";
 import ApiRoutes from "../../Services/ApiRoutes";
@@ -333,9 +191,30 @@ export default {
     data() {
         return {
             APP_URL: window.APP_URL,
-
+            singleProduct: null,
+            slug: ''
         }
     },
-    methods: {}
+    methods: {
+        getProduct: function () {
+            ApiService.POST(ApiRoutes.ProductSingle, {slug: this.slug},(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.singleProduct = res.data
+                    setTimeout(() => {
+                        $('.img-popup').magnificPopup({
+                            type: 'image',
+                            gallery: {
+                                enabled: true
+                            }
+                        });
+                    }, 1000)
+                }
+            });
+        }
+    },
+    created() {
+        this.slug = this.$route.params.slug
+        this.getProduct()
+    }
 }
 </script>
