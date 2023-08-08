@@ -7762,6 +7762,10 @@ a.default-btn {
   background-color: #a749ff;
   color: #fff;
 }
+.product-details-content .pro-details-size-color .pro-details-size .pro-details-size-content ul li a.active {
+  background-color: #a749ff;
+  color: #fff;
+}
 .product-details-content .pro-details-quality {
   display: -webkit-box;
   display: -ms-flexbox;

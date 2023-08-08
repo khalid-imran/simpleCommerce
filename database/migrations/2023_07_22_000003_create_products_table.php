@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('slug');
             $table->unsignedInteger('category_id')->nullable();
             $table->text('features')->nullable();
+            $table->string('video')->nullable();
             $table->text('description')->nullable();
             $table->double('buy_price')->nullable();
             $table->tinyInteger('discount_type')->default(0)->comment('1.prcnt , 0.fixed');

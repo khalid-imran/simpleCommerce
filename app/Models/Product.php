@@ -14,6 +14,15 @@ class Product extends Model
         'updated_at',
         'deleted_at'
     ];
+    protected $appends = [
+        'video_path',
+    ];
+    public function getVideoPathAttribute()
+    {
+        if ($this->video != null) {
+            return asset('storage/uploads/'.$this->video);
+        }
+    }
     public function images(){
         return $this->hasMany(ProductImage::class, 'product_id', 'id');
     }

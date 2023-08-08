@@ -105,6 +105,18 @@
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                         </div>
+                                        <div class="each-video mb-5" v-if="addEditParam.video != null">
+                                            <video controls :src="video"></video>
+                                            <button type="button" class="btn btn-danger btn-radius me-2 delete-btn" @click="addEditParam.video = null; video = null">
+                                                <i class="bx bx-trash"></i>
+                                            </button>
+                                        </div>
+                                        <div class="each-video mb-5" v-if="addEditParam.video == null">
+                                            <input @change="addVideo" id="fancy-file-upload" type="file"
+                                                   name="files" accept=".mp4, .wmv, .avi, .3gp"
+                                                   class="d-none">
+                                            <label for="fancy-file-upload" class="file-upload signature">Video</label>
+                                        </div>
                                         <div class="col-sm-12 d-flex align-items-center">
                                             <div class="each-img me-4" v-for="(img, index) in images">
                                                 <img :src="img" alt="">
@@ -114,7 +126,7 @@
                                             </div>
                                             <div class="each-img">
                                                 <input @change="addPhoto" id="fancy-file-upload" type="file"
-                                                       name="files" accept=".jpg, .png, image/jpeg, image/png"
+                                                       name="files" accept=".jpg, .png, .gif, image/jpeg, image/png"
                                                        class="d-none">
                                                 <label for="fancy-file-upload" class="file-upload signature">Photo</label>
                                             </div>
@@ -155,6 +167,7 @@ export default {
                 category_id: '',
                 description: '',
                 features: '',
+                video: '',
                 buy_price: '',
                 discount_type: 2,
                 discount_amount: '',
@@ -174,7 +187,8 @@ export default {
 
                 ['clean']
             ],
-            category: []
+            category: [],
+            video: null
         }
     },
     methods: {
@@ -191,6 +205,10 @@ export default {
         removePhoto: function (index) {
             this.addEditParam.images.splice(index, 1)
             this.images.splice(index, 1)
+        },
+        addVideo: function (e) {
+            this.addEditParam.video = e.target.files[0];
+            this.video = URL.createObjectURL(e.target.files[0]);
         },
         getCategory: function () {
             ApiService.POST(ApiRoutes.ListCategory, {limit: 20}, (res) => {
@@ -234,6 +252,19 @@ export default {
     img{
         width: 100%;
         height: 150px;
+    }
+    .delete-btn{
+        position: absolute;
+        top: -13px;
+        right: -18px;
+    }
+}
+.each-video{
+    width: 350px;
+    position: relative;
+    video{
+        width: 100%;
+        height: 300px;
     }
     .delete-btn{
         position: absolute;

@@ -79,8 +79,8 @@
                         <div class="product-content text-center">
                             <h3><router-link :to="{name: 'productSingle', params: {slug: l.slug}}">{{l.title}}</router-link></h3>
                             <div class="product-price">
-                                <span>$ {{getPrice(l).reduce_price}}</span>
-                                <span class="old" v-if="l.discount_type != 2">$ {{ getPrice(l).price }}</span>
+                                <span>৳ {{getPrice(l).reduce_price}}</span>
+                                <span class="old" v-if="l.discount_type != 2">৳ {{ getPrice(l).price }}</span>
                             </div>
                         </div>
                     </div>
@@ -115,22 +115,6 @@ export default {
                 }
             });
         },
-        getPrice: function (product) {
-            let price = parseInt(product.variants[0].price);
-            let reduce_price = 0
-            if(product.discount_type == 1){
-                let discountAmount = parseInt(price) / 100 * parseInt(product.discount_amount)
-                reduce_price = price - discountAmount;
-            } else if (product.discount_type == 0){
-                reduce_price = parseInt(price) - parseInt(product.discount_amount)
-            } else {
-                reduce_price = price
-            }
-            return {
-                price: price,
-                reduce_price: reduce_price
-            }
-        }
     },
     created: function () {
         this.getLatestProduct()

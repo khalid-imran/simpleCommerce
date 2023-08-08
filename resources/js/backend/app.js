@@ -49,7 +49,7 @@ app.mixin({
             let formData = new FormData()
             for (const property in object) {
                 if (object[property]){
-                    if (typeof object[property] === 'object' && property !== 'file' && property !== 'logo') {
+                    if (typeof object[property] === 'object' && property !== 'file' && property !== 'logo' && property !== 'video') {
                         if (Array.isArray(object[property]))  {
                             object[property].map((value, index) => {
                                 if (typeof object[property] === 'object' && (property === 'images'))  {
@@ -67,7 +67,7 @@ app.mixin({
                                 }
                             }
                         }
-                    } else if (typeof object[property] === 'object' && (property === 'file' || property === 'logo'))  {
+                    } else if (typeof object[property] === 'object' && (property === 'file' || property === 'logo' || property === 'video'))  {
                         formData.append(property, object[property])
                     } else {
                         formData.append(property, object[property])

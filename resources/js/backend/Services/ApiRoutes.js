@@ -31,6 +31,7 @@ const ApiRoutes = {
     DeleteProduct: ApiVersion + '/product/delete',
     ListProduct: ApiVersion + '/product/list',
     DeleteProductImage: ApiVersion + '/product/delete/image',
+    DeleteProductVideo: ApiVersion + '/product/delete/video',
 };
 
 export default ApiRoutes;

@@ -82,12 +82,15 @@ class SlideController extends Controller
         $image_path = $slide->file_path;
         if ($request->file('file')) {
             $image = $request->file('file');
-            $name = md5(uniqid(rand(), true)) . str_replace(' ', '-', $image->getClientOriginalName());
-            $image->move(storage_path('/app/public/uploads'), $name);
-            $image_path = $name;
-            if (!empty($slide->file_path) && file_exists(public_path('storage/uploads/'.$slide->file_path))) {
-                unlink(public_path('storage/uploads/'.$slide->file_path));
+            if ($image) {
+                $name = md5(uniqid(rand(), true)) . str_replace(' ', '-', $image->getClientOriginalName());
+                $image->move(storage_path('/app/public/uploads'), $name);
+                $image_path = $name;
+                if (!empty($slide->file_path) && file_exists(public_path('storage/uploads/'.$slide->file_path))) {
+                    unlink(public_path('storage/uploads/'.$slide->file_path));
+                }
             }
+
         }
         $slide->title = $requestData['title'];
         $slide->button_title = $requestData['button_title'];

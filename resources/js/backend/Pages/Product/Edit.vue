@@ -105,13 +105,33 @@
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                         </div>
+                                        <div class="each-video mb-5" v-if="addEditParam.video != null">
+                                            <video controls :src="video"></video>
+                                            <button type="button" class="btn btn-danger btn-radius me-2 delete-btn" v-if="addEditParam.video_path == null"
+                                                    @click="addEditParam.video = null; video = null">
+                                                <i class="bx bx-trash"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-radius me-2 delete-btn" v-if="addEditParam.video_path != null"
+                                                    @click="removeVideoServer">
+                                                <i class="bx bx-trash"></i>
+                                            </button>
+                                        </div>
+                                        <div class="each-video mb-5" v-if="addEditParam.video == null">
+                                            <input @change="addVideo" id="fancy-file-upload" type="file"
+                                                   name="files" accept=".mp4, .wmv, .avi, .3gp"
+                                                   class="d-none">
+                                            <label for="fancy-file-upload" class="file-upload signature">Video</label>
+                                        </div>
                                         <div class="col-sm-12 d-flex align-items-center">
-                                            <div class="each-img me-4" v-for="(img, index) in addEditParam.images">
-                                                <img :src="img.full_path" alt="">
-                                                <button type="button" class="btn btn-danger btn-radius me-2 delete-btn" @click="removePhotoServer(img, index)">
-                                                    <i class="bx bx-trash"></i>
-                                                </button>
-                                            </div>
+                                            <template v-for="(img, index) in addEditParam.images">
+                                                <div class="each-img me-4"  v-if="img?.full_path">
+                                                    <img :src="img.full_path" alt="">
+                                                    <button type="button" class="btn btn-danger btn-radius me-2 delete-btn" @click="removePhotoServer(img, index)">
+                                                        <i class="bx bx-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </template>
+
                                             <div class="each-img me-4" v-for="(img, index) in images">
                                                 <img :src="img" alt="">
                                                 <button type="button" class="btn btn-danger btn-radius me-2 delete-btn" @click="removePhoto(index)">
@@ -171,6 +191,7 @@ export default {
 
                 ['clean']
             ],
+            video: null
         }
     },
     methods: {
@@ -191,6 +212,15 @@ export default {
         removePhotoServer: function (img, index) {
             this.addEditParam.images.splice(index, 1)
             ApiService.POST(ApiRoutes.DeleteProductImage, {id: img.id}, (res) => {});
+        },
+        removeVideoServer: function () {
+            this.addEditParam.video = null
+            this.video = null
+            ApiService.POST(ApiRoutes.DeleteProductVideo, {id: this.addEditParam.id}, (res) => {});
+        },
+        addVideo: function (e) {
+            this.addEditParam.video = e.target.files[0];
+            this.video = URL.createObjectURL(e.target.files[0]);
         },
         getCategory: function () {
             ApiService.POST(ApiRoutes.ListCategory, {limit: 20}, (res) => {
@@ -218,6 +248,9 @@ export default {
             ApiService.POST(ApiRoutes.SingleProduct, {id: this.id}, (res) => {
                 if (parseInt(res.status) === 200) {
                     this.addEditParam = res.data
+                    if (this.addEditParam.video) {
+                        this.video = this.addEditParam.video_path
+                    }
                 }
             });
         },
@@ -240,6 +273,19 @@ export default {
     img{
         width: 100%;
         height: 150px;
+    }
+    .delete-btn{
+        position: absolute;
+        top: -13px;
+        right: -18px;
+    }
+}
+.each-video{
+    width: 350px;
+    position: relative;
+    video{
+        width: 100%;
+        height: 300px;
     }
     .delete-btn{
         position: absolute;

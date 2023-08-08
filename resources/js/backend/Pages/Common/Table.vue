@@ -190,7 +190,10 @@ export default {
     watch: {
         'param.keyword': function () {
             if (!this.tblData?.searchBtn) {
-                this.tblData.updateFilter (this.param)
+                clearTimeout(this.searchTimeout)
+                this.searchTimeout = setTimeout(() => {
+                    this.tblData.updateFilter (this.param)
+                }, 800)
             }
         },
         'param.limit': function () {
@@ -201,7 +204,8 @@ export default {
         return {
             selectedData: [],
             rowAction: null,
-            date: ''
+            date: '',
+            searchTimeout: null
         }
     },
     methods: {

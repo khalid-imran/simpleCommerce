@@ -34,10 +34,10 @@
 <script src="{{asset('frontend/js/jquery-v3.6.0.min.js')}}"></script>
 <script src="{{asset('frontend/js/popper.min.js')}}"></script>
 <script src="{{asset('frontend/js/bootstrap.min.js')}}"></script>
-<script src="{{asset('frontend/js/plugins.js')}}"></script>
 <!--app JS-->
 <script src="{{ asset('js/frontend/app.js') }}"></script>
 <!-- Main JS -->
+<script src="{{asset('frontend/js/plugins.js')}}"></script>
 <script src="{{asset('frontend/js/main.js')}}"></script>
 
 </body>

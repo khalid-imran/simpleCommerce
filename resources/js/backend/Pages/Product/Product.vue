@@ -58,22 +58,6 @@ export default {
                     this.param = param
                     this.list()
                 },
-                download: [
-                    {
-                        icon: 'xls',
-                        loading: false,
-                        action: () => {
-                            this.downloadFile('xls')
-                        }
-                    },
-                    {
-                        icon: 'pdf',
-                        loading: false,
-                        action: () => {
-                            this.downloadFile('pdf')
-                        }
-                    }
-                ],
                 noDataError: ' Please click "+ Add Product" to add a new Product'
             },
             department: [],
@@ -155,11 +139,6 @@ export default {
                 }
             });
         },
-        downloadFile: function (type) {
-            let route = type === 'xls' ? ApiRoutes.ProductExportExcel : ApiRoutes.ProductExportPdf
-            let name = type === 'xls' ? 'Product List.xlsx' : 'Product List.pdf'
-            DownloadService.download(route, this.table.download, name, type, this.param)
-        }
     },
     mounted() {
         this.list()

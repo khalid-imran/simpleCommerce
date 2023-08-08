@@ -1,12 +1,13 @@
 <template>
     <div class="shop-area pt-100 pb-100">
         <div class="container">
-            <div class="row"  v-if="singleProduct">
+            <div class="row mb-3"  v-if="singleProduct">
                 <div class="col-lg-6 col-md-6">
                     <div class="product-details">
-                        <div class="product-details-img">
+                        <div class="product-details-img mb-5">
                             <div class="tab-content jump">
-                                <div v-for="(img,i) in singleProduct.images" :id="'shop-details-'+i" class="tab-pane large-img-style" :class="{active: i == 0}">
+                                <div v-if="singleProduct.images.length > 0" v-for="(img,i) in singleProduct.images"
+                                     :id="'shop-details-'+i" class="tab-pane large-img-style" :class="{active: i == 0}">
                                     <img :src="img.full_path" alt="">
                                     <span class="dec-price" v-if="singleProduct.discount_type == 1">-{{ singleProduct.discount_amount }}%</span>
                                     <div class="img-popup-wrap">
@@ -14,21 +15,38 @@
                                             class="pe-7s-expand1"></i></a>
                                     </div>
                                 </div>
+                                <div v-else  class="tab-pane large-img-style active" id="shop-details">
+                                    <img src="/images/product_default.jpg" alt="">
+                                    <span class="dec-price" v-if="singleProduct.discount_type == 1">-{{ singleProduct.discount_amount }}%</span>
+                                    <div class="img-popup-wrap">
+                                        <a class="img-popup" href="images/product_default.jpg"><i
+                                            class="pe-7s-expand1"></i></a>
+                                    </div>
+                                </div>
                             </div>
                             <div class="shop-details-tab nav">
-                                <a :class="{active: i == 0}" class="shop-details-overly" v-for="(img,i) in singleProduct.images" :href="'#shop-details-'+i" data-bs-toggle="tab">
+                                <a :class="{active: i == 0}" class="shop-details-overly" v-if="singleProduct.images.length > 0"
+                                   v-for="(img,i) in singleProduct.images"
+                                   :href="'#shop-details-'+i" data-bs-toggle="tab">
                                     <img :src="img.full_path" alt="">
+                                </a>
+                                <a  class="shop-details-overly active" v-else
+                                   href="#shop-details" data-bs-toggle="tab">
+                                    <img src="/images/product_default.jpg" alt="">
                                 </a>
                             </div>
                         </div>
+                        <video id="video" v-if="singleProduct?.video_path" autoplay controls playsinline controlslist="nodownload" style="width: 100%;">
+                            <source :src="singleProduct.video_path"/>
+                        </video>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="product-details-content ml-70">
                         <h2>{{ singleProduct.title }}</h2>
                         <div class="product-details-price">
-                            <span>$18.00 </span>
-                            <span class="old">$20.00 </span>
+                            <span>৳ {{getPrice(singleProduct).reduce_price}} </span>
+                            <span class="old" v-if="singleProduct.discount_type != 2">৳ {{ getPrice(singleProduct).price }}</span>
                         </div>
 <!--                        <div class="pro-details-rating-wrap">-->
 <!--                            <div class="pro-details-rating">-->
@@ -70,82 +88,53 @@
             </div>
         </div>
     </div>
-    <div class="description-review-area pb-90">
+<!--    <div class="description-review-area pb-90">
         <div class="container">
             <div class="description-review-wrapper">
-                <div class="tab-content description-review-bottom">
-<!--                    <div id="des-details3" class="tab-pane">
-                        <div class="row">
-                            <div class="col-lg-7">
-                                <div class="review-wrapper">
-                                    <div class="single-review">
-                                        <div class="review-img">
-                                            <img src="assets/img/testimonial/1.jpg" alt="">
-                                        </div>
-                                        <div class="review-content">
-                                            <div class="review-top-wrap">
-                                                <div class="review-left">
-                                                    <div class="review-name">
-                                                        <h4>White Lewis</h4>
-                                                    </div>
-                                                    <div class="review-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="review-left">
-                                                    <a href="#">Reply</a>
-                                                </div>
-                                            </div>
-                                            <div class="review-bottom">
-                                                <p>Vestibulum ante ipsum primis aucibus orci luctustrices posuere
-                                                    cubilia Curae Suspendisse viverra ed viverra. Mauris ullarper
-                                                    euismod vehicula. Phasellus quam nisi, congue id nulla.</p>
-                                            </div>
-                                        </div>
+                <div id="des-details3" class="tab-pane">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="review-wrapper">
+                                <div class="single-review">
+                                    <div class="review-img">
+                                        <img src="assets/img/testimonial/1.jpg" alt="">
                                     </div>
-                                    <div class="single-review child-review">
-                                        <div class="review-img">
-                                            <img src="assets/img/testimonial/2.jpg" alt="">
+                                    <div class="review-content">
+                                        <div class="review-top-wrap">
+                                            <div class="review-left">
+                                                <div class="review-name">
+                                                    <h4>White Lewis</h4>
+                                                </div>
+                                                <div class="review-rating">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <div class="review-left">
+                                                <a href="#">Reply</a>
+                                            </div>
                                         </div>
-                                        <div class="review-content">
-                                            <div class="review-top-wrap">
-                                                <div class="review-left">
-                                                    <div class="review-name">
-                                                        <h4>White Lewis</h4>
-                                                    </div>
-                                                    <div class="review-rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="review-left">
-                                                    <a href="#">Reply</a>
-                                                </div>
-                                            </div>
-                                            <div class="review-bottom">
-                                                <p>Vestibulum ante ipsum primis aucibus orci luctustrices posuere
-                                                    cubilia Curae Sus pen disse viverra ed viverra. Mauris ullarper
-                                                    euismod vehicula. </p>
-                                            </div>
+                                        <div class="review-bottom">
+                                            <p>Vestibulum ante ipsum primis aucibus orci luctustrices posuere
+                                                cubilia Curae Suspendisse viverra ed viverra. Mauris ullarper
+                                                euismod vehicula. Phasellus quam nisi, congue id nulla.</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-5">
-                                <div class="ratting-form-wrapper pl-50">
-                                    <h3>Add a Review</h3>
-                                    <div class="ratting-form">
-                                        <form action="#">
-                                            <div class="star-box">
-                                                <span>Your rating:</span>
-                                                <div class="ratting-star">
+                                <div class="single-review child-review">
+                                    <div class="review-img">
+                                        <img src="assets/img/testimonial/2.jpg" alt="">
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="review-top-wrap">
+                                            <div class="review-left">
+                                                <div class="review-name">
+                                                    <h4>White Lewis</h4>
+                                                </div>
+                                                <div class="review-rating">
                                                     <i class="fa fa-star"></i>
                                                     <i class="fa fa-star"></i>
                                                     <i class="fa fa-star"></i>
@@ -153,34 +142,61 @@
                                                     <i class="fa fa-star"></i>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="rating-form-style mb-10">
-                                                        <input placeholder="Name" type="text">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="rating-form-style mb-10">
-                                                        <input placeholder="Email" type="email">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="rating-form-style form-submit">
-                                                        <textarea name="Your Review" placeholder="Message"></textarea>
-                                                        <input type="submit" value="Submit">
-                                                    </div>
-                                                </div>
+                                            <div class="review-left">
+                                                <a href="#">Reply</a>
                                             </div>
-                                        </form>
+                                        </div>
+                                        <div class="review-bottom">
+                                            <p>Vestibulum ante ipsum primis aucibus orci luctustrices posuere
+                                                cubilia Curae Sus pen disse viverra ed viverra. Mauris ullarper
+                                                euismod vehicula. </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>-->
+                        <div class="col-lg-5">
+                            <div class="ratting-form-wrapper pl-50">
+                                <h3>Add a Review</h3>
+                                <div class="ratting-form">
+                                    <form action="#">
+                                        <div class="star-box">
+                                            <span>Your rating:</span>
+                                            <div class="ratting-star">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="rating-form-style mb-10">
+                                                    <input placeholder="Name" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="rating-form-style mb-10">
+                                                    <input placeholder="Email" type="email">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="rating-form-style form-submit">
+                                                    <textarea name="Your Review" placeholder="Message"></textarea>
+                                                    <input type="submit" value="Submit">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 </template>
 <script>
 import ApiService from "../../Services/ApiService";
@@ -215,6 +231,6 @@ export default {
     created() {
         this.slug = this.$route.params.slug
         this.getProduct()
-    }
+    },
 }
 </script>

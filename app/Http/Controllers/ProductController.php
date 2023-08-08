@@ -28,13 +28,20 @@ class ProductController extends Controller
         if ($checkSlug != null) {
             $slug = $slug . '-' . time();
         }
-
+        $video_path = null;
+        if ($request->file('video')) {
+            $video = $request->file('video');
+            $name = md5(uniqid(rand(), true)) . str_replace(' ', '-', $video->getClientOriginalName());
+            $video->move(storage_path('/app/public/uploads'), $name);
+            $video_path = $name;
+        }
         $product = new Product();
         $product->category_id = $requestData['category_id'] ?? null;
         $product->title = $requestData['title'];
         $product->slug = $slug;
         $product->description = $requestData['description'] ?? null;
         $product->features = $requestData['features'] ?? null;
+        $product->video = $video_path;
         $product->buy_price = $requestData['buy_price'] ?? null;
         $product->discount_type = $requestData['discount_type'] ?? 2;
         if (isset($requestData['discount_amount']) && $requestData['discount_amount'] > 0) {
@@ -109,17 +116,24 @@ class ProductController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 500, 'errors' => $validator->errors()]);
         }
-        $slug = Str::slug($requestData['title']);
-        $checkSlug = Product::where('slug', $slug)->first();
-        if ($checkSlug != null) {
-            $slug = $slug . '-' . time();
-        }
         $product = Product::where('id', $requestData['id'])->first();
+        $video_path = $product->video;
+        if ($request->file('video')) {
+            $video = $request->file('video');
+            if ($video) {
+                $name = md5(uniqid(rand(), true)) . str_replace(' ', '-', $video->getClientOriginalName());
+                $video->move(storage_path('/app/public/uploads'), $name);
+                $video_path = $name;
+                if (!empty($product->video) && file_exists(public_path('storage/uploads/'.$product->video))) {
+                    unlink(public_path('storage/uploads/'.$product->video));
+                }
+            }
+        }
         $product->category_id = $requestData['category_id'] ?? null;
         $product->title = $requestData['title'];
-        $product->slug = $slug;
         $product->description = $requestData['description'] ?? null;
         $product->features = $requestData['features'] ?? null;
+        $product->video = $video_path;
         $product->buy_price = $requestData['buy_price'] ?? null;
         $product->discount_type = $requestData['discount_type'] ?? 2;
         if (isset($requestData['discount_amount']) && $requestData['discount_amount'] > 0) {
@@ -130,13 +144,15 @@ class ProductController extends Controller
         }
         if (isset($requestData['images']) && count($requestData['images']) > 0) {
             $files = $request->file('images');
-            $images = [];
-            foreach ($files as $img) {
-                $name = md5(uniqid(rand(), true)) . str_replace(' ', '-', $img->getClientOriginalName());
-                $img->move(storage_path('/app/public/uploads'), $name);
-                $images[] = ['product_id' =>  $product->id, 'file_path' => $name];
+            if ($files) {
+                $images = [];
+                foreach ($files as $img) {
+                    $name = md5(uniqid(rand(), true)) . str_replace(' ', '-', $img->getClientOriginalName());
+                    $img->move(storage_path('/app/public/uploads'), $name);
+                    $images[] = ['product_id' =>  $product->id, 'file_path' => $name];
+                }
+                ProductImage::insert($images);
             }
-            ProductImage::insert($images);
         }
         ProductVariants::where('product_id', $requestData['id'])->delete();
         if (isset($requestData['variants']) && count($requestData['variants']) > 0) {
@@ -150,8 +166,7 @@ class ProductController extends Controller
             }
             ProductVariants::insert($productVariant);
         }
-        $rv = $product->toArray();
-        return response()->json(['status' => 200, 'data' => $rv, 'message' => 'Successfully saved product.']);
+        return response()->json(['status' => 200, 'message' => 'Successfully saved product.']);
     }
     public function delete(Request $request)
     {
@@ -162,7 +177,11 @@ class ProductController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 500, 'errors' => $validator->errors()]);
         }
-        Product::where('id', $requestData['id'])->delete();
+        $product = Product::where('id', $requestData['id'])->first();
+        if (!empty($product['video']) && file_exists(public_path('storage/uploads/'.$product['video']))) {
+            unlink(public_path('storage/uploads/'.$product['video']));
+        }
+        $product->delete();
         ProductVariants::where('product_id', $requestData['id'])->delete();
         $images = ProductImage::where('product_id', $requestData['id'])->get()->toArray();
         foreach ($images as $image) {
@@ -191,5 +210,25 @@ class ProductController extends Controller
         }
         $image->delete();
         return response()->json(['status' => 200, 'message' => 'Successfully deleted product images.']);
+    }
+    public function deleteProductVideo(Request $request)
+    {
+        $requestData = $request->all();
+        $validator = Validator::make($requestData, [
+            'id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 500, 'errors' => $validator->errors()]);
+        }
+        $product = Product::find($requestData['id']);
+        if ($product == null) {
+            return response()->json(['status' => 500, 'message' => 'Product not found.']);
+        }
+        if (!empty($product->video) && file_exists(public_path('storage/uploads/'.$product->video))) {
+            unlink(public_path('storage/uploads/'.$product->video));
+        }
+        $product->video = null;
+        $product->save();
+        return response()->json(['status' => 200, 'message' => 'Successfully deleted product video.']);
     }
 }
