@@ -6,7 +6,7 @@
                     <li>
                         <router-link :to="{name: 'dashboard'}">Home</router-link>
                     </li>
-                    <li class="active">Shop </li>
+                    <li class="active"><a href="javascript:void(0)" class="active">Shop</a> </li>
                 </ul>
             </div>
         </div>
@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row mb-60" >
             <div class="col-xl-3 col-md-6 col-lg-4 col-sm-6" v-for="l in allProducts">
-                <div class="product-wrap mb-25">
+                <div class="product-wrap mb-25 scroll-zoom">
                     <div class="product-img">
                         <router-link :to="{name: 'productSingle', params: {slug: l.slug}}">
                             <img class="default-img" v-if="l.images.length > 0" :src="l.images[0].full_path" alt="">
@@ -27,7 +27,10 @@
                                 <a title="Wishlist" href="#"><i class="pe-7s-like"></i></a>
                             </div>
                             <div class="pro-same-action pro-cart">
-                                <a title="Add To Cart" href="#"><i class="pe-7s-cart"></i> Add to cart</a>
+                                <a @click="addToCart(l)" title="Add To Cart" href="javascript:void(0)">
+                                    <i v-if="!l.loading" class="pe-7s-cart"></i>
+                                    <i v-if="l.loading" class="fa fa-spin fa-spinner"></i>
+                                    Add to cart</a>
                             </div>
                         </div>
                     </div>
@@ -47,6 +50,7 @@
 <script>
 import ApiService from "../../Services/ApiService";
 import ApiRoutes from "../../Services/ApiRoutes";
+import store from "../../Store/store";
 
 export default {
     name: "product",
@@ -56,11 +60,65 @@ export default {
             allProducts: []
         }
     },
+    computed: {
+        auth: function () {
+            return store.getters.GetAuth
+        },
+        guest: function () {
+            return store.getters.GetGuest
+        }
+    },
     methods: {
+        addToCart: function (product) {
+            if (this.auth == null && this.guest == null) {
+                this.createGuest(product)
+            } else {
+                this.cartRequestToServer(product)
+            }
+        },
+        createGuest: function (product) {
+            ApiService.POST(ApiRoutes.CreateGuest, null,(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.$store.commit('PutGuest', res.guest);
+                    this.cartRequestToServer(product)
+                }
+            });
+        },
+        cartRequestToServer: function (product) {
+            product.loading = true
+            let param = {
+                product_id: product.id,
+                variant_id: product.variants[0].id
+            }
+            if (this.guest) {
+                param.guest_user_id = this.guest.uid
+            }
+            ApiService.POST(ApiRoutes.AddCart, param,(res) => {
+                product.loading = false
+                if (parseInt(res.status) === 200) {
+                    this.getCart()
+                }
+            });
+        },
+        getCart: function () {
+            let param = {}
+            if (this.guest) {
+                param.guest_user_id = this.guest.uid
+            }
+            ApiService.POST(ApiRoutes.GetCart, param,(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.$store.commit('PutCartData', res.data);
+                    $('.shopping-cart-content').addClass('cart-visible');
+                }
+            });
+        },
         getAllProducts: function () {
             ApiService.POST(ApiRoutes.ProductAll, null,(res) => {
                 if (parseInt(res.status) === 200) {
                     this.allProducts = res.data
+                    setTimeout(() => {
+                        sr.reveal('.scroll-zoom');
+                    }, 1)
                 }
             });
         },

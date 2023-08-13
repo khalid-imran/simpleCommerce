@@ -26,7 +26,7 @@
 
 <body>
 <!--wrapper-->
-<div class="wrapper" id="app">
+<div id="app">
     <app></app>
 </div>
 <!--end wrapper-->

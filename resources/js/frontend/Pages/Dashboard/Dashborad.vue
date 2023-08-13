@@ -59,7 +59,7 @@
             <h4 class="text-center mb-4">New Arrivals  </h4>
             <div class="row mb-60" >
                 <div class="col-xl-3 col-md-6 col-lg-4 col-sm-6" v-for="l in latestProducts">
-                    <div class="product-wrap mb-25">
+                    <div class="product-wrap mb-25 scroll-zoom">
                         <div class="product-img">
                             <router-link :to="{name: 'productSingle', params: {slug: l.slug}}">
                                 <img class="default-img" v-if="l.images.length > 0" :src="l.images[0].full_path" alt="">
@@ -112,6 +112,9 @@ export default {
             ApiService.POST(ApiRoutes.ProductLatest, null,(res) => {
                 if (parseInt(res.status) === 200) {
                     this.latestProducts = res.data
+                    setTimeout(() => {
+                        sr.reveal('.scroll-zoom');
+                    }, 1)
                 }
             });
         },

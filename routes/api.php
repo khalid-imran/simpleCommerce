@@ -10,6 +10,8 @@ use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WebsiteSettingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductFrontController;
+use App\Http\Controllers\GuestController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +28,10 @@ Route::group(['prefix' => 'auth'], function() {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('forgot/password', [AuthController::class, 'forget']);
     Route::post('reset/password', [AuthController::class, 'passwordReset']);
+    Route::post('guest/create', [GuestController::class, 'createGuest']);
+    Route::post('guest/get', [GuestController::class, 'getGuest']);
 });
+
 /*admin api*/
 Route::group(['middleware' => 'auth:api'], function() {
     Route::group(['prefix' => 'category'], function() {
@@ -73,4 +78,9 @@ Route::group(['prefix' => 'product'], function() {
     Route::post('by/category', [ProductFrontController::class, 'byCategory']);
     Route::post('get/all', [ProductFrontController::class, 'getAll']);
     Route::post('get/single', [ProductFrontController::class, 'getSingle']);
+});
+Route::group(['prefix' => 'cart'], function () {
+    Route::post('add', [CartController::class, 'addCart']);
+    Route::post('get', [CartController::class, 'getCart']);
+    Route::post('delete', [CartController::class, 'deleteCart']);
 });

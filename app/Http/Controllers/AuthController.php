@@ -15,7 +15,7 @@ class AuthController extends Controller
         $validator = Validator::make($inputData, [
             'name' => 'required',
             'phone' => 'required|numeric|unique:customers|digits:11',
-            'password' => 'required|confirmed'
+            'password' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => 500, 'errors' => $validator->errors()]);
@@ -87,7 +87,7 @@ class AuthController extends Controller
         $validator = Validator::make($input, [
             'phone' => 'required',
             'code' => 'required',
-            'password' => 'required|confirmed|min:8'
+            'password' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => 500, 'errors' => $validator->errors()]);

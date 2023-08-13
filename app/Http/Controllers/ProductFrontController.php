@@ -13,6 +13,9 @@ class ProductFrontController extends Controller
         $result = Product::with('images', 'variants');
         $result = $result->orderBy('id', 'DESC')
             ->skip(0)->take(12)->get()->toArray();
+        foreach ($result as &$product) {
+            $product['loading'] = false;
+        }
         return response()->json(['status' => 200, 'data' => $result]);
     }
     public function byCategory(Request $request)
@@ -23,6 +26,9 @@ class ProductFrontController extends Controller
             ->where('category_id', $category_id['id'])
             ->orderBy('id', 'DESC')
             ->get()->toArray();
+        foreach ($result as &$product) {
+            $product['loading'] = false;
+        }
         return response()->json(['status' => 200, 'data' => $result]);
     }
     public function getAll(Request $request)
@@ -30,6 +36,9 @@ class ProductFrontController extends Controller
         $result = Product::with('images', 'variants');
         $result = $result->orderBy('id', 'DESC')
            ->get()->toArray();
+        foreach ($result as &$product) {
+            $product['loading'] = false;
+        }
         return response()->json(['status' => 200, 'data' => $result]);
     }
 

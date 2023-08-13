@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row mb-60" >
             <div class="col-xl-3 col-md-6 col-lg-4 col-sm-6" v-for="l in categoryProducts">
-                <div class="product-wrap mb-25">
+                <div class="product-wrap mb-25 scroll-zoom">
                     <div class="product-img">
                         <router-link :to="{name: 'productSingle', params: {slug: l.slug}}">
                             <img class="default-img" v-if="l.images.length > 0" :src="l.images[0].full_path" alt="">
@@ -70,6 +70,9 @@ export default {
             ApiService.POST(ApiRoutes.ProductByCategory, {slug: this.slug},(res) => {
                 if (parseInt(res.status) === 200) {
                     this.categoryProducts = res.data
+                    setTimeout(() => {
+                        sr.reveal('.scroll-zoom');
+                    }, 1)
                 }
             });
         },

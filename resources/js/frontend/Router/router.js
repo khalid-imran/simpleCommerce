@@ -1,7 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-import Login from "../Pages/Auth/Login.vue"
-import Register from "../Pages/Auth/Register.vue"
 import Layout from "../Pages/Layout/Layout.vue"
 import Dashboard from "../Pages/Dashboard/Dashborad.vue"
 import Product from "../Pages/Product/Product.vue";
@@ -14,8 +12,6 @@ const routes = [
         component: Layout,
         children: [
             { path: "/", name: "dashboard", component: Dashboard},
-            { path: "/login", name: "login", component: Login, beforeEnter: authCheck},
-            { path: "/register", name: "register", component: Register, beforeEnter: authCheck},
             { path: "/products", name: "products", component: Product},
             { path: "/products/category/:slug", name: "productCategory", component: ProductCategory},
             { path: "/product/:slug", name: "productSingle", component: ProductSingle},
