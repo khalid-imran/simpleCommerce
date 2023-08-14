@@ -26,7 +26,7 @@
                 <div class="col-xl-2 col-lg-2 col-md-6 col-8">
                     <div class="header-right-wrap">
                         <div class="same-style account-satting" v-click-out-side="hideAccount">
-                            <a class="account-satting-active" href="#"><i class="pe-7s-user-female"></i></a>
+                            <a class="account-satting-active" @click="hideCart" href="#"><i class="pe-7s-user-female"></i></a>
                             <div class="account-dropdown">
                                 <ul>
                                     <li v-if="auth == null"><a href="javascript:void(0)" @click="openLoginModal">Login</a></li>
@@ -40,7 +40,7 @@
                         <div v-if="auth != null" class="same-style header-wishlist">
                             <a href="wishlist.html"><i class="pe-7s-like"></i></a>
                         </div>
-                        <div class="same-style cart-wrap" v-click-out-side="hideCart">
+                        <div class="same-style cart-wrap">
                             <button class="icon-cart">
                                 <i class="pe-7s-shopbag"></i>
                                 <span class="count-style" v-if="cartData != null">{{ cartData.length }}</span>
@@ -50,7 +50,7 @@
                                     <li class="single-shopping-cart" v-for="c in cartData" :class="{'blur-loading': c.loading}">
                                         <div class="shopping-cart-img" style="flex: 1">
                                             <a v-if="c.images.length > 0" href="javascript:void(0)"><img alt :src="c.images[0].full_path"></a>
-                                            <a v-else href="javascript:void(0)"><img alt src="images/product_default.jpg"></a>
+                                            <a v-else href="javascript:void(0)"><img alt src="/images/product_default.jpg"></a>
                                         </div>
                                         <div class="shopping-cart-title" style="flex: 9">
                                             <h4><a href="javascript:void(0)">{{ c.title }} </a></h4>
@@ -412,10 +412,10 @@ export default {
     pointer-events: none;
 }
 .varient-title {
-    padding: 1px 15px;
+    padding: 3px 10px;
     border: 1px solid #a749ff;
     color: #a749ff;
-    font-size: 10px!important;
+    font-size: 12px !important;
     margin-left: auto;
 }
 </style>

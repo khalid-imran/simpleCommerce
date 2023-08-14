@@ -27,7 +27,10 @@
                                 <a title="Wishlist" href="#"><i class="pe-7s-like"></i></a>
                             </div>
                             <div class="pro-same-action pro-cart">
-                                <a title="Add To Cart" href="#"><i class="pe-7s-cart"></i> Add to cart</a>
+                                <a @click="addToCart(l)" title="Add To Cart" href="javascript:void(0)">
+                                    <i v-if="!l.loading" class="pe-7s-cart"></i>
+                                    <i v-if="l.loading" class="fa fa-spin fa-spinner"></i>
+                                    Add to cart</a>
                             </div>
                         </div>
                     </div>
@@ -47,6 +50,7 @@
 <script>
 import ApiService from "../../Services/ApiService";
 import ApiRoutes from "../../Services/ApiRoutes";
+import store from "../../Store/store";
 
 export default {
     name: "category",
@@ -65,7 +69,58 @@ export default {
             }
         }
     },
+    computed: {
+        auth: function () {
+            return store.getters.GetAuth
+        },
+        guest: function () {
+            return store.getters.GetGuest
+        }
+    },
     methods: {
+        addToCart: function (product) {
+            if (this.auth == null && this.guest == null) {
+                this.createGuest(product)
+            } else {
+                this.cartRequestToServer(product)
+            }
+        },
+        createGuest: function (product) {
+            ApiService.POST(ApiRoutes.CreateGuest, null,(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.$store.commit('PutGuest', res.guest);
+                    this.cartRequestToServer(product)
+                }
+            });
+        },
+        cartRequestToServer: function (product) {
+            product.loading = true
+            let param = {
+                product_id: product.id,
+                variant_id: product.variants[0].id
+            }
+            if (this.guest) {
+                param.guest_user_id = this.guest.uid
+            }
+            ApiService.POST(ApiRoutes.AddCart, param,(res) => {
+                product.loading = false
+                if (parseInt(res.status) === 200) {
+                    this.getCart()
+                }
+            });
+        },
+        getCart: function () {
+            let param = {}
+            if (this.guest) {
+                param.guest_user_id = this.guest.uid
+            }
+            ApiService.POST(ApiRoutes.GetCart, param,(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.$store.commit('PutCartData', res.data);
+                    $('.shopping-cart-content').addClass('cart-visible');
+                }
+            });
+        },
         getCategoryProduct: function () {
             ApiService.POST(ApiRoutes.ProductByCategory, {slug: this.slug},(res) => {
                 if (parseInt(res.status) === 200) {

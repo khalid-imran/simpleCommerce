@@ -105,9 +105,58 @@ export default {
     computed: {
         settings: function () {
             return store.getters.GetWebsite
+        },
+        auth: function () {
+            return store.getters.GetAuth
+        },
+        guest: function () {
+            return store.getters.GetGuest
         }
     },
     methods: {
+        addToCart: function (product) {
+            if (this.auth == null && this.guest == null) {
+                this.createGuest(product)
+            } else {
+                this.cartRequestToServer(product)
+            }
+        },
+        createGuest: function (product) {
+            ApiService.POST(ApiRoutes.CreateGuest, null,(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.$store.commit('PutGuest', res.guest);
+                    this.cartRequestToServer(product)
+                }
+            });
+        },
+        cartRequestToServer: function (product) {
+            product.loading = true
+            let param = {
+                product_id: product.id,
+                variant_id: product.variants[0].id
+            }
+            if (this.guest) {
+                param.guest_user_id = this.guest.uid
+            }
+            ApiService.POST(ApiRoutes.AddCart, param,(res) => {
+                product.loading = false
+                if (parseInt(res.status) === 200) {
+                    this.getCart()
+                }
+            });
+        },
+        getCart: function () {
+            let param = {}
+            if (this.guest) {
+                param.guest_user_id = this.guest.uid
+            }
+            ApiService.POST(ApiRoutes.GetCart, param,(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.$store.commit('PutCartData', res.data);
+                    $('.shopping-cart-content').addClass('cart-visible');
+                }
+            });
+        },
         getLatestProduct: function () {
             ApiService.POST(ApiRoutes.ProductLatest, null,(res) => {
                 if (parseInt(res.status) === 200) {

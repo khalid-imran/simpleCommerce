@@ -84,3 +84,8 @@ Route::group(['prefix' => 'cart'], function () {
     Route::post('get', [CartController::class, 'getCart']);
     Route::post('delete', [CartController::class, 'deleteCart']);
 });
+Route::group(['prefix' => 'order'], function () {
+    Route::post('create', [CartController::class, 'addCart']);
+    Route::post('get', [CartController::class, 'getCart']);
+    Route::post('delete', [CartController::class, 'deleteCart']);
+});

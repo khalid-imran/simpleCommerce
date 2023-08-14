@@ -65,19 +65,21 @@
                                 <span>Variants</span>
                                 <div class="pro-details-size-content">
                                     <ul>
-                                        <li v-for="v in singleProduct.variants"><a href="javascript:void(0)">{{ v.title }}</a></li>
+                                        <li v-for="v in singleProduct.variants" @click="cart.variant_id = v.id">
+                                            <a :class="{active: v.id == cart.variant_id }" href="javascript:void(0)">{{ v.title }}</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="pro-details-quality">
                             <div class="cart-plus-minus">
-                                <div class="dec qtybutton">-</div>
-                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="2">
-                                <div class="inc qtybutton">+</div>
+                                <div class="dec qtybutton" @click="updateInputValue('decrease')">-</div>
+                                <input class="cart-plus-minus-box" type="text" name="qtybutton" v-model="cart.quantity">
+                                <div class="inc qtybutton" @click="updateInputValue('increase')">+</div>
                             </div>
-                            <div class="pro-details-cart btn-hover">
-                                <a href="#">Add To Cart</a>
+                            <div class="pro-details-cart btn-hover" @click="addToCart">
+                                <a href="javascript:void(0)">Add To Cart  <i v-if="loading" class="fa fa-spin fa-spinner"></i></a>
                             </div>
                             <div class="pro-details-wishlist">
                                 <a href="#"><i class="fa fa-heart-o"></i></a>
@@ -201,6 +203,7 @@
 <script>
 import ApiService from "../../Services/ApiService";
 import ApiRoutes from "../../Services/ApiRoutes";
+import store from "../../Store/store";
 
 export default {
     name: "product",
@@ -208,14 +211,78 @@ export default {
         return {
             APP_URL: window.APP_URL,
             singleProduct: null,
-            slug: ''
+            loading: false,
+            slug: '',
+            cart: {
+                quantity: 1,
+                variant_id: '',
+                product_id: ''
+            }
+        }
+    },
+    computed: {
+        auth: function () {
+            return store.getters.GetAuth
+        },
+        guest: function () {
+            return store.getters.GetGuest
         }
     },
     methods: {
+        addToCart: function () {
+            if (this.auth == null && this.guest == null) {
+                this.createGuest()
+            } else {
+                this.cartRequestToServer()
+            }
+        },
+        createGuest: function () {
+            ApiService.POST(ApiRoutes.CreateGuest, null,(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.$store.commit('PutGuest', res.guest);
+                    this.cartRequestToServer()
+                }
+            });
+        },
+        cartRequestToServer: function () {
+            this.loading = true
+            if (this.guest) {
+                this.cart.guest_user_id = this.guest.uid
+            }
+            ApiService.POST(ApiRoutes.AddCart, this.cart,(res) => {
+                this.loading = false
+                if (parseInt(res.status) === 200) {
+                    this.getCart()
+                }
+            });
+        },
+        getCart: function () {
+            let param = {}
+            if (this.guest) {
+                param.guest_user_id = this.guest.uid
+            }
+            ApiService.POST(ApiRoutes.GetCart, param,(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.$store.commit('PutCartData', res.data);
+                    $('.shopping-cart-content').addClass('cart-visible');
+                }
+            });
+        },
+        updateInputValue: function (type) {
+            if (type == 'decrease') {
+                if (this.cart.quantity != 0) {
+                    this.cart.quantity--
+                }
+            } else {
+                this.cart.quantity++
+            }
+        },
         getProduct: function () {
             ApiService.POST(ApiRoutes.ProductSingle, {slug: this.slug},(res) => {
                 if (parseInt(res.status) === 200) {
                     this.singleProduct = res.data
+                    this.cart.product_id = this.singleProduct.id
+                    this.cart.variant_id = this.singleProduct.variants[0].id
                     setTimeout(() => {
                         $('.img-popup').magnificPopup({
                             type: 'image',

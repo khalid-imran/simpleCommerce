@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('reset_code')->nullable();
             $table->string('is_admin')->nullable();
+            $table->text('address')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
