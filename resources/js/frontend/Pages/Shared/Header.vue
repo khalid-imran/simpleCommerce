@@ -5,7 +5,8 @@
                 <div class="col-xl-2 col-lg-2 col-md-6 col-4">
                     <div class="logo">
                         <router-link :to="{name: 'dashboard'}">
-                            <img alt :src="settings?.website?.full_path">
+                            <img v-if="settings?.website?.full_path" alt :src="settings?.website?.full_path">
+                            <span v-else>settings?.website?.name</span>
                         </router-link>
                     </div>
                 </div>

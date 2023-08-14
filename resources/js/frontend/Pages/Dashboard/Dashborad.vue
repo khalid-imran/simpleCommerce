@@ -2,7 +2,7 @@
     <div class="slider-area ml-70 mr-70">
         <div class="slider-active owl-carousel nav-style-1 owl-dot-none">
             <div  v-for="s in settings?.slide" class="single-slider-2 slider-height-1 d-flex align-items-center slider-height-res bg-img"
-                  :style="{ 'background-image': 'url(' + s.full_path + ')' }">
+                  :style="{ 'backgroundImage': 'url(' + s.full_path + ')' }">
                 <div class="container">
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-7 ms-auto">
