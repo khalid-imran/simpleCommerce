@@ -6,7 +6,7 @@
                     <div class="logo">
                         <router-link :to="{name: 'dashboard'}">
                             <img v-if="settings?.website?.full_path" alt :src="settings?.website?.full_path">
-                            <span v-else>settings?.website?.name</span>
+                            <span v-else class="icon-name">{{settings?.website?.name}}</span>
                         </router-link>
                     </div>
                 </div>
@@ -418,5 +418,9 @@ export default {
     color: #a749ff;
     font-size: 12px !important;
     margin-left: auto;
+}
+.icon-name{
+    font-size: 35px;
+    font-weight: bold;
 }
 </style>

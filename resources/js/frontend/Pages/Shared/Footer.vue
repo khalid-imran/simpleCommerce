@@ -6,7 +6,8 @@
                     <div class="copyright mb-30">
                         <div class="footer-logo">
                             <router-link :to="{name: 'dashboard'}">
-                                <img alt :src="settings?.website?.full_path">
+                                <img v-if="settings?.website?.full_path" alt :src="settings?.website?.full_path">
+                                <span v-else class="icon-name">{{settings?.website?.name}}</span>
                             </router-link>
                         </div>
                         <p>© {{ new Date().getFullYear() }} <router-link :to="{name: 'dashboard'}">Diivaa</router-link>.<br> All Rights Reserved</p>
@@ -80,5 +81,8 @@ export default {
 </script>
 
 <style scoped>
-
+.icon-name{
+    font-size: 35px;
+    font-weight: bold;
+}
 </style>
