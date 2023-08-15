@@ -12,6 +12,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductFrontController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\DeliveryFeeFrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,7 +87,10 @@ Route::group(['prefix' => 'cart'], function () {
     Route::post('delete', [CartController::class, 'deleteCart']);
 });
 Route::group(['prefix' => 'order'], function () {
-    Route::post('create', [CartController::class, 'addCart']);
-    Route::post('get', [CartController::class, 'getCart']);
-    Route::post('delete', [CartController::class, 'deleteCart']);
+    Route::post('create', [OrderController::class, 'addOrder']);
+    Route::post('get', [OrderController::class, 'getOrder']);
+    Route::post('delete', [OrderController::class, 'deleteOrder']);
+});
+Route::group(['prefix' => 'deliveryFee'], function () {
+    Route::post('get', [DeliveryFeeFrontController::class, 'list']);
 });

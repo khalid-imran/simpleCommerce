@@ -16,6 +16,8 @@ const ApiRoutes = {
     AddCart: ApiVersion + '/cart/add',
     GetCart: ApiVersion + '/cart/get',
     DeleteCart: ApiVersion + '/cart/delete',
+    // Delivery Fee
+    GetDeliveryFee: ApiVersion + '/deliveryFee/get'
 };
 
 export default ApiRoutes;

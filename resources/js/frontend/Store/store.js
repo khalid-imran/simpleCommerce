@@ -66,6 +66,10 @@ const store = createStore({
         Logout: function () {
             localStorage.removeItem('ecommerce_user_access_token');
             window.location.reload();
+        },
+        removeGuest: function () {
+            localStorage.removeItem('guestInfo');
+            this.Guest = null
         }
     },
 });

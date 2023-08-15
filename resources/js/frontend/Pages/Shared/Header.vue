@@ -79,8 +79,8 @@
                                     </li>
                                 </ul>
                                 <div v-else>
-                                    <div class="empty-message ng-star-inserted">
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"
+                                    <div class="empty-message ng-star-inserted text-center">
+                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="120px"
                                              preserveAspectRatio="xMidYMid meet"><g><path d="M477.52,135.43c3.72-20.13-6.84-37.6-26.3-43.52c-90.6-27.43-180.44-54.64-267.05-80.8
                                               c-5.18-1.57-10.17-2.36-14.82-2.36c-15.49,0-27.41,8.74-34.46,25.26l-22.12,51.7c-12.92,30.19-25.82,60.37-38.74,90.56
                                               c-0.44,1.04-0.92,2.06-1.46,3.14l-3.03-0.9c-3.42-1.04-6.68-2.03-9.92-2.98c-2.89-0.86-5.59-1.29-8-1.29
@@ -164,7 +164,7 @@
                                     </div>
                                 </div>
                                 <div class="shopping-cart-btn btn-hover text-center" v-if="cartData.length > 0">
-                                    <a class="default-btn" href="checkout.html">checkout</a>
+                                    <router-link :to="{name: 'checkout'}" class="default-btn" >checkout</router-link>
                                 </div>
                             </div>
                         </div>
