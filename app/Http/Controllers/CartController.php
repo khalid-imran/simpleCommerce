@@ -20,7 +20,7 @@ class CartController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 500, 'errors' => $validator->errors()]);
         }
-        $userInfo = $request->get('sessionUser');
+        $userInfo = $request->user('api');
         $userId = '';
         if ($userInfo != null) {
             $userId = $userInfo->id;
@@ -65,10 +65,13 @@ class CartController extends Controller
 
     public function getCart(Request $request) {
         $input = $request->input();
-        $userId = isset($input['guest_user_id']) ? $input['guest_user_id'] : '';
-        $userInfo = $request->get('sessionUser');
+        $userId = isset($input['guest_user_id']) ? $input['guest_user_id'] : null;
+        $userInfo = $request->user('api');
         if ($userInfo != null) {
             $userId = $userInfo->id;
+        }
+        if ($userId == null) {
+            return response()->json(['status' => 500, 'message' => 'Invalid Request']);
         }
 
         $productData = Product::with('images');
@@ -104,7 +107,7 @@ class CartController extends Controller
         }
 
         $userId = isset($input['guest_user_id']) ? $input['guest_user_id'] : '';
-        $userInfo = $request->get('sessionUser');
+        $userInfo = $request->user('api');
         if ($userInfo != null) {
             $userId = $userInfo->id;
         }

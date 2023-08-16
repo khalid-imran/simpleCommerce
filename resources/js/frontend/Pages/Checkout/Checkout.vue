@@ -2,14 +2,12 @@
     <div>
         <div class="breadcrumb-area pt-35 pb-35 bg-gray-3 mb-5">
             <div class="container">
-                <div class="breadcrumb-content text-center">
-                    <ul>
-                        <li>
-                            <router-link :to="{name: 'dashboard'}">Home</router-link>
-                        </li>
-                        <li class="active"><a href="javascript:void(0)" class="active">Checkout</a> </li>
-                    </ul>
-                </div>
+                <h1 class="text-center">
+                    <router-link class="text-decoration-none" :to="{name: 'dashboard'}" href="">
+                        <img v-if="settings?.website?.full_path" alt :src="settings?.website?.full_path" style="height: 25px">
+                        <span v-else>Diivaa</span>
+                    </router-link>
+                </h1>
             </div>
         </div>
         <div class="checkout-area pb-100">
@@ -20,22 +18,25 @@
                             <h3>Billing Details</h3>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="billing-info mb-20">
+                                    <div class="billing-info mb-20 form-group">
                                         <label>Name <span class="text-danger">*</span></label>
-                                        <input type="text">
+                                        <input type="text" v-model="orderParam.name" name="name">
+                                        <small class="invalid-feedback text-danger"></small>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="billing-info mb-20">
+                                    <div class="billing-info mb-20 form-group">
                                         <label>Phone <span class="text-danger">*</span></label>
-                                        <input type="text">
+                                        <input type="text" v-model="orderParam.phone" name="phone">
+                                        <small class="invalid-feedback text-danger"></small>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <div class="billing-info mb-20">
+                                    <div class="billing-info mb-20 form-group">
                                         <label>Full Address <span class="text-danger">*</span></label>
-                                        <input type="text" placeholder="Write you full address includes Thana, Upazila and zila">
+                                        <input type="text" placeholder="Write you full address includes Thana, Upazila and zila" v-model="orderParam.address" name="address">
                                         <small style="font-size: 11px">Example: house # 65, road #9/a, Mirpur 13, Dhaka - 1216</small>
+                                        <small class="invalid-feedback text-danger"></small>
                                     </div>
                                 </div>
                             </div>
@@ -89,7 +90,8 @@
                                 </div>
                             </div>
                             <div class="Place-order mt-25">
-                                <a class="btn-hover" href="#">Place Order</a>
+                                <a class="btn-hover" @click="makeOrder" v-if="!orderLoading" href="javascript:void(0)">Place Order</a>
+                                <a class="btn-hover" v-if="orderLoading" href="javascript:void(0)">Placing Order...</a>
                             </div>
                         </div>
                     </div>
@@ -109,22 +111,28 @@ export default {
         return {
             deliveryFee: [],
             orderParam: {
-                delivery_charge: 0
+                delivery_charge: 0,
+                name: '',
+                address: '',
+                phone: ''
             },
             totalPrice: 0,
+            orderLoading: false
         }
     },
     computed: {
         cartData: function () {
-
             return store.getters.GetCartData
         },
         auth: function () {
-            return store.getters.GetAuth
+            return store.getters.GetAuthUser
         },
         guest: function () {
             return store.getters.GetGuest
-        }
+        },
+        settings: function () {
+            return store.getters.GetWebsite
+        },
     },
     methods: {
         updateTotalPrice: function (fee) {
@@ -147,11 +155,74 @@ export default {
                     }
                 }
             });
+        },
+        makeOrder: function () {
+            ApiService.ClearErrorHandler();
+            this.orderLoading = true
+            if (this.guest != null) {
+                this.orderParam.guest_user_id = this.guest?.uid
+            }
+            ApiService.POST(ApiRoutes.addOrder, this.orderParam,(res) => {
+                this.orderLoading = false
+                if (parseInt(res.status) === 200) {
+                    if (this.auth != null) {
+                        this.getUserDetail()
+                    } else {
+                        this.getGuestDetail()
+                    }
+                }else {
+                    ApiService.ErrorHandler(res.errors);
+                }
+            });
+        },
+        getGuestDetail() {
+            ApiService.POST(ApiRoutes.GetGuest, {id: this.guest.id},(res) => {
+                this.orderLoading = false
+                if (parseInt(res.status) === 200) {
+                    this.$store.commit('PutGuest', res.guest);
+                    this.$router.push({
+                        name: 'complete'
+                    })
+                }
+            });
+        },
+        getUserDetail() {
+            ApiService.POST(ApiRoutes.Profile, {},(res) => {
+                this.orderLoading = false
+                if (parseInt(res.status) === 200) {
+                    this.$store.commit('PutAuth', res.user);
+                    this.$router.push({
+                        name: 'complete'
+                    })
+                }
+            });
         }
     },
     mounted() {
         this.hideCart()
         this.getDeliveryFee()
+        if (this.guest) {
+            if (this.guest.name != null) {
+                this.orderParam.name = this.guest.name
+            }
+            if (this.guest.phone != null) {
+                this.orderParam.phone = this.guest.phone
+            }
+            if (this.guest.address != null) {
+                this.orderParam.address = this.guest.address
+            }
+        }
+        if (this.auth) {
+            if (this.auth.name != null) {
+                this.orderParam.name = this.auth.name
+            }
+            if (this.auth.phone != null) {
+                this.orderParam.phone = this.auth.phone
+            }
+            if (this.auth.address != null) {
+                this.orderParam.address = this.auth.address
+            }
+        }
     }
 }
 </script>

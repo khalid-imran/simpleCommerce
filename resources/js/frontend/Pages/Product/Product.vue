@@ -62,7 +62,7 @@ export default {
     },
     computed: {
         auth: function () {
-            return store.getters.GetAuth
+            return store.getters.GetAuthUser
         },
         guest: function () {
             return store.getters.GetGuest

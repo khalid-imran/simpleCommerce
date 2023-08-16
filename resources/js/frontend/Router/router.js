@@ -6,6 +6,7 @@ import Product from "../Pages/Product/Product.vue";
 import ProductCategory from "../Pages/Product/ProductCategory.vue";
 import ProductSingle from "../Pages/Product/ProductSingle.vue";
 import Checkout from "../Pages/Checkout/Checkout.vue";
+import Complete from "../Pages/OrderComplete/OrderComplete.vue";
 const routes = [
     {
         name: "layout",
@@ -16,9 +17,10 @@ const routes = [
             { path: "/products", name: "products", component: Product},
             { path: "/products/category/:slug", name: "productCategory", component: ProductCategory},
             { path: "/product/:slug", name: "productSingle", component: ProductSingle},
-            { path: "/checkout", name: "checkout", component: Checkout},
         ]
-    }
+    },
+    { path: "/checkout", name: "checkout", component: Checkout},
+    { path: "/complete", name: "complete", component: Complete},
 ]
 function authCheck(to, from, next) {
     let token = localStorage.getItem('ecommerce_user_access_token');

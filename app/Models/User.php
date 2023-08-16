@@ -46,6 +46,7 @@ class User extends Authenticatable
             'id' => $userInfo['id'],
             'name' => $userInfo['name'],
             'phone' => $userInfo['phone'],
+            'address' => $userInfo['address'],
         ];
     }
 }

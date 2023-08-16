@@ -28,10 +28,13 @@ use App\Http\Controllers\DeliveryFeeFrontController;
 Route::group(['prefix' => 'auth'], function() {
     Route::post('registration', [AuthController::class, 'registration']);
     Route::post('login', [AuthController::class, 'login']);
+    Route::post('login/user', [AuthController::class, 'loginUser']);
+    Route::post('logout/user', [AuthController::class, 'logoutUser']);
     Route::post('forgot/password', [AuthController::class, 'forget']);
     Route::post('reset/password', [AuthController::class, 'passwordReset']);
     Route::post('guest/create', [GuestController::class, 'createGuest']);
     Route::post('guest/get', [GuestController::class, 'getGuest']);
+    Route::post('user/get', [AuthController::class, 'profile']);
 });
 
 /*admin api*/

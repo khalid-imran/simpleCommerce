@@ -1,7 +1,11 @@
 const ApiVersion = '/api/v1.0'
 const ApiRoutes = {
     // Authentication
+    Registration: ApiVersion + '/auth/registration',
     Login: ApiVersion + '/auth/login',
+    LoginUser: ApiVersion + '/auth/login/user',
+    LogoutUser: ApiVersion + '/auth/logout/user',
+    Profile: ApiVersion + '/auth/user/get',
     // Guest
     CreateGuest: ApiVersion + '/auth/guest/create',
     GetGuest: ApiVersion + '/auth/guest/get',
@@ -17,7 +21,9 @@ const ApiRoutes = {
     GetCart: ApiVersion + '/cart/get',
     DeleteCart: ApiVersion + '/cart/delete',
     // Delivery Fee
-    GetDeliveryFee: ApiVersion + '/deliveryFee/get'
+    GetDeliveryFee: ApiVersion + '/deliveryFee/get',
+    // Order
+    addOrder: ApiVersion + '/order/create'
 };
 
 export default ApiRoutes;

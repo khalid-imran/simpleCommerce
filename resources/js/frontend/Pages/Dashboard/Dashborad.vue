@@ -72,7 +72,10 @@
                                     <a title="Wishlist" href="#"><i class="pe-7s-like"></i></a>
                                 </div>
                                 <div class="pro-same-action pro-cart">
-                                    <a title="Add To Cart" href="#"><i class="pe-7s-cart"></i> Add to cart</a>
+                                    <a @click="addToCart(l)" title="Add To Cart" href="javascript:void(0)">
+                                        <i v-if="!l.loading" class="pe-7s-cart"></i>
+                                        <i v-if="l.loading" class="fa fa-spin fa-spinner"></i>
+                                        Add to cart</a>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +110,7 @@ export default {
             return store.getters.GetWebsite
         },
         auth: function () {
-            return store.getters.GetAuth
+            return store.getters.GetAuthUser
         },
         guest: function () {
             return store.getters.GetGuest

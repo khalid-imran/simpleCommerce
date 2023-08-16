@@ -9,7 +9,7 @@ const store = createStore({
         CartData: [],
     },
     getters: {
-        GetAuth: function (state) {
+        GetAuthUser: function (state) {
             if (state.Auth == null) {
                 return JSON.parse(localStorage.getItem("userInfoFront"));
             }
@@ -21,7 +21,7 @@ const store = createStore({
             }
             return state.Guest;
         },
-        GetAccessToken(state) {
+        GetAccessTokenUser(state) {
             if (state.AccessToken == null) {
                 return localStorage.getItem("ecommerce_user_access_token");
             }
@@ -41,7 +41,7 @@ const store = createStore({
         },
     },
     mutations: {
-        PutAuth(state, data) {
+        PutAuthUser(state, data) {
             localStorage.setItem("userInfoFront", JSON.stringify(data));
             state.Auth = data;
         },
@@ -49,7 +49,7 @@ const store = createStore({
             localStorage.setItem("guestInfo", JSON.stringify(data));
             state.Guest = data;
         },
-        PutAccessToken(state, data) {
+        PutAccessTokenUser(state, data) {
             localStorage.setItem('ecommerce_user_access_token', data);
             state.AccessToken = data;
         },
@@ -63,14 +63,20 @@ const store = createStore({
         },
     },
     actions: {
-        Logout: function () {
+        LogoutUser: function () {
             localStorage.removeItem('ecommerce_user_access_token');
+            localStorage.removeItem('userInfoFront');
             window.location.reload();
         },
         removeGuest: function () {
             localStorage.removeItem('guestInfo');
             this.Guest = null
-        }
+        },
+        RemoveCartData() {
+            localStorage.removeItem('CartData');
+            localStorage.setItem('CartData', JSON.stringify(data));
+            this.CartData = [];
+        },
     },
 });
 export default store;

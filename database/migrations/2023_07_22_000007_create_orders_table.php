@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->string('user_id');
             $table->string('user_phone')->nullable();
             $table->text('delivery_address')->nullable();
             $table->double('sub_total')->default(0);
             $table->double('delivery_charge')->default(0);
             $table->double('total')->default(0);
             $table->string('status')->default('pending');
-            $table->integer('is_active')->default(1);
+            $table->string('order_number')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +15,7 @@ class AuthController extends Controller
         $inputData = $request->all();
         $validator = Validator::make($inputData, [
             'name' => 'required',
-            'phone' => 'required|numeric|unique:customers|digits:11',
+            'phone' => 'required|numeric|unique:users|digits:11',
             'password' => 'required'
         ]);
         if ($validator->fails()) {
@@ -29,7 +30,28 @@ class AuthController extends Controller
         $user->phone = $inputData['phone'];
         $user->password =  bcrypt($inputData['password']);
         $user->save();
-        return response()->json(['status' => 200, 'msg' => 'Account created successfully']);
+        if (isset($inputData['guest_user_id'])) {
+            $carts = Cart::where('user_id', $inputData['guest_user_id'])->get()->toArray();
+            foreach ($carts as $cart) {
+                $cartCheck = Cart::where('user_id', $user->id)->where('product_id', $cart['product_id'])->first();
+                if ($cartCheck != null) {
+                    $cartCheck->quantity = $cartCheck->quantity + $cart['quantity'];
+                    $cartCheck->save();
+                } else {
+                    $cartModel = new Cart();
+                    $cartModel->user_id = $user->id;
+                    $cartModel->product_id = $cart['product_id'];
+                    $cartModel->quantity = $cart['quantity'];
+                    $cartModel->price = $cart['price'];
+                    $cartModel->total = $cart['total'];
+                    $cartModel->product_variant_id = $cart['product_variant_id'];
+                    $cartModel->save();
+                }
+            }
+            Cart::where('user_id', $inputData['guest_user_id'])->delete();
+        }
+        $access_token = $user->createToken('authToken')->accessToken;
+        return response()->json(['status' => 200, 'access_token' => $access_token, 'user' => User::parseData($user)]);
     }
 
     public function login(Request $request)
@@ -44,7 +66,7 @@ class AuthController extends Controller
         }
         $userInfo = User::where('phone', $inputData['phone'])->first();
         if($userInfo == null){
-            return response()->json(['status' => 500, 'errors' => ['email' => ['Invalid credential! Please try again']]], 200);
+            return response()->json(['status' => 500, 'errors' => ['phone' => ['Invalid credential! Please try again']]], 200);
         }
         if (Hash::check($inputData['password'], $userInfo->password)) {
             if (isset($inputData['is_admin']) && $inputData['is_admin'] == 1) {
@@ -58,6 +80,51 @@ class AuthController extends Controller
             return response()->json(['status' => 200,'access_token' => $access_token, 'user' => User::parseData($userInfo)]);
         }
         return response()->json(['status' => 500, 'errors' => ['password' => ['Password is not correct! Please try again.']]], 200);
+    }
+    public function loginUser(Request $request)
+    {
+        $inputData = $request->all();
+        $validator = Validator::make($inputData, [
+            'phone' => 'required',
+            'password' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 500, 'errors' => $validator->errors()]);
+        }
+        $userInfo = User::where('phone', $inputData['phone'])->first();
+        if($userInfo == null){
+            return response()->json(['status' => 500, 'errors' => ['phone' => ['Invalid credential! Please try again']]], 200);
+        }
+        if (Hash::check($inputData['password'], $userInfo->password)) {
+            if (isset($inputData['guest_user_id'])) {
+                $carts = Cart::where('user_id', $inputData['guest_user_id'])->get()->toArray();
+                foreach ($carts as $cart) {
+                    $cartCheck = Cart::where('user_id', $userInfo->id)->where('product_id', $cart['product_id'])->first();
+                    if ($cartCheck != null) {
+                        $cartCheck->quantity = $cartCheck->quantity + $cart['quantity'];
+                        $cartCheck->save();
+                    } else {
+                        $cartModel = new Cart();
+                        $cartModel->user_id = $userInfo->id;
+                        $cartModel->product_id = $cart['product_id'];
+                        $cartModel->quantity = $cart['quantity'];
+                        $cartModel->price = $cart['price'];
+                        $cartModel->total = $cart['total'];
+                        $cartModel->product_variant_id = $cart['product_variant_id'];
+                        $cartModel->save();
+                    }
+                }
+                Cart::where('user_id', $inputData['guest_user_id'])->delete();
+            }
+            $access_token = $userInfo->createToken('authToken')->accessToken;
+            return response()->json(['status' => 200,'access_token' => $access_token, 'user' => User::parseData($userInfo)]);
+        }
+        return response()->json(['status' => 500, 'errors' => ['password' => ['Password is not correct! Please try again.']]], 200);
+    }
+    public function logoutUser(Request $request)
+    {
+        $request->user('api')->token()->revoke();
+        return response()->json(['status' => 200, 'message' => 'Logout successfully']);
     }
     public function forget(Request $request)
     {
@@ -105,5 +172,13 @@ class AuthController extends Controller
         $userInfo->password = bcrypt($input['password']);
         $userInfo->save();
         return response()->json(['status' => 200, 'msg' => 'Password reset successful'], 200);
+    }
+    public function profile(Request $request)
+    {
+        $userInfo = $request->user('api');
+        if ($userInfo != null) {
+            return response()->json(['status' => 200, 'user' => User::parseData($userInfo)]);
+        }
+        return response()->json(['status' => 500, 'message' => 'Invalid Request'], 200);
     }
 }

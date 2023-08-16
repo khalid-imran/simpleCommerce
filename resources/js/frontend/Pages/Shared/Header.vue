@@ -200,16 +200,17 @@
                                 </div>
                                 <div class="login-form-container shadow-none p-5 pb-2">
                                     <div class="login-register-form">
-                                        <form>
-                                            <input type="text" name="user-name" placeholder="Username">
-                                            <input type="password" name="user-password" placeholder="Password">
+                                        <form @submit.prevent="login">
+                                            <input type="text" name="user-name" placeholder="Phone Number" v-model="loginParam.phone">
+                                            <input type="password" name="user-password" placeholder="Password" v-model="loginParam.password">
                                             <div class="button-box">
                                                 <div class="login-toggle-btn">
                                                     <input type="checkbox">
                                                     <label>Remember me</label>
                                                     <a href="#">Forgot Password?</a>
                                                 </div>
-                                                <button class="w-100" type="submit"><span>Login</span></button>
+                                                <button v-if="!loading" class="w-100" type="submit"><span>Login</span></button>
+                                                <button  v-if="loading" class="w-100" type="button"><span>Login in...</span></button>
                                             </div>
                                             <div class="text-end mt-3">
                                                 <a @click="openRegistrationModal" href="javascript:void(0)">Do not an have account? Register</a>
@@ -239,12 +240,13 @@
                                 </div>
                                 <div class="login-form-container shadow-none p-5 pb-2">
                                     <div class="login-register-form">
-                                        <form >
-                                            <input type="text" autocomplete="new-name" name="name" placeholder="Name">
-                                            <input type="text" autocomplete="new-mobile"  name="user-name" placeholder="Mobile">
-                                            <input type="password" autocomplete="new-password"  name="user-password" placeholder="Password">
+                                        <form @submit.prevent="registration">
+                                            <input type="text" autocomplete="new-name" name="name" placeholder="Name" v-model="registrationParam.name">
+                                            <input type="text" autocomplete="new-mobile"  name="user-name" placeholder="Mobile" v-model="registrationParam.phone">
+                                            <input type="password" autocomplete="new-password"  name="user-password" placeholder="Password" v-model="registrationParam.password">
                                             <div class="button-box">
-                                                <button class="w-100" type="submit"><span>Register</span></button>
+                                                <button v-if="!loading" class="w-100" type="submit"><span>Register</span></button>
+                                                <button  v-if="loading" class="w-100" type="button"><span>Registering...</span></button>
                                             </div>
                                             <div class="text-end mt-3">
                                                 <a @click="openLoginModal" href="javascript:void(0)">Already have an account? Login</a>
@@ -289,7 +291,7 @@ export default {
     },
     computed: {
         auth: function () {
-            return store.getters.GetAuth
+            return store.getters.GetAuthUser
         },
         settings: function () {
             return store.getters.GetWebsite
@@ -309,19 +311,29 @@ export default {
             $('.account-dropdown').hide();
         },
         logout: function () {
-            this.$store.dispatch('Logout')
+            ApiService.POST(ApiRoutes.LogoutUser, {},(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.$store.dispatch('LogoutUser')
+                }
+            });
         },
         openLoginModal: function () {
             $('#registration').modal('hide')
             $('#login').modal('show')
         },
         login: function() {
-            this.loading = true;
-            ApiService.POST(ApiRoutes.Login, this.loginParam, (res) => {
+            this.loading = true
+            if (this.guest) {
+                this.loginParam.guest_user_id = this.guest.uid
+            }
+            ApiService.POST(ApiRoutes.LoginUser, this.loginParam, (res) => {
                 this.loading = false;
                 if (parseInt(res.status) === 200) {
-                    this.$store.commit('PutAccessToken', res.access_token);
-                    this.$store.commit('PutAuth', res.user);
+                    this.$store.commit('PutAccessTokenUser', res.access_token);
+                    this.$store.commit('PutAuthUser', res.user);
+                    this.$store.dispatch('removeGuest');
+                    $('#login').modal('hide')
+                    this.$toast.success('Login successfully')
                     window.location.reload();
                 } else {
                     ApiService.ErrorHandler(res.errors);
@@ -334,10 +346,18 @@ export default {
         },
         registration: function() {
             this.loading = true;
-            ApiService.POST(ApiRoutes.Login, this.registrationParam, (res) => {
+            if (this.guest) {
+                this.loginParam.guest_user_id = this.guest.uid
+            }
+            ApiService.POST(ApiRoutes.Registration, this.registrationParam, (res) => {
                 this.loading = false;
                 if (parseInt(res.status) === 200) {
-
+                    this.$store.commit('PutAccessTokenUser', res.access_token);
+                    this.$store.commit('PutAuthUser', res.user);
+                    this.$store.dispatch('removeGuest');
+                    $('#registration').modal('hide')
+                    this.$toast.success('Registration complete and we logged you in')
+                    window.location.reload();
                 } else {
                     ApiService.ErrorHandler(res.errors);
                 }
@@ -351,6 +371,8 @@ export default {
             ApiService.POST(ApiRoutes.GetCart, param,(res) => {
                 if (parseInt(res.status) === 200) {
                     this.$store.commit('PutCartData', res.data);
+                } else {
+                    this.$store.dispatch('RemoveCartData');
                 }
             });
         },

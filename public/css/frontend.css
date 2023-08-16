@@ -33,3 +33,6 @@
     transform: rotate(1turn);
   }
 }
+.modal-backdrop {
+  z-index: 998;
+}

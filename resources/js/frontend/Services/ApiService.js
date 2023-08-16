@@ -3,7 +3,7 @@ import store from '../Store/store';
 let headers = {
     'Content-Type': 'application/json; charset=utf-8',
 };
-const access_token = store.getters.GetAccessToken;
+const access_token = store.getters.GetAccessTokenUser;
 const ApiService = {
     POST: (url, param, callback, auth = false) => {
         headers['Authorization'] =  'Bearer '+access_token

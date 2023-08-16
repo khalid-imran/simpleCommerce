@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Guest;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductVariants;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,13 +26,32 @@ class OrderController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 500, 'errors' => $validator->errors()]);
         }
-        $userId = '';
-        $userInfo = $request->get('sessionUser');
+        $userId = null;
+        $userInfo = $request->user('api');
         if ($userInfo != null) {
             $userId = $userInfo->id;
         }
         if (isset($input['guest_user_id']) && !empty($input['guest_user_id'])) {
             $userId = $input['guest_user_id'];
+            $guest = Guest::where('uid', $userId)->first();
+            if (empty($guest->name)) {
+                $guest->name = $input['name'];
+            }
+            if (empty($guest->phone)) {
+                $guest->phone = $input['phone'];
+            }
+            if (empty($guest->address)) {
+                $guest->address = $input['address'];
+            }
+            $guest->save();
+        }
+        if ($userId == null) {
+            return response()->json(['status' => 500, 'message' => 'Invalid Request']);
+        }
+        $user = User::find($userId);
+        if (empty($user->address)) {
+            $user->address = $input['address'];
+            $user->save();
         }
 
         $orderModel = new Order();

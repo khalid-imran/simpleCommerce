@@ -23,7 +23,7 @@ const routes = [
         component: Layout,
         beforeEnter: authRequestCheck,
         children: [
-            { path: "/", name: "dashboard", component: Dashboard},
+            { path: "/secure-admin", name: "dashboard", component: Dashboard},
             { path: "/secure-admin/category", name: "category", component: Category},
             { path: "/secure-admin/delivery/fee", name: "deliveryFee", component: DeliveryFee},
             { path: "/secure-admin/slide", name: "slide", component: Slide},
