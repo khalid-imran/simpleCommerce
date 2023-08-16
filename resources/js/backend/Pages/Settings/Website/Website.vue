@@ -161,20 +161,6 @@ export default {
                 }
             });
         },
-        adfs: function () {
-            this.dataLoading = true
-            ApiService.POST(ApiRoutes.web, null,(res) => {
-                /*this.dataLoading = false
-                if (parseInt(res.status) === 200) {
-                    if (res.data != null) {
-                        this.addEditParam = res.data
-                        if (this.addEditParam.logo != null) {
-                            this.photo = this.addEditParam.full_path
-                        }
-                    }
-                }*/
-            });
-        },
         manage: function () {
             ApiService.ClearErrorHandler();
             this.loading = true;
@@ -193,8 +179,7 @@ export default {
     mounted () {
     },
     created() {
-        // this.getSingle()
-        this.adfs()
+        this.getSingle()
     }
 }
 </script>

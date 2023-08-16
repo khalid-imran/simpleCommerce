@@ -23,7 +23,7 @@ const ApiRoutes = {
     // Delivery Fee
     GetDeliveryFee: ApiVersion + '/deliveryFee/get',
     // Order
-    addOrder: ApiVersion + '/order/create'
+    addOrder: ApiVersion + '/order/user/create'
 };
 
 export default ApiRoutes;

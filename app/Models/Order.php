@@ -14,4 +14,10 @@ class Order extends Model
         'updated_at',
         'deleted_at'
     ];
+    public function user(){
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+    public function guest(){
+        return $this->hasOne(Guest::class, 'uid', 'user_id');
+    }
 }

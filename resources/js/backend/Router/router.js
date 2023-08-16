@@ -10,6 +10,7 @@ import Website from "../Pages/Settings/Website/Website.vue"
 import Product from "../Pages/Product/Product.vue"
 import ProductAdd from "../Pages/Product/Add.vue"
 import ProductEdit from "../Pages/Product/Edit.vue"
+import Order from "../Pages/Order/Order.vue";
 const routes = [
     {
         name: "login",
@@ -31,6 +32,7 @@ const routes = [
             { path: "/secure-admin/product", name: "product", component: Product},
             { path: "/secure-admin/product/add", name: "productAdd", component: ProductAdd},
             { path: "/secure-admin/product/edit/:id", name: "productEdit", component: ProductEdit},
+            { path: "/secure-admin/order", name: "order", component: Order},
         ]
     }
 ]

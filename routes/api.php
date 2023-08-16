@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductFrontController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderAdminController;
 use App\Http\Controllers\DeliveryFeeFrontController;
 
 /*
@@ -74,6 +75,10 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('delete/image', [ProductController::class, 'deleteProductImage']);
         Route::post('delete/video', [ProductController::class, 'deleteProductVideo']);
     });
+    Route::group(['prefix' => 'order'], function() {
+        Route::post('get', [OrderAdminController::class, 'getOrder']);
+        Route::post('update/status', [OrderAdminController::class, 'updateStatus']);
+    });
 });
 
 /*front api*/
@@ -90,14 +95,11 @@ Route::group(['prefix' => 'cart'], function () {
     Route::post('get', [CartController::class, 'getCart']);
     Route::post('delete', [CartController::class, 'deleteCart']);
 });
-Route::group(['prefix' => 'order'], function () {
+Route::group(['prefix' => 'order/user'], function () {
     Route::post('create', [OrderController::class, 'addOrder']);
-    Route::group(['middleware' => 'auth:api'], function() {
-        Route::post('get', [OrderController::class, 'getOrder']);
-        Route::post('cancel', [OrderController::class, 'cancelOrder']);
-    });
+    Route::post('get', [OrderController::class, 'getOrder']);
+    Route::post('cancel', [OrderController::class, 'cancelOrder']);
     Route::post('get/guest', [OrderController::class, 'getOrderGuest']);
-    Route::post('cancel/guest', [OrderController::class, 'cancelOrderGuest']);
 });
 Route::group(['prefix' => 'deliveryFee'], function () {
     Route::post('get', [DeliveryFeeFrontController::class, 'list']);

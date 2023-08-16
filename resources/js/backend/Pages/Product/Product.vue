@@ -86,18 +86,6 @@ export default {
                 if (ok) {
                     this.delete()
                 }
-            } else if (type == 'pdf') {
-                if (index != null) {
-                    $('.' + index).toggle()
-                    ApiService.DOWNLOAD(ApiRoutes.ProductSingleExportPdf, {id: data.id}, '', res => {
-                        $('.' + index).toggle()
-                        let blob = new Blob([res], {type: type});
-                        const link = document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
-                        link.download = data.name + '.pdf';
-                        link.click();
-                    });
-                }
             }
         },
         addProduct() {

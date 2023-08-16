@@ -43,6 +43,13 @@
                     <div class="menu-title">Product</div>
                 </router-link>
             </li>
+            <li>
+                <router-link :to="{name: 'order'}">
+                    <div class="parent-icon"><i class='bx bx-cart-alt'></i>
+                    </div>
+                    <div class="menu-title">Order</div>
+                </router-link>
+            </li>
         </ul>
         <!--end navigation-->
     </div>

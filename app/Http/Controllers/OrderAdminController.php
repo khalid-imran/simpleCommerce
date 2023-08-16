@@ -22,10 +22,10 @@ class OrderAdminController extends Controller
         $orderMode = isset($requestData['order_mode']) && !empty($requestData['order_mode']) ? $requestData['order_mode'] : 'DESC';
         $keyword = isset($requestData['keyword']) ? $requestData['keyword'] : '';
         $status = isset($requestData['status']) ? $requestData['status'] : '';
-        $result = Order::select('*');
+        $result = Order::with('user', 'guest');
         if (!empty($keyword)) {
             $result->where(function($q) use ($keyword) {
-                $q->where('name', 'LIKE', '%'.$keyword.'%');
+                $q->where('order_number', 'LIKE', '%'.$keyword.'%');
             });
         }
         if (!empty($status)) {
@@ -36,5 +36,20 @@ class OrderAdminController extends Controller
         $result = $result->orderBy($orderBy, $orderMode)
             ->paginate($limit);
         return response()->json(['status' => 200, 'data' => $result]);
+    }
+    public function updateStatus(Request $request)
+    {
+        $input = $request->input();
+        $validator = Validator::make($input, [
+            'order_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return ['status' => 5000, 'error' => $validator->errors()];
+        }
+        $order = Order::where('id', $input['order_id'])->first();
+        $order->update([
+            'status' => $input['status']
+        ]);
+        return response()->json(['status' => 200, 'message' => 'Update Status Successfully']);
     }
 }

@@ -110,13 +110,42 @@ class OrderController extends Controller
         $orders = $orders->orderBy('id', 'DESC')->get()->toArray();
         return response()->json(['status' => 200, 'data' => $orders]);
     }
+    public function cancelOrder(Request $request)
+    {
+        $input = $request->input();
+        $validator = Validator::make($input, [
+            'order_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return ['status' => 5000, 'error' => $validator->errors()];
+        }
+        $order = Order::where('id', $input['order_id'])->first();
+
+        if ($order->status == 'pending') {
+            $order->update([
+                'status' => 'cancel'
+            ]);
+            return response()->json(['status' => 200, 'data' => $order]);
+        }
+        return response()->json(['status' => 500, 'message' => 'You cannot cancel this order in this moment, Product is already on the way']);
+    }
     public function getOrderGuest(Request $request)
     {
         $input = $request->input();
-        $orders = Order::select('orders.*')
-            ->where('orders.user_id', $input['guest_user_id'])
-            ->where('orders.status', $input['status']);
-        $orders = $orders->orderBy('id', 'DESC')->get()->toArray();
-        return response()->json(['status' => 200, 'data' => $orders]);
+        $validator = Validator::make($input, [
+            'order_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return ['status' => 5000, 'error' => $validator->errors()];
+        }
+        $order = Order::where('id', $input['order_id'])->first();
+
+        if ($order->status == 'pending') {
+            $order->update([
+                'status' => 'cancel'
+            ]);
+            return response()->json(['status' => 200, 'data' => $order]);
+        }
+        return response()->json(['status' => 500, 'message' => 'You cannot cancel this order in this moment, Product is already on the way']);
     }
 }
