@@ -99,5 +99,24 @@ class OrderController extends Controller
         }
         return response()->json(['status' => 200, 'message' => 'Order Successful.']);
     }
+    public function getOrder(Request $request)
+    {
+        $input = $request->input();
+        $userInfo = $request->user('api');
 
+        $orders = Order::select('orders.*')
+            ->where('orders.user_id', $userInfo->id)
+            ->where('orders.status', $input['status']);
+        $orders = $orders->orderBy('id', 'DESC')->get()->toArray();
+        return response()->json(['status' => 200, 'data' => $orders]);
+    }
+    public function getOrderGuest(Request $request)
+    {
+        $input = $request->input();
+        $orders = Order::select('orders.*')
+            ->where('orders.user_id', $input['guest_user_id'])
+            ->where('orders.status', $input['status']);
+        $orders = $orders->orderBy('id', 'DESC')->get()->toArray();
+        return response()->json(['status' => 200, 'data' => $orders]);
+    }
 }

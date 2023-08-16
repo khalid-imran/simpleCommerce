@@ -77,6 +77,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 });
 
 /*front api*/
+
 Route::post('website/get', [WebsiteSettingController::class, 'get']);
 Route::group(['prefix' => 'product'], function() {
     Route::post('get/latest', [ProductFrontController::class, 'latest']);
@@ -91,8 +92,12 @@ Route::group(['prefix' => 'cart'], function () {
 });
 Route::group(['prefix' => 'order'], function () {
     Route::post('create', [OrderController::class, 'addOrder']);
-    Route::post('get', [OrderController::class, 'getOrder']);
-    Route::post('delete', [OrderController::class, 'deleteOrder']);
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::post('get', [OrderController::class, 'getOrder']);
+        Route::post('cancel', [OrderController::class, 'cancelOrder']);
+    });
+    Route::post('get/guest', [OrderController::class, 'getOrderGuest']);
+    Route::post('cancel/guest', [OrderController::class, 'cancelOrderGuest']);
 });
 Route::group(['prefix' => 'deliveryFee'], function () {
     Route::post('get', [DeliveryFeeFrontController::class, 'list']);

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->double('sub_total')->default(0);
             $table->double('delivery_charge')->default(0);
             $table->double('total')->default(0);
-            $table->string('status')->default('pending');
+            $table->string('status')->default('pending')->comment('pending, cancel, on the way, delivered');
             $table->string('order_number')->nullable();
             $table->timestamps();
             $table->softDeletes();
