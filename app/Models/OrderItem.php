@@ -14,4 +14,13 @@ class OrderItem extends Model
         'updated_at',
         'deleted_at'
     ];
+    public function product()
+    {
+        return $this->hasOne(Product::Class, 'id', 'product_id')->with('images');
+    }
+    public function product_variants()
+    {
+        return $this->hasMany(ProductVariants::class, 'id', 'product_variant_id');
+    }
+
 }

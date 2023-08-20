@@ -35,6 +35,7 @@ const ApiRoutes = {
     //Order
     getOrder: ApiVersion + '/order/get',
     updateStatusOrder: ApiVersion + '/order/update/status',
+    singleOrder: ApiVersion + '/order/single',
 };
 
 export default ApiRoutes;

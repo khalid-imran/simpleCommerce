@@ -78,6 +78,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::group(['prefix' => 'order'], function() {
         Route::post('get', [OrderAdminController::class, 'getOrder']);
         Route::post('update/status', [OrderAdminController::class, 'updateStatus']);
+        Route::post('single', [OrderAdminController::class, 'single']);
     });
 });
 

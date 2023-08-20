@@ -14,10 +14,14 @@ class Order extends Model
         'updated_at',
         'deleted_at'
     ];
+    protected $fillable = ['status'];
     public function user(){
         return $this->hasOne(User::class, 'id', 'user_id');
     }
     public function guest(){
         return $this->hasOne(Guest::class, 'uid', 'user_id');
+    }
+    public function order_item(){
+        return $this->hasMany(OrderItem::class, 'order_id', 'id')->with('product')->with('product_variants');
     }
 }

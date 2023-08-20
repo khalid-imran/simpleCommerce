@@ -52,4 +52,16 @@ class OrderAdminController extends Controller
         ]);
         return response()->json(['status' => 200, 'message' => 'Update Status Successfully']);
     }
+    public function single(Request $request)
+    {
+        $input = $request->input();
+        $validator = Validator::make($input, [
+            'order_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return ['status' => 5000, 'error' => $validator->errors()];
+        }
+        $detail = Order::with('order_item')->where('id', $input['order_id'])->first();
+        return response()->json(['status' => 2000, 'data' => $detail]);
+    }
 }

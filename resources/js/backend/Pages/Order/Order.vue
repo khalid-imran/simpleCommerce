@@ -8,19 +8,23 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="add" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="status" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-capitalize">{{ actionType }} {{ 'Category' }}</h5>
+                        <h5 class="modal-title text-capitalize">Update Status</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form @submit.prevent="actionType == 'add' ? add() : edit()">
+                    <form @submit.prevent="updateStatus()">
                         <div class="modal-body">
                             <div class="form-group mb-3">
-                                <label for="name" class="form-label">Category Name<span class="text-danger">*</span></label>
-                                <input type="text" v-model="addEditParam.name" name="name"
-                                       class="form-control" id="name" placeholder="Categrty Name">
+                                <label for="name" class="form-label">Status<span class="text-danger">*</span></label>
+                                <select v-model="statusParam.status" name="name"  class="form-control" >
+                                    <option value="pending">Pending</option>
+                                    <option value="cancel">Cancel</option>
+                                    <option value="on the way">On the way</option>
+                                    <option value="delivered">Delivered</option>
+                                </select>
                                 <small class="invalid-feedback text-danger"></small>
                             </div>
                         </div>
@@ -28,13 +32,40 @@
                             <button type="button" class="btn btn-secondary btn-width" data-bs-dismiss="modal">Close
                             </button>
                             <button type="submit" class="btn btn-primary btn-width" v-if="!loading">
-                                {{ actionType == 'add' ? 'Save' : 'Update' }}
+                                Update
                             </button>
                             <button type="button" class="btn btn-primary btn-width" v-if="loading">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="single" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-capitalize">View order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Variant</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-width" data-bs-dismiss="modal">Close
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -55,9 +86,11 @@ export default {
         return {
             breadCrumb: ['List'],
             loading: false,
-            addEditParam: {
-                name: '',
+            statusParam: {
+                order_id: '',
+                status: '',
             },
+            addEditParam: {},
             param: {
                 keyword: '',
                 limit: 10,
@@ -113,16 +146,44 @@ export default {
                 ],
                 noDataError: ''
             },
+            singleData: null
         }
     },
     methods: {
         openModal(type, data = null) {
             if (type === 'status') {
-                $('#add').modal('show');
+                this.statusParam.order_id = data.id
+                this.statusParam.status = data.status
+                $('#status').modal('show');
             }
-            if (type === 'send') {
-
+            if (type === 'view') {
+                this.single(data.id)
+                $('#single').modal('show');
             }
+        },
+        updateStatus: function () {
+            ApiService.ClearErrorHandler();
+            this.loading = true;
+            ApiService.POST(ApiRoutes.updateStatusOrder, this.statusParam, (res) => {
+                this.loading = false;
+                if (parseInt(res.status) === 200) {
+                    this.$toast.success(res.message)
+                    $('#status').modal('hide');
+                    this.list()
+                } else {
+                    ApiService.ErrorHandler(res.errors);
+                }
+            });
+        },
+        single: function (order_id) {
+            ApiService.POST(ApiRoutes.singleOrder, {order_id: order_id}, (res) => {
+                this.loading = false;
+                if (parseInt(res.status) === 200) {
+                    this.singleData = res.data
+                } else {
+                    ApiService.ErrorHandler(res.errors);
+                }
+            });
         },
         edit: function () {
             ApiService.ClearErrorHandler();
