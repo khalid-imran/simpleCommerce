@@ -99,6 +99,7 @@ Route::group(['prefix' => 'cart'], function () {
 Route::group(['prefix' => 'order/user'], function () {
     Route::post('create', [OrderController::class, 'addOrder']);
     Route::post('get', [OrderController::class, 'getOrder']);
+    Route::post('get/guest', [OrderController::class, 'getOrderGuest']);
     Route::post('cancel', [OrderController::class, 'cancelOrder']);
     Route::post('get/guest', [OrderController::class, 'getOrderGuest']);
 });

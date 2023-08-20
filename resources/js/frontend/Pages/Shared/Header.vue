@@ -32,15 +32,17 @@
                                 <ul>
                                     <li v-if="auth == null"><a href="javascript:void(0)" @click="openLoginModal">Login</a></li>
                                     <li v-if="auth == null"><a href="javascript:void(0)" @click="openRegistrationModal">Register</a></li>
-                                    <li v-if="auth != null"><a href="javascript:void(0)">Wishlist  </a></li>
-                                    <li v-if="auth != null"><a href="javascript:void(0)">My Account</a></li>
+                                    <li v-if="auth != null"><router-link :to="{name: 'order'}">My Order</router-link></li>
                                     <li v-if="auth != null"><a @click="logout" href="javascript:void(0)">Logout</a></li>
                                 </ul>
                             </div>
                         </div>
-                        <div v-if="auth != null" class="same-style header-wishlist">
+                        <!-- <div v-if="auth != null" class="same-style header-wishlist">
                             <a href="wishlist.html"><i class="pe-7s-like"></i></a>
-                        </div>
+                        </div> -->
+                         <div v-if="guest != null" class="same-style header-wishlist">
+                            <router-link :to="{name: 'order'}"><i class="pe-7s-box1"></i></router-link>
+                         </div>
                         <div class="same-style cart-wrap">
                             <button class="icon-cart">
                                 <i class="pe-7s-shopbag"></i>

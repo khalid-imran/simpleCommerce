@@ -26,10 +26,19 @@ class OrderController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 500, 'errors' => $validator->errors()]);
         }
+        $phone = substr($input['phone'], 0, -8);
+        if ($phone != '017' && $phone != '018' && $phone != '019' && $phone != '013' && $phone != '014' && $phone != '016' && $phone != '015') {
+            return response()->json(['status' => 500, 'errors' => ['phone' => ['Please insert a valid Bangladeshi number']]], 200);
+        }
         $userId = null;
         $userInfo = $request->user('api');
         if ($userInfo != null) {
             $userId = $userInfo->id;
+            $user = User::find($userId);
+            if (empty($userInfo->address)) {
+                $user->address = $input['address'];
+                $user->save();
+            }
         }
         if (isset($input['guest_user_id']) && !empty($input['guest_user_id'])) {
             $userId = $input['guest_user_id'];
@@ -47,11 +56,6 @@ class OrderController extends Controller
         }
         if ($userId == null) {
             return response()->json(['status' => 500, 'message' => 'Invalid Request']);
-        }
-        $user = User::find($userId);
-        if (empty($user->address)) {
-            $user->address = $input['address'];
-            $user->save();
         }
 
         $orderModel = new Order();
@@ -103,8 +107,7 @@ class OrderController extends Controller
     {
         $input = $request->input();
         $userInfo = $request->user('api');
-
-        $orders = Order::select('orders.*')
+        $orders = Order::with('user')
             ->where('orders.user_id', $userInfo->id)
             ->where('orders.status', $input['status']);
         $orders = $orders->orderBy('id', 'DESC')->get()->toArray();
@@ -132,20 +135,10 @@ class OrderController extends Controller
     public function getOrderGuest(Request $request)
     {
         $input = $request->input();
-        $validator = Validator::make($input, [
-            'order_id' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return ['status' => 5000, 'error' => $validator->errors()];
-        }
-        $order = Order::where('id', $input['order_id'])->first();
-
-        if ($order->status == 'pending') {
-            $order->update([
-                'status' => 'cancel'
-            ]);
-            return response()->json(['status' => 200, 'data' => $order]);
-        }
-        return response()->json(['status' => 500, 'message' => 'You cannot cancel this order in this moment, Product is already on the way']);
+        $orders = Order::with('guest')
+            ->where('orders.user_id', $input['guest_user_id'])
+            ->where('orders.status', $input['status']);
+        $orders = $orders->orderBy('id', 'DESC')->get()->toArray();
+        return response()->json(['status' => 200, 'data' => $orders]);
     }
 }

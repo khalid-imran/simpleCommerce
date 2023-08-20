@@ -62,6 +62,6 @@ class OrderAdminController extends Controller
             return ['status' => 5000, 'error' => $validator->errors()];
         }
         $detail = Order::with('order_item')->where('id', $input['order_id'])->first();
-        return response()->json(['status' => 2000, 'data' => $detail]);
+        return response()->json(['status' => 200, 'data' => $detail]);
     }
 }

@@ -43,23 +43,34 @@
             </div>
         </div>
         <div class="modal fade" id="single" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-md">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-capitalize">View order</h5>
+                        <h5 class="modal-title text-capitalize" v-if="singleData != null">{{singleData.order_number}}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" v-if="singleData != null">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
                                 <th>Image</th>
                                 <th>Name</th>
                                 <th>Variant</th>
-                                <th>Quantity</th>
                                 <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total Price</th>
                             </tr>
                             </thead>
+                            <tbody>
+                            <tr v-for="p in singleData.order_item">
+                                <td><img v-if="p?.product?.images.length > 0" :src="p?.product?.images[0].full_path" alt=""></td>
+                                <td>{{p.product.title}}</td>
+                                <td>{{p.product_variants[0].title}}</td>
+                                <td class="text-end">{{p.unit_price}}</td>
+                                <td>{{p.quantity}}</td>
+                                <td class="text-end">{{p.total_price}}</td>
+                            </tr>
+                            </tbody>
                         </table>
                     </div>
                     <div class="modal-footer">
@@ -180,6 +191,7 @@ export default {
                 this.loading = false;
                 if (parseInt(res.status) === 200) {
                     this.singleData = res.data
+                    console.log(this.singleData)
                 } else {
                     ApiService.ErrorHandler(res.errors);
                 }
