@@ -65,7 +65,7 @@ class ProductController extends Controller
             foreach ($requestData['variants'] as $variant) {
                 $productVariant[] = [
                     'product_id' => $product->id,
-                    'title' => $variant['title'],
+                    'title' => $variant['title'] ?? null,
                     'price' => $variant['price'],
                 ];
             }
@@ -160,7 +160,7 @@ class ProductController extends Controller
             foreach ($requestData['variants'] as $variant) {
                 $productVariant[] = [
                     'product_id' => $product->id,
-                    'title' => $variant['title'],
+                    'title' => $variant['title'] ?? null,
                     'price' => $variant['price'],
                 ];
             }

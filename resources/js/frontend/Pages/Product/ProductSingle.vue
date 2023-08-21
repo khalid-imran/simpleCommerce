@@ -65,9 +65,11 @@
                                 <span>Variants</span>
                                 <div class="pro-details-size-content">
                                     <ul>
-                                        <li v-for="v in singleProduct.variants" @click="cart.variant_id = v.id">
-                                            <a :class="{active: v.id == cart.variant_id }" href="javascript:void(0)">{{ v.title }}</a>
-                                        </li>
+                                        <template v-for="v in singleProduct.variants">
+                                            <li @click="cart.variant_id = v.id" v-if="v.title != null">
+                                                <a :class="{active: v.id == cart.variant_id }" href="javascript:void(0)">{{ v.title }}</a>
+                                            </li>
+                                        </template>
                                     </ul>
                                 </div>
                             </div>
