@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $data = [
-            ['name' => 'diivaa-admin', 'phone' => 'admin', 'password' => bcrypt('12345678!@'), 'is_admin' => 1]
+            ['name' => 'diivaa-admin', 'phone' => 'admin', 'password' => bcrypt('123qwe123!@'), 'is_admin' => 1]
         ];
         User::insert($data);
     }
