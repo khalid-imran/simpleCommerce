@@ -6,7 +6,7 @@
                     <div class="copyright mb-30">
                         <div class="footer-logo">
                             <router-link :to="{name: 'dashboard'}">
-                                <img v-if="settings?.website?.full_path" alt :src="settings?.website?.full_path">
+                                <img style="width: 100px" v-if="settings?.website?.full_path" alt :src="settings?.website?.full_path">
                                 <span v-else class="icon-name">{{settings?.website?.name}}</span>
                             </router-link>
                         </div>

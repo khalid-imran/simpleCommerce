@@ -425,8 +425,9 @@ export default {
 
 <style lang="scss" scoped>
 .logo{
+    margin-top: 5px!important;
     img{
-        height: 25px;
+        height: 73px;
         object-fit: cover;
         object-position: center;
     }
