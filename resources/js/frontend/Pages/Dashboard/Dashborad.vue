@@ -54,7 +54,7 @@
             </div>
         </div>
     </div>-->
-    <div class="product-area pb-60">
+    <div class="product-area pt-60 pb-60">
         <div class="container">
             <h4 class="text-center mb-4">New Arrivals  </h4>
             <div class="row mb-60" >
