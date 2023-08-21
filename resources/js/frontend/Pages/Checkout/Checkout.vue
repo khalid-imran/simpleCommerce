@@ -60,7 +60,7 @@
                                                     <img v-if="c.images.length > 0" class="p-img" :src="c.images[0].full_path" alt="">
                                                     <img v-else class="p-img" src="/images/product_default.jpg" alt="">
                                                     <span class="me-3"> {{ c.title }}  X  {{ c.cart_quantity }}</span>
-                                                    <span class="varient-title">{{c.variant_title}}</span>
+                                                    <span class="varient-title" v-if="c.variant_title">{{c.variant_title}}</span>
                                                 </span>
                                                 <span class="order-price">৳ {{c.price}}.00 </span>
                                             </li>

@@ -26,6 +26,8 @@ const ApiRoutes = {
     addOrder: ApiVersion + '/order/user/create',
     getOrder: ApiVersion + '/order/user/get',
     getOrderGuest: ApiVersion + '/order/user/get/guest',
+    getOrderSingle: ApiVersion + '/order/user/single',
+    OrderCancel: ApiVersion + '/order/user/cancel',
 };
 
 export default ApiRoutes;

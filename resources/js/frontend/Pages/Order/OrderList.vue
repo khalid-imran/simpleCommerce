@@ -12,26 +12,15 @@
         </div>
     </div>
     <div class="container">
-        <div class="row mb-60" >
+        <div class="row mb-60 justify-content-end" >
             <div class="col-sm-3">
-                <div class="order-status" :class="{'active': param.status == 'pending'}" @click="param.status = 'pending'">
-                    Pending
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="order-status" :class="{'active': param.status == 'on the way'}" @click="param.status = 'on the way'">
-                    On the way
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="order-status" :class="{'active': param.status == 'delivered'}" @click="param.status = 'delivered'">
-                    Delivered
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="order-status" :class="{'active': param.status == 'cancel'}" @click="param.status = 'cancel'">
-                    Canceled
-                </div>
+                <select class="form-select" v-model="param.status">
+                    <option value="">All order</option>
+                    <option value="pending">Pending</option>
+                    <option value="on the way">On the way</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancel">Canceled</option>
+                </select>
             </div>
             <div class="col-sm-12 mt-5 mb-2">
                 <table class="table table-bordered">
@@ -39,18 +28,23 @@
                     <tr>
                         <th>Order No</th>
                         <th>Sub total</th>
-                        <th>Delivery Charge</th>
-                        <th>Total</th>
-                        <th>Status</th>
+                        <th class="text-end">Delivery Charge</th>
+                        <th class="text-end">Total</th>
+                        <th>Order Status</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody v-if="orders.length > 0">
                     <tr v-for="o in orders"  class="cursor-pointer" >
                         <td>{{o.order_number}}</td>
                         <td>{{o.sub_total}}</td>
-                        <td>{{o.delivery_charge}}</td>
-                        <td>{{o.total}}</td>
+                        <td class="text-end">{{o.delivery_charge}}</td>
+                        <td class="text-end">{{o.total}}</td>
                         <td class="text-capitalize">{{o.status}}</td>
+                        <td class="text-end">
+                            <button class="btn btn-outline-info btn-sm me-2" @click="openSingle(o)">View</button>
+                            <button class="btn btn-outline-danger btn-sm" @click="openCancel(o)" v-if="o.status == 'pending'">Cancel</button>
+                        </td>
                     </tr>
                     </tbody>
                     <tbody v-else>
@@ -61,6 +55,62 @@
                 </table>
             </div>
         </div>
+        <div class="modal fade" id="single" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-capitalize" v-if="singleData != null">{{singleData.order_number}}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" v-if="singleData != null">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Variant</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="p in singleData.order_item">
+                                <td><img style="height: 110px" v-if="p?.product?.images.length > 0" :src="p?.product?.images[0].full_path" alt=""></td>
+                                <td>{{p.product.title}}</td>
+                                <td>{{p.product_variants[0].title}}</td>
+                                <td class="text-end">{{p.unit_price}}</td>
+                                <td>{{p.quantity}}</td>
+                                <td class="text-end">{{p.total_price}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-width" data-bs-dismiss="modal">Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="cancel" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog" style="max-width: 550px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-capitalize">Cancel Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h3 class="text-danger">Are you sure you want to cancel this order?</h3>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-width" data-bs-dismiss="modal">No
+                        </button>
+                        <button type="button" class="btn btn-danger btn-width" @click="cancelOrder()">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -68,16 +118,22 @@
 import ApiService from "../../Services/ApiService";
 import ApiRoutes from "../../Services/ApiRoutes";
 import store from "../../Store/store";
+import Table from "../../../backend/Pages/Common/Table.vue";
 
 export default {
     name: "order",
+    components: {Table},
     data() {
         return {
             APP_URL: window.APP_URL,
             orders: [],
             param: {
-                status: 'pending',
-            }
+                status: '',
+            },
+            cancelParam: {
+                order_id: '',
+            },
+            singleData: null
         }
     },
     watch: {
@@ -98,6 +154,33 @@ export default {
         }
     },
     methods: {
+        openCancel: function (data) {
+            this.cancelParam.order_id = data.id
+            $('#cancel').modal('show');
+        },
+        cancelOrder: function () {
+            ApiService.POST(ApiRoutes.OrderCancel, this.cancelParam,(res) => {
+                if (parseInt(res.status) === 200) {
+                    if (this.guest) {
+                        this.getOrderGuest()
+                    } else {
+                        this.getOrder()
+                    }
+                    $('#cancel').modal('hide');
+                }
+            });
+        },
+        openSingle: function (data) {
+            this.single(data.id)
+            $('#single').modal('show');
+        },
+        single: function (order_id) {
+            ApiService.POST(ApiRoutes.getOrderSingle, {order_id: order_id},(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.singleData = res.data
+                }
+            });
+        },
         getOrder: function () {
             ApiService.POST(ApiRoutes.getOrder, this.param,(res) => {
                 if (parseInt(res.status) === 200) {

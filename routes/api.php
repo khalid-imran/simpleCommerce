@@ -102,6 +102,7 @@ Route::group(['prefix' => 'order/user'], function () {
     Route::post('get/guest', [OrderController::class, 'getOrderGuest']);
     Route::post('cancel', [OrderController::class, 'cancelOrder']);
     Route::post('get/guest', [OrderController::class, 'getOrderGuest']);
+    Route::post('single', [OrderAdminController::class, 'single']);
 });
 Route::group(['prefix' => 'deliveryFee'], function () {
     Route::post('get', [DeliveryFeeFrontController::class, 'list']);

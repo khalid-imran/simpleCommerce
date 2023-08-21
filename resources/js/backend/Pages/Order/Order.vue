@@ -63,7 +63,7 @@
                             </thead>
                             <tbody>
                             <tr v-for="p in singleData.order_item">
-                                <td><img v-if="p?.product?.images.length > 0" :src="p?.product?.images[0].full_path" alt=""></td>
+                                <td><img style="height: 110px" v-if="p?.product?.images.length > 0" :src="p?.product?.images[0].full_path" alt=""></td>
                                 <td>{{p.product.title}}</td>
                                 <td>{{p.product_variants[0].title}}</td>
                                 <td class="text-end">{{p.unit_price}}</td>
@@ -191,7 +191,6 @@ export default {
                 this.loading = false;
                 if (parseInt(res.status) === 200) {
                     this.singleData = res.data
-                    console.log(this.singleData)
                 } else {
                     ApiService.ErrorHandler(res.errors);
                 }

@@ -107,9 +107,10 @@ class OrderController extends Controller
     {
         $input = $request->input();
         $userInfo = $request->user('api');
-        $orders = Order::with('user')
-            ->where('orders.user_id', $userInfo->id)
-            ->where('orders.status', $input['status']);
+        $orders = Order::with('user')->where('orders.user_id', $userInfo->id);
+        if (!empty($input['status'])) {
+            $orders->where('orders.status', $input['status']);
+        }
         $orders = $orders->orderBy('id', 'DESC')->get()->toArray();
         return response()->json(['status' => 200, 'data' => $orders]);
     }
@@ -135,9 +136,10 @@ class OrderController extends Controller
     public function getOrderGuest(Request $request)
     {
         $input = $request->input();
-        $orders = Order::with('guest')
-            ->where('orders.user_id', $input['guest_user_id'])
-            ->where('orders.status', $input['status']);
+        $orders = Order::with('guest')->where('orders.user_id', $input['guest_user_id']);
+        if (!empty($input['status'])) {
+            $orders->where('orders.status', $input['status']);
+        }
         $orders = $orders->orderBy('id', 'DESC')->get()->toArray();
         return response()->json(['status' => 200, 'data' => $orders]);
     }
