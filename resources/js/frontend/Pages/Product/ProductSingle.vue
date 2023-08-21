@@ -264,7 +264,9 @@ export default {
             ApiService.POST(ApiRoutes.GetCart, param,(res) => {
                 if (parseInt(res.status) === 200) {
                     this.$store.commit('PutCartData', res.data);
-                    $('.shopping-cart-content').addClass('cart-visible');
+                    setTimeout(() => {
+                        $('.shopping-cart-content').addClass('cart-visible');
+                    }, 500)
                 }
             });
         },

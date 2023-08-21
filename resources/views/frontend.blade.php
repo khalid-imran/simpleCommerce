@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
-    <link rel="icon" href="{{ asset('images/favicon-32x32.png') }}" type="image/png" />
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{asset('frontend/css/bootstrap.min.css')}}">
     <!-- Icon Font CSS -->
@@ -36,7 +36,7 @@
 <script src="{{asset('frontend/js/bootstrap.min.js')}}"></script>
 <script src="{{asset('frontend/js/plugins.js')}}"></script>
 <!--app JS-->
-<script src="{{ asset('js/frontend/app.js?v=1.0') }}"></script>
+<script src="{{ asset('js/frontend/app.js?v=1.1') }}"></script>
 <!-- Main JS -->
 <script src="{{asset('frontend/js/main.js')}}"></script>
 

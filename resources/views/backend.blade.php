@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
-    <link rel="icon" href="{{ asset('images/favicon-32x32.png') }}" type="image/png" />
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png" />
     <!--plugins-->
     <link href="{{ asset('plugins/metismenu/css/metisMenu.min.css') }}" rel="stylesheet" />
     <!-- loader-->
@@ -36,6 +36,6 @@
 <script src="{{ asset('plugins/metismenu/js/metisMenu.min.js') }}"></script>
 <script src="{{ asset('js/theme.js') }}"></script>
 <!--app JS-->
-<script src="{{ asset('/js/backend/app.js?v=1.0') }}"></script>
+<script src="{{ asset('/js/backend/app.js?v=1.1') }}"></script>
 </body>
 </html>

@@ -117,10 +117,10 @@
                                             </button>
                                         </div>
                                         <div class="each-video mb-5" v-if="addEditParam.video == null">
-                                            <input @change="addVideo" id="fancy-file-upload" type="file"
+                                            <input @change="addVideo" id="fancy-video-upload" type="file"
                                                    name="files" accept=".mp4, .wmv, .avi, .3gp"
                                                    class="d-none">
-                                            <label for="fancy-file-upload" class="file-upload signature">Video</label>
+                                            <label for="fancy-video-upload" class="file-upload signature">Video</label>
                                         </div>
                                         <div class="col-sm-12 d-flex align-items-center">
                                             <template v-for="(img, index) in addEditParam.images">
