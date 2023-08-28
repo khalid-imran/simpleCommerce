@@ -91,7 +91,7 @@
             </div>
         </div>
     </div>
-    <div class="product-area pt-60 pb-60">
+    <div class="product-area pt-60 pb-60" v-if="trandingProducts.length > 0">
         <div class="container">
             <h3 class="text-center mb-4">Tranding  </h3>
             <div class="row mb-60" >
@@ -128,7 +128,7 @@
             </div>
         </div>
     </div>
-    <div class="product-area pt-60 pb-60">
+    <div class="product-area pt-60 pb-60" v-if="upcomingProducts.length > 0">
         <div class="container">
             <h3 class="text-center mb-4">Upcoming  </h3>
             <div class="row mb-60" >
