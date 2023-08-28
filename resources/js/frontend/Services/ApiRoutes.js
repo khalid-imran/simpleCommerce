@@ -13,6 +13,8 @@ const ApiRoutes = {
     Website: ApiVersion + '/website/get',
     // Product
     ProductLatest: ApiVersion + '/product/get/latest',
+    ProductTranding: ApiVersion + '/product/get/tranding',
+    ProductUpcoming: ApiVersion + '/product/get/upcoming',
     ProductByCategory: ApiVersion + '/product/by/category',
     ProductAll: ApiVersion + '/product/get/all',
     ProductSingle: ApiVersion + '/product/get/single',
@@ -22,12 +24,16 @@ const ApiRoutes = {
     DeleteCart: ApiVersion + '/cart/delete',
     // Delivery Fee
     GetDeliveryFee: ApiVersion + '/deliveryFee/get',
+    GetState: ApiVersion + '/state/get',
+    GetCity: ApiVersion + '/city/get',
     // Order
     addOrder: ApiVersion + '/order/user/create',
     getOrder: ApiVersion + '/order/user/get',
     getOrderGuest: ApiVersion + '/order/user/get/guest',
     getOrderSingle: ApiVersion + '/order/user/single',
     OrderCancel: ApiVersion + '/order/user/cancel',
+    //Pages
+    GetPagesSingle: ApiVersion + '/pages/get/single',
 };
 
 export default ApiRoutes;

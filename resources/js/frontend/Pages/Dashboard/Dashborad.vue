@@ -56,9 +56,9 @@
     </div>-->
     <div class="product-area pt-60 pb-60">
         <div class="container">
-            <h4 class="text-center mb-4">New Arrivals  </h4>
+            <h3 class="text-center mb-4">New Arrivals  </h3>
             <div class="row mb-60" >
-                <div class="col-xl-3 col-md-6 col-lg-4 col-sm-6" v-for="l in latestProducts">
+                <div class="col-xl-4 col-md-6 col-lg-4 col-sm-6" v-for="l in latestProducts">
                     <div class="product-wrap mb-25 scroll-zoom">
                         <div class="product-img">
                             <router-link :to="{name: 'productSingle', params: {slug: l.slug}}">
@@ -91,6 +91,72 @@
             </div>
         </div>
     </div>
+    <div class="product-area pt-60 pb-60">
+        <div class="container">
+            <h3 class="text-center mb-4">Tranding  </h3>
+            <div class="row mb-60" >
+                <div class="col-xl-4 col-md-6 col-lg-4 col-sm-6" v-for="l in trandingProducts">
+                    <div class="product-wrap mb-25 scroll-zoom">
+                        <div class="product-img">
+                            <router-link :to="{name: 'productSingle', params: {slug: l.slug}}">
+                                <img class="default-img" v-if="l.images.length > 0" :src="l.images[0].full_path" alt="">
+                                <img class="default-img" v-else src="images/product_default.jpg" alt="">
+                                <img class="hover-img" v-if="l.images.length > 1" :src="l.images[1].full_path" alt="">
+                            </router-link>
+                            <span class="pink" v-if="l.discount_type == 1">-{{ l.discount_amount }}%</span>
+                            <div class="product-action">
+                                <div class="pro-same-action pro-wishlist">
+                                    <a title="Wishlist" href="#"><i class="pe-7s-like"></i></a>
+                                </div>
+                                <div class="pro-same-action pro-cart">
+                                    <a @click="addToCart(l)" title="Add To Cart" href="javascript:void(0)">
+                                        <i v-if="!l.loading" class="pe-7s-cart"></i>
+                                        <i v-if="l.loading" class="fa fa-spin fa-spinner"></i>
+                                        Add to cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-content text-center">
+                            <h3><router-link :to="{name: 'productSingle', params: {slug: l.slug}}">{{l.title}}</router-link></h3>
+                            <div class="product-price">
+                                <span>৳ {{getPrice(l).reduce_price}}</span>
+                                <span class="old" v-if="l.discount_type != 2">৳ {{ getPrice(l).price }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="product-area pt-60 pb-60">
+        <div class="container">
+            <h3 class="text-center mb-4">Upcoming  </h3>
+            <div class="row mb-60" >
+                <div class="col-xl-4 col-md-6 col-lg-4 col-sm-6" v-for="l in upcomingProducts">
+                    <div class="product-wrap mb-25 scroll-zoom">
+                        <div class="product-img">
+                            <a href="javascript:void(0)">
+                                <img class="default-img" v-if="l.images.length > 0" :src="l.images[0].full_path" alt="">
+                                <img class="default-img" v-else src="images/product_default.jpg" alt="">
+                                <img class="hover-img" v-if="l.images.length > 1" :src="l.images[1].full_path" alt="">
+                            </a>
+                            <span class="pink" v-if="l.discount_type == 1">-{{ l.discount_amount }}%</span>
+<!--                            <div class="product-action">-->
+<!--                                <div class="pro-same-action pro-cart w-100">-->
+<!--                                    <a title="Interested" href="javascript:void(0)">-->
+<!--                                        <i v-if="l.loading" class="fa fa-spin fa-spinner"></i>-->
+<!--                                        Interested</a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+                        <div class="product-content text-center">
+                            <h3><a href="javascript:void(0)">{{l.title}}</a></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -103,6 +169,8 @@ export default {
     data: function () {
         return {
             latestProducts: [],
+            trandingProducts: [],
+            upcomingProducts: [],
         }
     },
     computed: {
@@ -172,9 +240,31 @@ export default {
                 }
             });
         },
+        getTrandingProduct: function () {
+            ApiService.POST(ApiRoutes.ProductTranding, null,(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.trandingProducts = res.data
+                    setTimeout(() => {
+                        sr.reveal('.scroll-zoom');
+                    }, 1)
+                }
+            });
+        },
+        getUpcomingProduct: function () {
+            ApiService.POST(ApiRoutes.ProductUpcoming, null,(res) => {
+                if (parseInt(res.status) === 200) {
+                    this.upcomingProducts = res.data
+                    setTimeout(() => {
+                        sr.reveal('.scroll-zoom');
+                    }, 1)
+                }
+            });
+        },
     },
     created: function () {
         this.getLatestProduct()
+        this.getTrandingProduct()
+        this.getUpcomingProduct()
     },
     mounted() {
         setTimeout(() => {

@@ -8,6 +8,7 @@ import ProductSingle from "../Pages/Product/ProductSingle.vue";
 import Checkout from "../Pages/Checkout/Checkout.vue";
 import Complete from "../Pages/OrderComplete/OrderComplete.vue";
 import Order from "../Pages/Order/OrderList.vue";
+import pages from "../Pages/Pages/Pages.vue";
 const routes = [
     {
         name: "layout",
@@ -19,6 +20,7 @@ const routes = [
             { path: "/products/category/:slug", name: "productCategory", component: ProductCategory},
             { path: "/product/:slug", name: "productSingle", component: ProductSingle},
             { path: "/order", name: "order", component: Order},
+            { path: "/page/:slug", name: "page", component: pages},
         ]
     },
     { path: "/checkout", name: "checkout", component: Checkout},

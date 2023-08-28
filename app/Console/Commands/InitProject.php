@@ -67,6 +67,12 @@ class InitProject extends Command
         self::Logger(1, 'DB Seed', 'info');
         Artisan::call('db:seed');
 
+        self::Logger(1, 'Insert states', 'info');
+        Artisan::call('insert:states');
+
+        self::Logger(1, 'Insert cities', 'info');
+        Artisan::call('insert:cities');
+
         self::Logger(1, 'Passport install', 'info');
         Artisan::call('passport:install --force');
 

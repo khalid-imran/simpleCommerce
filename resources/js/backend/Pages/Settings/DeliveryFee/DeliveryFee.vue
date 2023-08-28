@@ -9,7 +9,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="add" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="add" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -25,9 +25,16 @@
                                 <small class="invalid-feedback text-danger"></small>
                             </div>
                             <div class="form-group mb-3">
+                                <label for="name" class="form-label">State<span class="text-danger">*</span></label>
+                                <select name="state_id" class="form-select" v-model="addEditParam.state_id">
+                                    <option v-for="s in state" :value="s.id">{{s.name}}</option>
+                                </select>
+                                <small class="invalid-feedback text-danger"></small>
+                            </div>
+                            <div class="form-group mb-3">
                                 <label for="name" class="form-label">Fee<span class="text-danger">*</span></label>
-                                <input type="text" v-model="addEditParam.fee" name="name"
-                                       class="form-control" id="name" placeholder="Fee">
+                                <input type="text" v-model="addEditParam.cost" name="cost"
+                                       class="form-control" id="cost" placeholder="Fee">
                                 <small class="invalid-feedback text-danger"></small>
                             </div>
                         </div>
@@ -65,11 +72,12 @@ export default {
             loading: false,
             addEditParam: {
                 name: '',
-                fee: '',
+                state_id: '',
+                cost: '',
             },
             param: {
                 keyword: '',
-                limit: 10,
+                limit: 15,
                 order_by: 'id',
                 order_mode: 'DESC',
                 page: 1,
@@ -78,8 +86,9 @@ export default {
             id: [],
             table: {
                 columns: [
-                    {type: 'text', key: 'name', label: 'Area', sortable: true},
-                    {type: 'text', key: 'fee', label: 'Fee', sortable: true},
+                    {type: 'text', key: 'state_name', label: 'State', sortable: false},
+                    {type: 'text', key: 'name', label: 'City', sortable: true},
+                    {type: 'text', key: 'cost', label: 'Fee', sortable: true},
                 ],
                 rows: [],
                 row_actions: [
@@ -94,12 +103,23 @@ export default {
                 updatePagination: (page) => {
                     this.list(page)
                 },
+                dropdown: [
+                    {
+                        title: 'All state',
+                        data: [],
+                        action: (event) => {
+                            this.param.state_id = event.target.value
+                            this.list()
+                        }
+                    }
+                ],
                 updateFilter: (param) => {
                     this.param = param
                     this.list()
                 },
                 noDataError: 'Please click "+ Add Delivery Fee" Type to add a new Delivery Fee'
             },
+            state: []
         }
     },
     methods: {
@@ -135,7 +155,7 @@ export default {
         add: function () {
             ApiService.ClearErrorHandler();
             this.loading = true;
-            ApiService.POST(ApiRoutes.AddFee, this.addEditParam, (res) => {
+            ApiService.POST(ApiRoutes.AddCity, this.addEditParam, (res) => {
                 this.loading = false;
                 if (parseInt(res.status) === 200) {
                     $('#add').modal('hide');
@@ -149,7 +169,7 @@ export default {
         edit: function () {
             ApiService.ClearErrorHandler();
             this.loading = true;
-            ApiService.POST(ApiRoutes.EditFee, this.addEditParam, (res) => {
+            ApiService.POST(ApiRoutes.EditCity, this.addEditParam, (res) => {
                 this.loading = false;
                 if (parseInt(res.status) === 200) {
                     this.$toast.success(res.message)
@@ -161,7 +181,7 @@ export default {
             });
         },
         delete: function () {
-            ApiService.POST(ApiRoutes.DeleteFee, {id: this.id[0]}, (res) => {
+            ApiService.POST(ApiRoutes.DeleteCity, {id: this.id[0]}, (res) => {
                 this.$refs.confirmDialogue._loading(false)
                 if (parseInt(res.status) === 200) {
                     this.$toast.success(res.message)
@@ -171,9 +191,17 @@ export default {
             });
         },
         single: function () {
-            ApiService.POST(ApiRoutes.SingleFee, {id: this.id[0]}, (res) => {
+            ApiService.POST(ApiRoutes.SingleCity, {id: this.id[0]}, (res) => {
                 if (parseInt(res.status) === 200) {
                     this.addEditParam = res.data
+                }
+            });
+        },
+        getState: function () {
+            ApiService.POST(ApiRoutes.ListState, {limit: 5000, page: 1}, (res) => {
+                if (parseInt(res.status) === 200) {
+                    this.state = res.data.data
+                    this.table.dropdown[0].data = this.state
                 }
             });
         },
@@ -183,10 +211,13 @@ export default {
             }
             this.param.page = page;
             this.table.loading = true
-            ApiService.POST(ApiRoutes.ListFee, this.param, (res) => {
+            ApiService.POST(ApiRoutes.ListCity, this.param, (res) => {
                 this.table.loading = false
                 if (parseInt(res.status) === 200) {
                     this.table.rows = res.data.data
+                    this.table.rows.forEach(v => {
+                        v.state_name = v.state.name;
+                    })
                     this.table.paginateData = res.data
                 }
             });
@@ -194,6 +225,7 @@ export default {
     },
     mounted() {
         this.list()
+        this.getState()
     },
     created() {
         this.breadCrumb.push('Delivery Fee')

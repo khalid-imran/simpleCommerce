@@ -172,7 +172,7 @@
             </div>
             <div class="col-sm-12 col-md-7">
                 <div class="dataTables_paginate paging_simple_numbers float-end" id="example_paginate">
-                    <Bootstrap5Pagination :data="tblData.paginateData"
+                    <Bootstrap5Pagination :data="tblData.paginateData" :limit="2" :keepLength="true"
                                           @pagination-change-page="tblData.updatePagination"></Bootstrap5Pagination>
                 </div>
             </div>

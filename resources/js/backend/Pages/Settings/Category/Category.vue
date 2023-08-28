@@ -9,7 +9,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="add" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="add" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">

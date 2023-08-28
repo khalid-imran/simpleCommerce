@@ -15,6 +15,10 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderAdminController;
 use App\Http\Controllers\DeliveryFeeFrontController;
+use App\Http\Controllers\StateController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\PagesController;
+use App\Http\Controllers\PagesFrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +84,27 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('update/status', [OrderAdminController::class, 'updateStatus']);
         Route::post('single', [OrderAdminController::class, 'single']);
     });
+    Route::group(['prefix' => 'state'], function() {
+        Route::post('save', [StateController::class, 'save']);
+        Route::post('list', [StateController::class, 'list']);
+        Route::post('single', [StateController::class, 'single']);
+        Route::post('update', [StateController::class, 'update']);
+        Route::post('delete', [StateController::class, 'delete']);
+    });
+    Route::group(['prefix' => 'city'], function() {
+        Route::post('save', [CityController::class, 'save']);
+        Route::post('list', [CityController::class, 'list']);
+        Route::post('single', [CityController::class, 'single']);
+        Route::post('update', [CityController::class, 'update']);
+        Route::post('delete', [CityController::class, 'delete']);
+    });
+    Route::group(['prefix' => 'pages'], function() {
+        Route::post('save', [PagesController::class, 'save']);
+        Route::post('list', [PagesController::class, 'list']);
+        Route::post('single', [PagesController::class, 'single']);
+        Route::post('update', [PagesController::class, 'update']);
+        Route::post('delete', [PagesController::class, 'delete']);
+    });
 });
 
 /*front api*/
@@ -87,6 +112,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 Route::post('website/get', [WebsiteSettingController::class, 'get']);
 Route::group(['prefix' => 'product'], function() {
     Route::post('get/latest', [ProductFrontController::class, 'latest']);
+    Route::post('get/tranding', [ProductFrontController::class, 'tranding']);
+    Route::post('get/upcoming', [ProductFrontController::class, 'upcoming']);
     Route::post('by/category', [ProductFrontController::class, 'byCategory']);
     Route::post('get/all', [ProductFrontController::class, 'getAll']);
     Route::post('get/single', [ProductFrontController::class, 'getSingle']);
@@ -106,4 +133,14 @@ Route::group(['prefix' => 'order/user'], function () {
 });
 Route::group(['prefix' => 'deliveryFee'], function () {
     Route::post('get', [DeliveryFeeFrontController::class, 'list']);
+});
+Route::group(['prefix' => 'state'], function () {
+    Route::post('get', [DeliveryFeeFrontController::class, 'getState']);
+});
+
+Route::group(['prefix' => 'city'], function () {
+    Route::post('get', [DeliveryFeeFrontController::class, 'getCity']);
+});
+Route::group(['prefix' => 'pages'], function () {
+    Route::post('get/single', [PagesFrontController::class, 'getPageSingle']);
 });

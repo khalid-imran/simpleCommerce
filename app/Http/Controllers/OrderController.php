@@ -22,6 +22,8 @@ class OrderController extends Controller
             'address' => 'required',
             'delivery_charge' => 'required',
             'phone' => 'required',
+            'state_id' => 'required',
+            'city_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => 500, 'errors' => $validator->errors()]);
@@ -74,6 +76,8 @@ class OrderController extends Controller
         $orderModel->order_number = $order_number;
         $orderModel->user_phone = $input['phone'];
         $orderModel->delivery_address = $input['address'];
+        $orderModel->state_id = $input['state_id'];
+        $orderModel->city_id = $input['city_id'];
         $orderModel->save();
         $orderId = $orderModel->id;
 

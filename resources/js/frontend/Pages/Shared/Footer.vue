@@ -20,10 +20,7 @@
                         </div>
                         <div class="footer-list">
                             <ul>
-                                <li><a href="javascript:void(0)">Returns</a></li>
-                                <li><a href="javascript:void(0)">Support Policy</a></li>
-                                <li><a href="javascript:void(0)">Size guide</a></li>
-                                <li><a href="javascript:void(0)">FAQs</a></li>
+                                <li v-for="p in settings?.pages"><router-link :to="{name: 'page', params: {slug: p.slug}}">{{ p.name }}</router-link></li>
                             </ul>
                         </div>
                     </div>
@@ -35,11 +32,21 @@
                         </div>
                         <div class="footer-list">
                             <ul>
-                                <li v-if="settings?.website?.social_facebook"><a :href="settings?.website.social_facebook">Facebook</a></li>
-                                <li v-if="settings?.website?.social_twitter"><a :href="settings?.website?.social_twitter">Twitter</a></li>
-                                <li v-if="settings?.website?.social_instagram"><a :href="settings?.website?.social_instagram">Instagram</a></li>
-                                <li v-if="settings?.website?.social_youtube"><a :href="settings?.website?.social_youtube">Youtube</a></li>
-                                <li v-if="settings?.website?.social_linkedIn"><a :href="settings?.website?.social_linkedIn">LinkedIn</a></li>
+                                <li v-if="settings?.website?.social_facebook"><a :href="settings?.website.social_facebook">
+                                    <i style="color: #1873EB" class="fa fa-facebook-official"></i> Facebook</a>
+                                </li>
+                                <li v-if="settings?.website?.social_twitter"><a :href="settings?.website?.social_twitter">
+                                    <i style="color: #1D9BF0" class="fa fa-twitter"></i> Twitter</a>
+                                </li>
+                                <li v-if="settings?.website?.social_instagram"><a :href="settings?.website?.social_instagram">
+                                    <i style="color: #F502BB" class="fa fa-instagram"></i> Instagram</a>
+                                </li>
+                                <li v-if="settings?.website?.social_youtube"><a :href="settings?.website?.social_youtube">
+                                    <i style="color: #FE0000" class="fa fa-youtube"></i> Youtube</a>
+                                </li>
+                                <li v-if="settings?.website?.social_linkedIn"><a :href="settings?.website?.social_linkedIn">
+                                    <i style="color: #0A66C2" class="fa fa-linkedin-square"></i> LinkedIn</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -47,7 +54,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="footer-widget mb-30 ml-70">
                         <div class="footer-title">
-                            <h3>About us</h3>
+                            <h3>ABOUT US</h3>
                         </div>
                         <div class="subscribe-style">
                             <p>{{ settings?.website?.about }}</p>

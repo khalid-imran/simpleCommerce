@@ -10,42 +10,23 @@
             </div>
         </div>
         <div class="modal fade" id="add" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-            <div class="modal-dialog modal-md">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-capitalize">{{ actionType }} {{ 'Slide' }}</h5>
+                        <h5 class="modal-title text-capitalize">{{ actionType }} {{ 'Page' }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form @submit.prevent="actionType == 'add' ? add() : edit()">
                         <div class="modal-body">
                             <div class="form-group mb-3">
-                                <label for="name" class="form-label">Title<span class="text-danger">*</span></label>
-                                <input type="text" v-model="addEditParam.title" name="title"
-                                       class="form-control" id="title" placeholder="Title">
+                                <label for="name" class="form-label">Page Name<span class="text-danger">*</span></label>
+                                <input type="text" v-model="addEditParam.name" name="name"
+                                       class="form-control" id="name" placeholder="Page Name">
                                 <small class="invalid-feedback text-danger"></small>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="name" class="form-label">Button Title<span class="text-danger">*</span></label>
-                                <input type="text" v-model="addEditParam.button_title" name="button_title"
-                                       class="form-control" id="button_title" placeholder="Button Title">
-                                <small class="invalid-feedback text-danger"></small>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="name" class="form-label">Slide Image<span class="text-danger">*</span></label>
-                                <template v-if="!image">
-                                    <input @change="addFile" id="fancy-sig-upload" type="file"
-                                           name="file" accept=".jpg, .png, image/jpeg, image/png"
-                                           class="d-none">
-                                    <label for="fancy-sig-upload" class="file-upload signature"></label>
-                                </template>
-                                <template v-if="image">
-                                    <div class="position-relative">
-                                        <img class="signature" :src="image" alt="">
-                                        <div class="remove-sig bg-danger" @click="removeFile">
-                                            <i class="bx bx-trash"></i>
-                                        </div>
-                                    </div>
-                                </template>
+                                <label for="name" class="form-label">Page Content<span class="text-danger">*</span></label>
+                                <vue-editor v-model="addEditParam.content" :editor-toolbar="customToolbar" name="description"/>
                                 <small class="invalid-feedback text-danger"></small>
                             </div>
                         </div>
@@ -81,11 +62,9 @@ export default {
         return {
             breadCrumb: [],
             loading: false,
-            image: null,
             addEditParam: {
-                title: '',
-                button_title: '',
-                file: '',
+                name: '',
+                content: '',
             },
             param: {
                 keyword: '',
@@ -94,13 +73,23 @@ export default {
                 order_mode: 'DESC',
                 page: 1,
             },
+            customToolbar: [
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                ['blockquote'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+
+                [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                [{ 'font': [] }],
+                [{ 'align': [] }],
+
+                ['clean']
+            ],
             actionType: 'Add',
             id: [],
             table: {
                 columns: [
-                    {type: 'text', key: 'title', label: 'Title', sortable: true},
-                    {type: 'text', key: 'button_title', label: 'Button Title', sortable: true},
-                    {type: 'img', key: 'full_path', label: 'Image', sortable: true},
+                    {type: 'text', key: 'name', label: 'Name', sortable: true},
                 ],
                 rows: [],
                 row_actions: [
@@ -119,19 +108,11 @@ export default {
                     this.param = param
                     this.list()
                 },
-                noDataError: 'Please click "+ Add Slide" Type to add a new Slide'
+                noDataError: 'Please click "+ Add Pages" Type to add a new Pages'
             },
         }
     },
     methods: {
-        addFile: function (e) {
-            this.addEditParam.file = e.target.files[0];
-            this.image = URL.createObjectURL(this.addEditParam.file);
-        },
-        removeFile: function () {
-            this.addEditParam.file = '';
-            this.image = null;
-        },
         openModal(type, data = null) {
             this.clearForm(type)
             this.id = this.structureReturnData(data)
@@ -148,15 +129,13 @@ export default {
             ApiService.ClearErrorHandler();
             this.actionType = type
             this.addEditParam = {
-                title: '',
-                button_title: '',
-                file: ''
+                name: '',
+                type: this.type,
             }
-            this.image = null
         },
         async deleteModal() {
             const ok = await this.$refs.confirmDialogue.show({
-                message: 'Are you sure you want to delete this Slide?',
+                message: 'Are you sure you want to delete this Pages?',
                 okButton: 'Delete',
             })
             if (ok) {
@@ -166,8 +145,7 @@ export default {
         add: function () {
             ApiService.ClearErrorHandler();
             this.loading = true;
-            let param = this.makeFormData(this.addEditParam)
-            ApiService.POST(ApiRoutes.AddSlide, param, (res) => {
+            ApiService.POST(ApiRoutes.AddPages, this.addEditParam, (res) => {
                 this.loading = false;
                 if (parseInt(res.status) === 200) {
                     $('#add').modal('hide');
@@ -181,8 +159,7 @@ export default {
         edit: function () {
             ApiService.ClearErrorHandler();
             this.loading = true;
-            let param = this.makeFormData(this.addEditParam)
-            ApiService.POST(ApiRoutes.EditSlide, param, (res) => {
+            ApiService.POST(ApiRoutes.EditPages, this.addEditParam, (res) => {
                 this.loading = false;
                 if (parseInt(res.status) === 200) {
                     this.$toast.success(res.message)
@@ -194,7 +171,7 @@ export default {
             });
         },
         delete: function () {
-            ApiService.POST(ApiRoutes.DeleteSlide, {id: this.id[0]}, (res) => {
+            ApiService.POST(ApiRoutes.DeletePages, {id: this.id[0]}, (res) => {
                 this.$refs.confirmDialogue._loading(false)
                 if (parseInt(res.status) === 200) {
                     this.$toast.success(res.message)
@@ -204,10 +181,9 @@ export default {
             });
         },
         single: function () {
-            ApiService.POST(ApiRoutes.SingleSlide, {id: this.id[0]}, (res) => {
+            ApiService.POST(ApiRoutes.SinglePages, {id: this.id[0]}, (res) => {
                 if (parseInt(res.status) === 200) {
                     this.addEditParam = res.data
-                    this.image = this.addEditParam.full_path
                 }
             });
         },
@@ -217,7 +193,7 @@ export default {
             }
             this.param.page = page;
             this.table.loading = true
-            ApiService.POST(ApiRoutes.ListSlide, this.param, (res) => {
+            ApiService.POST(ApiRoutes.ListPages, this.param, (res) => {
                 this.table.loading = false
                 if (parseInt(res.status) === 200) {
                     this.table.rows = res.data.data
@@ -230,7 +206,7 @@ export default {
         this.list()
     },
     created() {
-        this.breadCrumb.push('Slide')
+        this.breadCrumb.push('Pages')
     }
 }
 </script>

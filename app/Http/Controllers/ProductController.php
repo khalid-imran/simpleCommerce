@@ -43,6 +43,8 @@ class ProductController extends Controller
         $product->features = $requestData['features'] ?? null;
         $product->video = $video_path;
         $product->buy_price = $requestData['buy_price'] ?? null;
+        $product->tranding = $requestData['tranding'] ?? 0;
+        $product->upcoming = $requestData['upcoming'] ?? 0;
         $product->discount_type = $requestData['discount_type'] ?? 2;
         if (isset($requestData['discount_amount']) && $requestData['discount_amount'] > 0) {
             $product->discount_amount = $requestData['discount_amount'];
@@ -135,6 +137,8 @@ class ProductController extends Controller
         $product->features = $requestData['features'] ?? null;
         $product->video = $video_path;
         $product->buy_price = $requestData['buy_price'] ?? null;
+        $product->tranding = $requestData['tranding'] ?? 0;
+        $product->upcoming = $requestData['upcoming'] ?? 0;
         $product->discount_type = $requestData['discount_type'] ?? 2;
         if (isset($requestData['discount_amount']) && $requestData['discount_amount'] > 0) {
             $product->discount_amount = $requestData['discount_amount'];

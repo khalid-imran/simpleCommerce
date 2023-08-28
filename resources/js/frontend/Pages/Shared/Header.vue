@@ -1,7 +1,7 @@
 <template>
-    <header class="header-area header-padding-2 sticky-bar header-res-padding clearfix">
+    <header class="header-area header-padding-2 sticky-bar clearfix">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center" style="padding: 15px 0">
                 <div class="col-xl-2 col-lg-2 col-md-6 col-4">
                     <div class="logo">
                         <router-link :to="{name: 'dashboard'}">
@@ -41,7 +41,9 @@
                             <a href="wishlist.html"><i class="pe-7s-like"></i></a>
                         </div> -->
                          <div v-if="guest != null" class="same-style header-wishlist">
-                            <router-link :to="{name: 'order'}"><i class="pe-7s-box1"></i></router-link>
+                            <router-link :to="{name: 'order'}"  v-tooltip="'My order'">
+                                <i class="pe-7s-box1"></i>
+                            </router-link>
                          </div>
                         <div class="same-style cart-wrap">
                             <button class="icon-cart">
@@ -285,7 +287,7 @@ export default {
                 phone: '',
                 password: '',
             },
-            loading: false
+            loading: false,
         }
     },
     directives: {
@@ -425,11 +427,16 @@ export default {
 
 <style lang="scss" scoped>
 .logo{
-    margin-top: 5px!important;
+    margin-top: 0!important;
     img{
-        height: 73px;
+        height: 53px;
         object-fit: cover;
         object-position: center;
+    }
+}
+.stick{
+    .logo{
+        margin-top: 0!important;
     }
 }
 .disable-arrow{
@@ -448,4 +455,13 @@ export default {
     font-size: 35px;
     font-weight: bold;
 }
+.main-menu{
+    a{
+        line-height: inherit!important;
+    }
+}
+.header-right-wrap{
+    margin-top: 0!important;
+}
+
 </style>

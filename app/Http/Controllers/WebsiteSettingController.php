@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\DeliveryFee;
+use App\Models\pages;
 use App\Models\Slide;
 use App\Models\Website;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class WebsiteSettingController extends Controller
         $website = Website::first();
         $slide = Slide::select('title', 'file_path', 'button_title')->get()->toArray();
         $deliveryFee = DeliveryFee::select('name', 'fee')->get()->toArray();
-        return response()->json(['status' => 200, 'data' => ['category' => $category, 'website' => $website, 'slide' => $slide, 'deliveryFee' => $deliveryFee]]);
+        $pages = pages::select('name', 'slug')->get()->toArray();
+        return response()->json(['status' => 200, 'data' => ['category' => $category, 'website' => $website, 'slide' => $slide, 'deliveryFee' => $deliveryFee, 'pages' => $pages]]);
     }
 }

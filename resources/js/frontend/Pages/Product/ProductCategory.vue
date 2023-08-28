@@ -13,7 +13,7 @@
     </div>
     <div class="container">
         <div class="row mb-60" >
-            <div class="col-xl-3 col-md-6 col-lg-4 col-sm-6" v-for="l in categoryProducts">
+            <div class="col-xl-4 col-md-6 col-lg-4 col-sm-6" v-for="l in categoryProducts">
                 <div class="product-wrap mb-25 scroll-zoom">
                     <div class="product-img">
                         <router-link :to="{name: 'productSingle', params: {slug: l.slug}}">

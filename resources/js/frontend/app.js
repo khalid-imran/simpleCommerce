@@ -6,10 +6,22 @@ import router from "./Router/router";
 import store from "./Store/store";
 import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-default.css';
+import FloatingVue from "floating-vue";
+import 'floating-vue/dist/style.css'
+import VueSelect  from "vue-select";
+import "vue-select/dist/vue-select.css";
 
 const app = createApp(App);
 app.use(store);
 app.use(router);
+app.use(FloatingVue, {
+    themes: {
+        'tooltip': {
+            delay: { show: 0, hide: 0 },
+        },
+    },
+});
+app.component("v-select", VueSelect)
 app.use(ToastPlugin,  { position: "top-right"});
 app.mount('#app');
 app.mixin({

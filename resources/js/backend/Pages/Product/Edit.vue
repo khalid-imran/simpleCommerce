@@ -64,13 +64,26 @@
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-6 mb-4">
                                             <div class="form-group mb-3">
                                                 <label for="name" class="form-label">Buy Price</label>
                                                 <input type="text" v-model="addEditParam.buy_price"
                                                        name="buy_price" class="form-control" id="buy_price"
                                                        placeholder="Buy Price">
                                                 <small class="invalid-feedback text-danger"></small>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="1" id="tranding" v-model="addEditParam.tranding">
+                                                    <label class="form-check-label" for="tranding">Tranding</label>
+                                                </div>
+                                                <small class="invalid-feedback text-danger"></small>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="1" id="upcoming" v-model="addEditParam.upcoming">
+                                                    <label class="form-check-label" for="upcoming">Upcoming</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -232,6 +245,8 @@ export default {
         manage: function () {
             ApiService.ClearErrorHandler();
             this.loading = true;
+            this.addEditParam.tranding = this.addEditParam.tranding ? 1 : 0
+            this.addEditParam.upcoming = this.addEditParam.upcoming ? 1 : 0
             let param = this.makeFormData(this.addEditParam)
             ApiService.POST(ApiRoutes.EditProduct, param, (res) => {
                 this.loading = false;

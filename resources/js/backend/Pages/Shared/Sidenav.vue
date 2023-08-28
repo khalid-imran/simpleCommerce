@@ -31,6 +31,9 @@
                     <li :class="isActive('slide')">
                         <router-link :to="{name: 'slide'}"><i class="bx bx-right-arrow-alt"></i>Slide</router-link>
                     </li>
+                    <li :class="isActive('pages')">
+                        <router-link :to="{name: 'pages'}"><i class="bx bx-right-arrow-alt"></i>Pages</router-link>
+                    </li>
                     <li :class="isActive('website')">
                         <router-link :to="{name: 'website'}"><i class="bx bx-right-arrow-alt"></i>Website</router-link>
                     </li>

@@ -10,9 +10,29 @@ class ProductFrontController extends Controller
 {
     public function latest(Request $request)
     {
-        $result = Product::with('images', 'variants');
+        $result = Product::with('images', 'variants')->where('upcoming', 0);
         $result = $result->orderBy('id', 'DESC')
-            ->skip(0)->take(12)->get()->toArray();
+            ->skip(0)->take(6)->get()->toArray();
+        foreach ($result as &$product) {
+            $product['loading'] = false;
+        }
+        return response()->json(['status' => 200, 'data' => $result]);
+    }
+    public function tranding(Request $request)
+    {
+        $result = Product::with('images', 'variants')->where('tranding', 1);
+        $result = $result->orderBy('id', 'DESC')
+            ->skip(0)->take(6)->get()->toArray();
+        foreach ($result as &$product) {
+            $product['loading'] = false;
+        }
+        return response()->json(['status' => 200, 'data' => $result]);
+    }
+    public function upcoming(Request $request)
+    {
+        $result = Product::with('images', 'variants')->where('upcoming', 1);
+        $result = $result->orderBy('id', 'DESC')
+            ->skip(0)->take(6)->get()->toArray();
         foreach ($result as &$product) {
             $product['loading'] = false;
         }
@@ -33,7 +53,7 @@ class ProductFrontController extends Controller
     }
     public function getAll(Request $request)
     {
-        $result = Product::with('images', 'variants');
+        $result = Product::with('images', 'variants')->where('upcoming', 0);
         $result = $result->orderBy('id', 'DESC')
            ->get()->toArray();
         foreach ($result as &$product) {

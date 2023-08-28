@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div class="breadcrumb-area pt-35 pb-35 bg-gray-3 mb-5">
+        <div class="breadcrumb-area pt-20 pb-20 bg-gray-3 mb-5">
             <div class="container">
                 <h1 class="text-center">
                     <router-link class="text-decoration-none" :to="{name: 'dashboard'}" href="">
-                        <img v-if="settings?.website?.full_path" alt :src="settings?.website?.full_path" style="height: 25px">
+                        <img v-if="settings?.website?.full_path" alt :src="settings?.website?.full_path" style="height: 70px">
                         <span v-else>Diivaa</span>
                     </router-link>
                 </h1>
@@ -17,20 +17,38 @@
                         <div class="billing-info-wrap">
                             <h3>Billing Details</h3>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="billing-info mb-20 form-group">
                                         <label>Name <span class="text-danger">*</span></label>
                                         <input type="text" v-model="orderParam.name" name="name">
                                         <small class="invalid-feedback text-danger"></small>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="billing-info mb-20 form-group">
                                         <label>Phone <span class="text-danger">*</span></label>
                                         <input type="text" v-model="orderParam.phone" name="phone">
                                         <small class="invalid-feedback text-danger"></small>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="billing-info mb-20 form-group">
+                                        <label>District <span class="text-danger">*</span></label>
+                                        <v-select class="form-control" :options="state" label="name" name="state_id" v-model="orderParam.state_id"
+                                                  :reduce="(option) => option.id"></v-select>
+                                        <small class="invalid-feedback text-danger"></small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="billing-info mb-20 form-group">
+                                        <label>City <span class="text-danger">*</span></label>
+                                        <v-select class="form-control" :options="city" label="name"  name="city_id" v-model="orderParam.city_id"
+                                                  :reduce="(option) => option.id"></v-select>
+                                        <small class="invalid-feedback text-danger"></small>
+                                    </div>
+                                </div>
+
                                 <div class="col-lg-12">
                                     <div class="billing-info mb-20 form-group">
                                         <label>Full Address <span class="text-danger">*</span></label>
@@ -70,14 +88,7 @@
                                         <ul>
                                             <li class="your-order-shipping">Shipping</li>
                                             <li>
-                                                <div class="form-check"  v-if="deliveryFee.length > 0" v-for="(d, i) in deliveryFee">
-                                                    <input class="form-check-input" type="radio" :id="'d'+i" name="delivery_fee" :value="d.fee" @change="updateTotalPrice(d.fee)"
-                                                           v-model="orderParam.delivery_charge">
-                                                    <label class="form-check-label" :for="'d'+i">
-                                                        {{d.name}} - ৳ {{d.fee}}
-                                                    </label>
-                                                </div>
-                                                <div v-else>Free Shipping</div>
+                                                ৳ {{orderParam.delivery_charge}}
                                             </li>
                                         </ul>
                                     </div>
@@ -109,15 +120,31 @@ import ApiRoutes from "../../Services/ApiRoutes";
 export default {
     data: function () {
         return {
-            deliveryFee: [],
             orderParam: {
                 delivery_charge: 0,
                 name: '',
                 address: '',
-                phone: ''
+                phone: '',
+                state_id: '',
+                city_id: ''
             },
             totalPrice: 0,
-            orderLoading: false
+            orderLoading: false,
+            city: [],
+            state: [],
+        }
+    },
+    watch: {
+        'orderParam.state_id': function () {
+            this.getCity()
+        },
+        'orderParam.city_id': function () {
+            this.city.map(v => {
+                if (v.id == this.orderParam.city_id) {
+                    this.orderParam.delivery_charge = v.cost
+                }
+            })
+            this.updateTotalPrice()
         }
     },
     computed: {
@@ -135,26 +162,15 @@ export default {
         },
     },
     methods: {
-        updateTotalPrice: function (fee) {
+        updateTotalPrice: function () {
             this.totalPrice = 0
             this.cartData.map(v => {
-                this.totalPrice += v.price
+                this.totalPrice += parseInt(v.price)
             })
-            this.totalPrice += fee
+            this.totalPrice += parseInt(this.orderParam.delivery_charge)
         },
         hideCart: function () {
             $('.shopping-cart-content').removeClass('cart-visible');
-        },
-        getDeliveryFee: function () {
-            ApiService.POST(ApiRoutes.GetDeliveryFee, {},(res) => {
-                if (parseInt(res.status) === 200) {
-                    this.deliveryFee =  res.data
-                    if (this.deliveryFee.length > 0) {
-                        this.orderParam.delivery_charge = this.deliveryFee[0].fee
-                        this.updateTotalPrice(this.deliveryFee[0].fee)
-                    }
-                }
-            });
         },
         makeOrder: function () {
             ApiService.ClearErrorHandler();
@@ -196,11 +212,26 @@ export default {
                     })
                 }
             });
-        }
+        },
+        getState: function () {
+            ApiService.POST(ApiRoutes.GetState, {}, (res) => {
+                if (parseInt(res.status) === 200) {
+                    this.state = res.data
+                }
+            });
+        },
+        getCity: function () {
+            ApiService.POST(ApiRoutes.GetCity, {state_id: this.orderParam.state_id}, (res) => {
+                if (parseInt(res.status) === 200) {
+                    this.city = res.data
+                }
+            });
+        },
     },
     mounted() {
         this.hideCart()
-        this.getDeliveryFee()
+        this.getState()
+        this.getCity()
         if (this.guest) {
             if (this.guest.name != null) {
                 this.orderParam.name = this.guest.name

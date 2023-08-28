@@ -1,9 +1,9 @@
 <template>
-    <div class="breadcrumb-area pt-35 pb-35 bg-gray-3 mb-5">
+    <div class="breadcrumb-area pt-20 pb-20 bg-gray-3 mb-5">
         <div class="container">
             <h1 class="text-center">
                 <router-link class="text-decoration-none" :to="{name: 'dashboard'}" href="">
-                    <img v-if="settings?.website?.full_path" alt :src="settings?.website?.full_path" style="height: 25px">
+                    <img v-if="settings?.website?.full_path" alt :src="settings?.website?.full_path" style="height: 70px">
                     <span v-else>Diivaa</span>
                 </router-link>
             </h1>

@@ -36,6 +36,24 @@ const ApiRoutes = {
     getOrder: ApiVersion + '/order/get',
     updateStatusOrder: ApiVersion + '/order/update/status',
     singleOrder: ApiVersion + '/order/single',
+    //State
+    AddState: ApiVersion + '/state/save',
+    EditState: ApiVersion + '/state/update',
+    SingleState: ApiVersion + '/state/single',
+    DeleteState: ApiVersion + '/state/delete',
+    ListState: ApiVersion + '/state/list',
+    //City
+    AddCity: ApiVersion + '/city/save',
+    EditCity: ApiVersion + '/city/update',
+    SingleCity: ApiVersion + '/city/single',
+    DeleteCity: ApiVersion + '/city/delete',
+    ListCity: ApiVersion + '/city/list',
+    //Pages
+    AddPages: ApiVersion + '/pages/save',
+    EditPages: ApiVersion + '/pages/update',
+    SinglePages: ApiVersion + '/pages/single',
+    DeletePages: ApiVersion + '/pages/delete',
+    ListPages: ApiVersion + '/pages/list',
 };
 
 export default ApiRoutes;

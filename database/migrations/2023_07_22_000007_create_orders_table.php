@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('user_id');
             $table->string('user_phone')->nullable();
+            $table->integer('state_id')->nullable();
+            $table->integer('city_id')->nullable();
             $table->text('delivery_address')->nullable();
             $table->double('sub_total')->default(0);
             $table->double('delivery_charge')->default(0);
