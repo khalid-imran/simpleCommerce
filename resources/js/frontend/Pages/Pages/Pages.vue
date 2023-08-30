@@ -27,6 +27,12 @@ import Table from "../../../backend/Pages/Common/Table.vue";
 export default {
     name: "order",
     components: {Table},
+    watch:{
+        $route (to, from){
+            this.slug = this.$route.params.slug;
+            this.single()
+        }
+    },
     data() {
         return {
             APP_URL: window.APP_URL,
@@ -46,7 +52,7 @@ export default {
     created() {
         this.slug = this.$route.params.slug;
         this.single()
-    }
+    },
 }
 </script>
 <style scoped lang="scss">

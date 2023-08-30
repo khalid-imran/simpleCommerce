@@ -65,6 +65,16 @@
                 </div>
             </div>
         </div>
+        <div>
+            <div id="fb-root"></div>
+            <div class="fb-customerchat"
+                 attribution="page_inbox"
+                 page_id="646929627418669"
+                 theme_color="#a749ff"
+                 logged_in_greeting="Welcome! How can we assist you today?"
+                 logged_out_greeting="Welcome! Please log in to chat with us.">
+            </div>
+        </div>
     </footer>
 
 </template>
@@ -84,6 +94,15 @@ export default {
     methods: {
 
     },
+    mounted() {
+        // (function(d, s, id) {
+        //     var js, fjs = d.getElementsByTagName(s)[0];
+        //     if (d.getElementById(id)) return;
+        //     js = d.createElement(s); js.id = id;
+        //     js.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+        //     fjs.parentNode.insertBefore(js, fjs);
+        // }(document, 'script', 'facebook-jssdk'));
+    }
 }
 </script>
 
