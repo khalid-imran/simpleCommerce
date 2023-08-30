@@ -65,7 +65,7 @@
                 </div>
             </div>
         </div>
-        <div>
+<!--        <div>
             <div id="fb-root"></div>
             <div class="fb-customerchat"
                  attribution="page_inbox"
@@ -74,7 +74,7 @@
                  logged_in_greeting="Welcome! How can we assist you today?"
                  logged_out_greeting="Welcome! Please log in to chat with us.">
             </div>
-        </div>
+        </div>-->
     </footer>
 
 </template>
