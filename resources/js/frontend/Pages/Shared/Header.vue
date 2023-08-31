@@ -445,11 +445,15 @@ export default {
     pointer-events: none;
 }
 .varient-title {
-    padding: 3px 10px;
+    padding: 3px 5px;
     border: 1px solid #a749ff;
     color: #a749ff;
     font-size: 12px !important;
     margin-left: auto;
+    max-width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .icon-name{
     font-size: 35px;

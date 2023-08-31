@@ -22,7 +22,7 @@ class ProductFrontController extends Controller
     {
         $result = Product::with('images', 'variants')->where('tranding', 1);
         $result = $result->orderBy('id', 'DESC')
-            ->skip(0)->take(6)->get()->toArray();
+            ->skip(0)->take(6)->inRandomOrder()->get()->toArray();
         foreach ($result as &$product) {
             $product['loading'] = false;
         }

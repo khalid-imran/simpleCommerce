@@ -36,6 +36,6 @@
 <script src="{{ asset('plugins/metismenu/js/metisMenu.min.js') }}"></script>
 <script src="{{ asset('js/theme.js') }}"></script>
 <!--app JS-->
-<script src="{{ asset('/js/backend/app.js?v=1.5') }}"></script>
+<script src="{{ asset('/js/backend/app.js?v=1.6') }}"></script>
 </body>
 </html>
