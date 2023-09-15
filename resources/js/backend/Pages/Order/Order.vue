@@ -202,6 +202,7 @@ export default {
             });
         },
         single: function (order_id) {
+            this.singleData = null
             ApiService.POST(ApiRoutes.singleOrder, {order_id: order_id}, (res) => {
                 this.loading = false;
                 if (parseInt(res.status) === 200) {

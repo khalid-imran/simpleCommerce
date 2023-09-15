@@ -69,7 +69,7 @@
 <script src="{{asset('frontend/js/bootstrap.min.js')}}"></script>
 <script src="{{asset('frontend/js/plugins.js')}}"></script>
 <!--app JS-->
-<script src="{{ asset('js/frontend/app.js?v=1.7') }}"></script>
+<script src="{{ asset('js/frontend/app.js?v=1.8') }}"></script>
 <!-- Main JS -->
 <script src="{{asset('frontend/js/main.js')}}"></script>
 

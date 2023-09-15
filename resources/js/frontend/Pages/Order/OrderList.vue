@@ -193,6 +193,7 @@ export default {
             $('#single').modal('show');
         },
         single: function (order_id) {
+            this.singleData = null
             ApiService.POST(ApiRoutes.getOrderSingle, {order_id: order_id},(res) => {
                 if (parseInt(res.status) === 200) {
                     this.singleData = res.data

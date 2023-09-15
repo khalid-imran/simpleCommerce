@@ -74,14 +74,14 @@
                                             </div>
                                             <div class="form-group mb-3">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="1" id="tranding" v-model="addEditParam.tranding">
+                                                    <input class="form-check-input" type="checkbox" value="1" id="tranding" :checked="addEditParam.tranding == 1" v-model="addEditParam.tranding">
                                                     <label class="form-check-label" for="tranding">Tranding</label>
                                                 </div>
                                                 <small class="invalid-feedback text-danger"></small>
                                             </div>
                                             <div class="form-group mb-3">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="1" id="upcoming" v-model="addEditParam.upcoming">
+                                                    <input class="form-check-input" type="checkbox" value="1" id="upcoming" :checked="addEditParam.upcoming == 1" v-model="addEditParam.upcoming">
                                                     <label class="form-check-label" for="upcoming">Upcoming</label>
                                                 </div>
                                             </div>
