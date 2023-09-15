@@ -20,7 +20,7 @@ class OrderItem extends Model
     }
     public function product_variants()
     {
-        return $this->hasMany(ProductVariants::class, 'id', 'product_variant_id');
+        return $this->hasOne(ProductVariants::class, 'id', 'product_variant_id');
     }
 
 }

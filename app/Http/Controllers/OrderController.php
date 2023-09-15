@@ -85,7 +85,20 @@ class OrderController extends Controller
             $orderItems = Cart::where('user_id', $userId)->get();
             $items = [];
             $sub_total = 0;
+            $discount_sub_total = 0;
             foreach ($orderItems as $item) {
+                $product = Product::select('discount_type', 'discount_amount', 'id')->where('id', $item->product_id)->first();
+                $variant = ProductVariants::select('price', 'id')->where('id', $item->product_variant_id)->first();
+                if ($product->discount_type == 0) {
+                    $discount_price = $variant->price - $product->discount_amount;
+                    $discount_total = $discount_price * $item->quantity;
+                } else if ($product->discount_type == 1) {
+                    $discount_price = $variant->price - (($product->discount_amount / 100) * $variant->price);
+                    $discount_total = $discount_price * $item->quantity;
+                } else {
+                    $discount_price = $item->price;
+                    $discount_total = $item->total;
+                }
                 $items[] = [
                     'order_id' => $orderModel->id,
                     'product_id' => $item->product_id,
@@ -95,12 +108,14 @@ class OrderController extends Controller
                     'total_price' => $item->total,
                 ];
                 $sub_total = $sub_total + $item->total;
+                $discount_sub_total = $discount_sub_total + $discount_total;
             }
 
             OrderItem::insert($items);
             $orderModel->sub_total = $sub_total;
+            $orderModel->discount_sub_total = $discount_sub_total;
             $orderModel->delivery_charge = $input['delivery_charge'];
-            $total = $sub_total + $input['delivery_charge'];
+            $total = $discount_sub_total + $input['delivery_charge'];
             $orderModel->total = $total;
             $orderModel->save();
             Cart::where('user_id', $userId)->delete();
@@ -111,7 +126,7 @@ class OrderController extends Controller
     {
         $input = $request->input();
         $userInfo = $request->user('api');
-        $orders = Order::with('user')->where('orders.user_id', $userInfo->id);
+        $orders = Order::with('user', 'state', 'city')->where('orders.user_id', $userInfo->id);
         if (!empty($input['status'])) {
             $orders->where('orders.status', $input['status']);
         }
@@ -140,7 +155,7 @@ class OrderController extends Controller
     public function getOrderGuest(Request $request)
     {
         $input = $request->input();
-        $orders = Order::with('guest')->where('orders.user_id', $input['guest_user_id']);
+        $orders = Order::with('guest', 'state', 'city')->where('orders.user_id', $input['guest_user_id']);
         if (!empty($input['status'])) {
             $orders->where('orders.status', $input['status']);
         }

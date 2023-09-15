@@ -28,7 +28,10 @@ class CartController extends Controller
         if (isset($input['guest_user_id']) && !empty($input['guest_user_id'])) {
             $userId = $input['guest_user_id'];
         }
-
+        $product = Product::select('discount_type', 'discount_amount')->where('id', $input['product_id'])->first();
+        if (empty($product)) {
+            return response()->json(['status' => 500, 'message' => 'invalid Item.']);
+        }
         $price = ProductVariants::select('variants.price')->where('product_id', $input['product_id'])->where('id', $input['variant_id'])->first();
         $checkExist = Cart::where('product_id', $input['product_id'])->where('product_variant_id', $input['variant_id'])->where('user_id', $userId)->first();
 
@@ -50,7 +53,6 @@ class CartController extends Controller
         if ($quantity < 1) {
             return response()->json(['status' => 500, 'message' => 'invalid quantity.']);
         }
-
         $total = $price->price * $quantity;
         $cartModel = new Cart();
         $cartModel->user_id = $userId;

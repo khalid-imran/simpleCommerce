@@ -48,7 +48,7 @@ app.mixin({
         makeFormData: function (object) {
             let formData = new FormData()
             for (const property in object) {
-                if (object[property]){
+                if (object[property] != null){
                     if (typeof object[property] === 'object' && property !== 'file' && property !== 'logo' && property !== 'video') {
                         if (Array.isArray(object[property]))  {
                             object[property].map((value, index) => {

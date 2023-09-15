@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('city_id')->nullable();
             $table->text('delivery_address')->nullable();
             $table->double('sub_total')->default(0);
+            $table->double('discount_sub_total')->default(0);
             $table->double('delivery_charge')->default(0);
             $table->double('total')->default(0);
             $table->string('status')->default('pending')->comment('pending, cancel, on the way, delivered');

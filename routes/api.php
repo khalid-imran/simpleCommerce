@@ -78,6 +78,8 @@ Route::group(['middleware' => 'auth:api'], function() {
         Route::post('delete', [ProductController::class, 'delete']);
         Route::post('delete/image', [ProductController::class, 'deleteProductImage']);
         Route::post('delete/video', [ProductController::class, 'deleteProductVideo']);
+        Route::post('update/variant', [ProductController::class, 'updateVariant']);
+        Route::post('delete/variant', [ProductController::class, 'deleteVariant']);
     });
     Route::group(['prefix' => 'order'], function() {
         Route::post('get', [OrderAdminController::class, 'getOrder']);

@@ -32,6 +32,12 @@
                                     <i v-if="l.loading" class="fa fa-spin fa-spinner"></i>
                                     Add to cart</a>
                             </div>
+                            <div class="pro-same-action pro-cart">
+                                <a @click="orderNow(l)" title="Order Now" href="javascript:void(0)">
+                                    <i v-if="!l.loading" class="pe-7s-shopbag"></i>
+                                    <i v-if="l.loading" class="fa fa-spin fa-spinner"></i>
+                                    Order Now</a>
+                            </div>
                         </div>
                     </div>
                     <div class="product-content text-center">
@@ -78,22 +84,36 @@ export default {
         }
     },
     methods: {
-        addToCart: function (product) {
+        orderNow: function (product) {
+            let isCartFinished = (finished) => {
+                if (finished) {
+                    this.$router.push({
+                        name: 'checkout'
+                    })
+                }
+            }
+            this.addToCart(product, isCartFinished);
+        },
+        addToCart: function (product, callback) {
+            if (product.loading) {
+                return;
+            }
             if (this.auth == null && this.guest == null) {
-                this.createGuest(product)
+                this.createGuest(product, callback)
             } else {
-                this.cartRequestToServer(product)
+                this.cartRequestToServer(product, callback)
             }
         },
-        createGuest: function (product) {
+        createGuest: function (product, callback) {
+            product.loading = true
             ApiService.POST(ApiRoutes.CreateGuest, null,(res) => {
                 if (parseInt(res.status) === 200) {
                     this.$store.commit('PutGuest', res.guest);
-                    this.cartRequestToServer(product)
+                    this.cartRequestToServer(product, callback)
                 }
             });
         },
-        cartRequestToServer: function (product) {
+        cartRequestToServer: function (product, callback) {
             product.loading = true
             let param = {
                 product_id: product.id,
@@ -105,7 +125,11 @@ export default {
             ApiService.POST(ApiRoutes.AddCart, param,(res) => {
                 product.loading = false
                 if (parseInt(res.status) === 200) {
-                    this.getCart()
+                    if (callback) {
+                        callback(true)
+                    } else {
+                        this.getCart()
+                    }
                 }
             });
         },

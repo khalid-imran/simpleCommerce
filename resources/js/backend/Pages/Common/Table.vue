@@ -295,6 +295,7 @@ export default {
 
 <style scoped lang="scss">
 table {
+    min-width: 900px;
     thead {
         position: sticky;
         top: -1px;
@@ -440,7 +441,7 @@ table {
 
 .table-height {
     height: 71vh;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
     margin-bottom: 15px;
 }

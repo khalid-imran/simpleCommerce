@@ -6,7 +6,7 @@
                     <li>
                         <router-link :to="{name: 'dashboard'}">Home</router-link>
                     </li>
-                    <li class="active"><a href="javascript:void(0)" class="active" v-if="singleData">{{singleData.name}}</a> </li>
+                    <li class="active"><a href="javascript:void(0)" class="active" v-if="singleData"> {{singleData.name}}</a> </li>
                 </ul>
             </div>
         </div>

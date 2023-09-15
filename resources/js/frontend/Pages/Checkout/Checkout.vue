@@ -77,8 +77,8 @@
                                                 <span class="order-middle-left">
                                                     <img v-if="c.images.length > 0" class="p-img" :src="c.images[0].full_path" alt="">
                                                     <img v-else class="p-img" src="/images/product_default.jpg" alt="">
-                                                    <span class="me-3"> {{ c.title }}  X  {{ c.cart_quantity }}</span>
-                                                    <span class="varient-title" v-if="c.variant_title">{{c.variant_title}}</span>
+                                                    <span class="me-3"> <span class="product-name" v-tooltip="c.title">{{ c.title }}</span>  <span class="d-inline-block">X</span>  <span class="d-inline-block">{{ c.cart_quantity }}</span></span>
+                                                    <span class="varient-title" v-if="c.variant_title"  v-tooltip="c.variant_title">{{c.variant_title}}</span>
                                                 </span>
                                                 <span class="order-price">৳ {{c.price}}.00 </span>
                                             </li>
@@ -173,6 +173,9 @@ export default {
             $('.shopping-cart-content').removeClass('cart-visible');
         },
         makeOrder: function () {
+            if (this.orderLoading) {
+                return;
+            }
             ApiService.ClearErrorHandler();
             this.orderLoading = true
             if (this.guest != null) {
@@ -265,6 +268,10 @@ export default {
     object-position: center;
     object-fit: contain;
     margin-right: 15px;
+    @media only screen and (max-width: 440px) {
+        height: 80px;
+        width: 75px;
+    }
 }
 .varient-title {
     padding: 0px 10px;
@@ -274,8 +281,31 @@ export default {
     margin-left: auto;
     position: absolute;
     left: 7.2rem;
-    bottom: 1rem;
-    line-height: 18px
+    line-height: 18px;
+    max-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    bottom: 0.5rem;
+}
+.product-name{
+    width: 130px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: inline-block;
+    position: relative;
+    top: 8px;
+    @media only screen and (max-width: 440px) {
+        width: 90px;
+    }
+    @media only screen and (max-width: 350px) {
+        width: 44px;
+    }
+}
+.order-price{
+    width: 80px;
+    text-align: right;
 }
 </style>
 

@@ -24,4 +24,11 @@ class Order extends Model
     public function order_item(){
         return $this->hasMany(OrderItem::class, 'order_id', 'id')->with('product')->with('product_variants');
     }
+    public function state()
+    {
+        return $this->hasOne(State::class, 'id', 'state_id');
+    }
+    public function city(){
+        return $this->hasOne(City::class, 'id', 'city_id');
+    }
 }

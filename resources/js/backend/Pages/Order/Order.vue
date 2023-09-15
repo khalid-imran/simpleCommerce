@@ -65,10 +65,10 @@
                             <tr v-for="p in singleData.order_item">
                                 <td><img style="height: 110px" v-if="p?.product?.images.length > 0" :src="p?.product?.images[0].full_path" alt=""></td>
                                 <td>{{p.product.title}}</td>
-                                <td>{{p.product_variants[0].title}}</td>
-                                <td class="text-end">{{p.unit_price}}</td>
+                                <td>{{p.product_variants?.title}}</td>
+                                <td class="text-end">{{calculateProductPrice(p)}}</td>
                                 <td>{{p.quantity}}</td>
-                                <td class="text-end">{{p.total_price}}</td>
+                                <td class="text-end">{{calculateProductPrice(p) * p.quantity}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -119,6 +119,8 @@ export default {
                     {type: 'text', key: 'sub_total', label: 'Sub total', sortable: true},
                     {type: 'text', key: 'delivery_charge', label: 'Delivery Charge', sortable: true},
                     {type: 'text', key: 'total', label: 'Total', sortable: true},
+                    {type: 'text', key: 'state_name', label: 'State', sortable: true},
+                    {type: 'text', key: 'city_name', label: 'City', sortable: true},
                     {type: 'text', key: 'delivery_address', label: 'Delivery Address', sortable: true},
                     {type: 'text', key: 'status', label: 'Order Status', sortable: true, isCapital: true},
                 ],
@@ -161,6 +163,19 @@ export default {
         }
     },
     methods: {
+        calculateProductPrice: function (product) {
+            let price = parseInt(product?.product_variants?.price);
+            let reduce_price = 0
+            if(product?.product.discount_type == 1){
+                let discountAmount = parseInt(price) / 100 * parseInt(product?.product.discount_amount)
+                reduce_price = price - discountAmount;
+            } else if (product?.product.discount_type == 0){
+                reduce_price = parseInt(price) - parseInt(product?.product.discount_amount)
+            } else {
+                reduce_price = price
+            }
+            return reduce_price
+        },
         openModal(type, data = null) {
             if (type === 'status') {
                 this.statusParam.order_id = data.id
@@ -220,6 +235,8 @@ export default {
                 this.table.loading = false
                 if (parseInt(res.status) === 200) {
                     res.data.data.forEach(v => {
+                        v.state_name = v.state.name
+                        v.city_name = v.city.name
                         if (v.user != null) {
                             v.user_name = v.user.name
                         }

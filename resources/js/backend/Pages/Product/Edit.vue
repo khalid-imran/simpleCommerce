@@ -103,13 +103,13 @@
                                                     <tbody>
                                                     <tr v-for="(v, i) in addEditParam.variants">
                                                         <td>
-                                                            <input class="form-control" type="text" v-model="v.title">
+                                                            <input class="form-control" type="text" v-model="v.title" @blur="updateVariant(v)">
                                                         </td>
                                                         <td>
-                                                            <input class="form-control" type="text" v-model="v.price">
+                                                            <input class="form-control" type="number" v-model="v.price" @blur="updateVariant(v)">
                                                         </td>
                                                         <td class="text-center">
-                                                            <i v-if="i > 0" class="bx bx-trash text-danger cursor-pointer fs-5" @click="removeVariant(i)"></i>
+                                                            <i v-if="i > 0" class="bx bx-trash text-danger cursor-pointer fs-5" @click="removeVariant(i, v)"></i>
                                                         </td>
                                                     </tr>
                                                     </tbody>
@@ -211,8 +211,28 @@ export default {
         addNewVariant: function () {
             this.addEditParam.variants.push({title: '', price: ''})
         },
-        removeVariant: function (index) {
-            this.addEditParam.variants.splice(index, 1)
+        removeVariant: function (index, variant) {
+            if (variant.id == null) {
+                this.addEditParam.variants.splice(index, 1)
+            } else {
+                this.deleteVariant(variant)
+                this.addEditParam.variants.splice(index, 1)
+            }
+        },
+        deleteVariant: function (variant) {
+            ApiService.POST(ApiRoutes.DeleteProductVariant, {id: variant.id}, (res) => {});
+        },
+        updateVariant: function (variant) {
+            if (variant.price == '') {
+                return ;
+            }
+            let param = {
+                product_id: this.id,
+                title: variant.title,
+                price: variant.price,
+                id: variant.id ?? null,
+            }
+            ApiService.POST(ApiRoutes.UpdateProductVariant, param, (res) => {});
         },
         addPhoto: function (e) {
             this.addEditParam.images.push(e.target.files[0]);

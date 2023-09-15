@@ -70,7 +70,7 @@
                                                     </a>
                                                 </span>
                                                 <span>Qty: {{ c.cart_quantity }}</span>
-                                                <span class="varient-title" v-if="c.variant_title != null">{{c.variant_title}}</span>
+                                                <span class="varient-title" v-if="c.variant_title != null" v-tooltip="c.variant_title">{{c.variant_title}}</span>
                                             </h6>
                                             <span>৳ {{c.price}}.00</span>
                                         </div>

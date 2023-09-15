@@ -108,7 +108,7 @@
                                                             <input class="form-control" type="text" v-model="v.title">
                                                         </td>
                                                         <td>
-                                                            <input class="form-control" type="text" v-model="v.price">
+                                                            <input class="form-control" type="number" v-model="v.price">
                                                         </td>
                                                         <td class="text-center">
                                                             <i v-if="i > 0" class="bx bx-trash text-danger cursor-pointer fs-5" @click="removeVariant(i)"></i>

@@ -158,18 +158,6 @@ class ProductController extends Controller
                 ProductImage::insert($images);
             }
         }
-        ProductVariants::where('product_id', $requestData['id'])->delete();
-        if (isset($requestData['variants']) && count($requestData['variants']) > 0) {
-            $productVariant = [];
-            foreach ($requestData['variants'] as $variant) {
-                $productVariant[] = [
-                    'product_id' => $product->id,
-                    'title' => $variant['title'] ?? null,
-                    'price' => $variant['price'],
-                ];
-            }
-            ProductVariants::insert($productVariant);
-        }
         return response()->json(['status' => 200, 'message' => 'Successfully saved product.']);
     }
     public function delete(Request $request)
@@ -186,7 +174,7 @@ class ProductController extends Controller
             unlink(public_path('storage/uploads/'.$product['video']));
         }
         $product->delete();
-        ProductVariants::where('product_id', $requestData['id'])->delete();
+        ProductVariants::where('product_id', $requestData['id'])->forceDelete();
         $images = ProductImage::where('product_id', $requestData['id'])->get()->toArray();
         foreach ($images as $image) {
             if (!empty($image['file_path']) && file_exists(public_path('storage/uploads/'.$image['file_path']))) {
@@ -234,5 +222,40 @@ class ProductController extends Controller
         $product->video = null;
         $product->save();
         return response()->json(['status' => 200, 'message' => 'Successfully deleted product video.']);
+    }
+    public function updateVariant(Request $request)
+    {
+        $requestData = $request->all();
+        $validator = Validator::make($requestData, [
+            'price' => 'required',
+            'product_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 500, 'errors' => $validator->errors()]);
+        }
+        if (!empty($requestData['id'])) {
+            $variant = ProductVariants::where('id', $requestData['id'])->first();
+        } else {
+            $variant = new ProductVariants();
+        }
+        $variant->product_id = $requestData['product_id'];
+        $variant->price = $requestData['price'];
+        $variant->title = $requestData['title'];
+        if (!$variant->save()) {
+            return response()->json(['status' => 500, 'message' => 'Cannot save product variants.']);
+        }
+        return response()->json(['status' => 200, 'message' => 'Variant save successfully.']);
+    }
+    public function deleteVariant(Request $request)
+    {
+        $requestData = $request->all();
+        $validator = Validator::make($requestData, [
+            'id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 500, 'errors' => $validator->errors()]);
+        }
+        ProductVariants::where('id', $requestData['id'])->forceDelete();
+        return response()->json(['status' => 200, 'message' => 'Variant deleted successfully.']);
     }
 }

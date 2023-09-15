@@ -80,11 +80,11 @@
                                 <input class="cart-plus-minus-box" type="text" name="qtybutton" v-model="cart.quantity">
                                 <div class="inc qtybutton" @click="updateInputValue('increase')">+</div>
                             </div>
-                            <div class="pro-details-cart btn-hover" @click="addToCart">
+                            <div class="pro-details-cart btn-hover me-0" @click="addToCart">
                                 <a href="javascript:void(0)">Add To Cart  <i v-if="loading" class="fa fa-spin fa-spinner"></i></a>
                             </div>
-                            <div class="pro-details-wishlist">
-                                <a href="#"><i class="fa fa-heart-o"></i></a>
+                            <div class="pro-details-cart btn-hover" @click="orderNow">
+                                <a href="javascript:void(0)">Order Now  <i v-if="loading" class="fa fa-spin fa-spinner"></i></a>
                             </div>
                         </div>
                     </div>
@@ -231,22 +231,35 @@ export default {
         }
     },
     methods: {
-        addToCart: function () {
+        orderNow: function () {
+            let isCartFinished = (finished) => {
+                if (finished) {
+                    this.$router.push({
+                        name: 'checkout'
+                    })
+                }
+            }
+            this.addToCart(isCartFinished);
+        },
+        addToCart: function (callback) {
+            if (this.loading) {
+                return;
+            }
             if (this.auth == null && this.guest == null) {
-                this.createGuest()
+                this.createGuest(callback)
             } else {
-                this.cartRequestToServer()
+                this.cartRequestToServer(callback)
             }
         },
-        createGuest: function () {
+        createGuest: function (callback) {
             ApiService.POST(ApiRoutes.CreateGuest, null,(res) => {
                 if (parseInt(res.status) === 200) {
                     this.$store.commit('PutGuest', res.guest);
-                    this.cartRequestToServer()
+                    this.cartRequestToServer(callback)
                 }
             });
         },
-        cartRequestToServer: function () {
+        cartRequestToServer: function (callback) {
             this.loading = true
             if (this.guest) {
                 this.cart.guest_user_id = this.guest.uid
@@ -254,7 +267,11 @@ export default {
             ApiService.POST(ApiRoutes.AddCart, this.cart,(res) => {
                 this.loading = false
                 if (parseInt(res.status) === 200) {
-                    this.getCart()
+                    if (callback) {
+                        callback(true)
+                    } else {
+                        this.getCart()
+                    }
                 }
             });
         },

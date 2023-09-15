@@ -22,7 +22,7 @@ class OrderAdminController extends Controller
         $orderMode = isset($requestData['order_mode']) && !empty($requestData['order_mode']) ? $requestData['order_mode'] : 'DESC';
         $keyword = isset($requestData['keyword']) ? $requestData['keyword'] : '';
         $status = isset($requestData['status']) ? $requestData['status'] : '';
-        $result = Order::with('user', 'guest');
+        $result = Order::with('user', 'guest', 'state', 'city');
         if (!empty($keyword)) {
             $result->where(function($q) use ($keyword) {
                 $q->where('order_number', 'LIKE', '%'.$keyword.'%');

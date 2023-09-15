@@ -40,7 +40,12 @@
                         <td>{{o.sub_total}}</td>
                         <td class="text-end">{{o.delivery_charge}}</td>
                         <td class="text-end">{{o.total}}</td>
-                        <td class="text-capitalize">{{o.status}}</td>
+                        <td class="text-capitalize">
+                            <span class="btn btn-success btn-sm" v-if="o.status == 'delivered'">{{o.status}}</span>
+                            <span class="btn btn-warning btn-sm" v-if="o.status == 'pending'">{{o.status}}</span>
+                            <span class="btn btn-info btn-sm" v-if="o.status == 'on the way'">{{o.status}}</span>
+                            <span class="btn btn-danger btn-sm" v-if="o.status == 'cancel'">{{o.status}}</span>
+                        </td>
                         <td class="text-end">
                             <button class="btn btn-outline-info btn-sm me-2" @click="openSingle(o)">View</button>
                             <button class="btn btn-outline-danger btn-sm" @click="openCancel(o)" v-if="o.status == 'pending'">Cancel</button>
@@ -69,19 +74,19 @@
                                 <th>Image</th>
                                 <th>Name</th>
                                 <th>Variant</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total Price</th>
+                                <th class="text-end">Price</th>
+                                <th class="text-end">Quantity</th>
+                                <th class="text-end">Total Price</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr v-for="p in singleData.order_item">
                                 <td><img style="height: 110px" v-if="p?.product?.images.length > 0" :src="p?.product?.images[0].full_path" alt=""></td>
                                 <td>{{p.product.title}}</td>
-                                <td>{{p.product_variants[0].title}}</td>
-                                <td class="text-end">{{p.unit_price}}</td>
-                                <td>{{p.quantity}}</td>
-                                <td class="text-end">{{p.total_price}}</td>
+                                <td>{{p?.product_variants?.title}}</td>
+                                <td class="text-end">{{calculateProductPrice(p)}}</td>
+                                <td class="text-end">{{p.quantity}}</td>
+                                <td class="text-end">{{calculateProductPrice(p) * p.quantity}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -154,6 +159,19 @@ export default {
         }
     },
     methods: {
+        calculateProductPrice: function (product) {
+            let price = parseInt(product.product_variants.price);
+            let reduce_price = 0
+            if(product?.product.discount_type == 1){
+                let discountAmount = parseInt(price) / 100 * parseInt(product?.product.discount_amount)
+                reduce_price = price - discountAmount;
+            } else if (product?.product.discount_type == 0){
+                reduce_price = parseInt(price) - parseInt(product?.product.discount_amount)
+            } else {
+                reduce_price = price
+            }
+            return reduce_price
+        },
         openCancel: function (data) {
             this.cancelParam.order_id = data.id
             $('#cancel').modal('show');
