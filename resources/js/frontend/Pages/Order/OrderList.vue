@@ -37,7 +37,7 @@
                     <tbody v-if="orders.length > 0">
                     <tr v-for="o in orders"  class="cursor-pointer" >
                         <td>{{o.order_number}}</td>
-                        <td>{{o.sub_total}}</td>
+                        <td>{{o.discunt_sub_total}}</td>
                         <td class="text-end">{{o.delivery_charge}}</td>
                         <td class="text-end">{{o.total}}</td>
                         <td class="text-capitalize">

@@ -218,12 +218,14 @@ export default {
             }
         },
         bgColor: function (status) {
-            if (status === 'unpaid' || status === 'absent') {
+            if (status === 'cancel') {
                 return 'bg-danger'
-            } else if (status === 'paid' || status === 'present') {
-                return 'bg-primary'
-            } else if (status === 'partial paid' || status === 'late') {
-                return 'bg-warning'
+            } else if (status === 'on the way') {
+                return 'btn-info'
+            } else if (status === 'delivered') {
+                return 'btn-success'
+            } else if (status === 'pending') {
+                return 'btn-warning'
             } else {
                 return ''
             }
