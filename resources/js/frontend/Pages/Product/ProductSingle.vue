@@ -267,10 +267,9 @@ export default {
             ApiService.POST(ApiRoutes.AddCart, this.cart,(res) => {
                 this.loading = false
                 if (parseInt(res.status) === 200) {
+                    this.getCart()
                     if (callback) {
                         callback(true)
-                    } else {
-                        this.getCart()
                     }
                 }
             });
