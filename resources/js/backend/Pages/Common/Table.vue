@@ -221,11 +221,11 @@ export default {
             if (status === 'cancel') {
                 return 'bg-danger'
             } else if (status === 'on the way') {
-                return 'btn-info'
+                return 'bg-info'
             } else if (status === 'delivered') {
-                return 'btn-success'
+                return 'bg-success'
             } else if (status === 'pending') {
-                return 'btn-warning'
+                return 'bg-warning'
             } else {
                 return ''
             }

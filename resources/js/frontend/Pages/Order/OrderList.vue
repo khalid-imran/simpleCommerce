@@ -41,10 +41,10 @@
                         <td class="text-end">{{o.delivery_charge}}</td>
                         <td class="text-end">{{o.total}}</td>
                         <td class="text-capitalize">
-                            <span class="btn btn-success btn-sm" v-if="o.status == 'delivered'">{{o.status}}</span>
-                            <span class="btn btn-warning btn-sm" v-if="o.status == 'pending'">{{o.status}}</span>
-                            <span class="btn btn-info btn-sm" v-if="o.status == 'on the way'">{{o.status}}</span>
-                            <span class="btn btn-danger btn-sm" v-if="o.status == 'cancel'">{{o.status}}</span>
+                            <span class="badge rounded-pill text-capitalize m-0 text-white fw-normal fs-13 bg-success" v-if="o.status == 'delivered'">{{o.status}}</span>
+                            <span class="badge rounded-pill text-capitalize m-0 text-white fw-normal fs-13 bg-warning" v-if="o.status == 'pending'">{{o.status}}</span>
+                            <span class="badge rounded-pill text-capitalize m-0 text-white fw-normal fs-13 bg-info" v-if="o.status == 'on the way'">{{o.status}}</span>
+                            <span class="badge rounded-pill text-capitalize m-0 text-white fw-normal fs-13 bg-danger" v-if="o.status == 'cancel'">{{o.status}}</span>
                         </td>
                         <td class="text-end">
                             <button class="btn btn-outline-info btn-sm me-2" @click="openSingle(o)">View</button>
